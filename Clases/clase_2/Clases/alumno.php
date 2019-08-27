@@ -6,7 +6,7 @@
 
         public function toString()
         {
-            return "Nombre: " . (string) $this->nombre;
+            return json_encode($this);
         }
 
     }
