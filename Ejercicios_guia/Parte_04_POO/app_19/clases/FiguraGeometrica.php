@@ -20,7 +20,7 @@
 
         public function getColor()
         {
-            return $color;
+            return $this->_color;
         }
 
         public function setColor($color)
@@ -31,7 +31,7 @@
 
         public function toString()
         {
-            $datos = "Color: ". $this->_color;
+            $datos = "Color: ". $this->getColor();
             $datos = $datos . "<br>Perímetro: ". $this->_perimetro;
             $datos = $datos . "<br>Superficie: ". $this->_superficie;
 

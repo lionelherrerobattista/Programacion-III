@@ -1,5 +1,5 @@
 <?php
-    require "./FiguraGeometrica.php";
+    require_once "FiguraGeometrica.php";
 
     class Rectangulo extends FiguraGeometrica
     {
@@ -22,19 +22,23 @@
         public function dibujar()
         {
 
-            for($i = 0; $i <= $this->_ladoUno; $i++)
+            for($i = 1; $i <= $this->_ladoUno; $i++)
             {
-                for($j = 0; $j <= $this->_ladoDos; $j++)
+                for($j = 1; $j <= $this->_ladoDos; $j++)
                 {
-
+                    echo "*";
                 }
+
+                echo "<br>";
             }
         }
 
-        public function toSting()
+        public function toString()
         {
-            $datos = parent::toString() . "Lado 1: " . $this->_ladoUno;
-            $datos = $datos . "Lado 2: " . $this->_ladoDos;
+            $datos = "Lado 1: " . $this->_ladoUno;
+            $datos = $datos . "<br>Lado 2: " . $this->_ladoDos;
+            $datos = $datos . "<br>". parent::toString();
+
 
             return $datos;
 
