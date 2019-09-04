@@ -2,9 +2,9 @@
 
     function Guardar($ruta, $dato)
     {
-        $ar = fopen($ruta, "w");
+        $ar = fopen($ruta, "a");
 
-        fwrite($ar, json_encode($dato));
+        fwrite($ar, json_encode($dato) . PHP_EOL);
 
         fclose($ar);
 
@@ -14,12 +14,28 @@
     {
 
         $ar = fopen($ruta, "r");
+        $primeraLectura = true;
 
-        $dato = fread($ar, filesize($ruta));
+        while(!feof($ar))
+        {
+            if($primeraLectura)
+            {
+                $datos = array(fgets($ar));
+
+                $primeraLectura = false;
+            }
+            else
+            {
+                $otroDato = array(fgets($ar));
+
+                array_push($datos, $otroDato);
+            }
+       
+        }
 
         fclose($ar);
 
-        return $dato;
+        return $datos;
     }
 
 

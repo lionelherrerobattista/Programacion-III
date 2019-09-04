@@ -1,38 +1,31 @@
 <?php
     require_once "funciones.php";
 
-    $objeto = array("nombre" => $_GET["nombre"]);
+    if(isset($_GET["nombre"]))
+    {
+        $objeto = array("nombre" => $_GET["nombre"]);
 
-    Guardar("archivo.txt", $objeto);
+        Guardar("objetos.json", $objeto);
+    }
 
-    $datos= Leer("archivo.txt");
 
-    echo $datos;
+    $datos = Leer("objetos.json");
+
+    var_dump($datos);
+
+    // foreach($datos as $clave=>$valor)
+    // {
+    //     echo $clave . ": " . $valor;
+    // }
+
+    
     
 
+    // // fwrite($ar, "Hola" . PHP_EOL); //constante PHP_EOL
 
+    // // copy("archivo.txt", "archivoCopia.txt"); //Copia archivo
 
-    // $ar = fopen("archivo.txt", "r");
-    
+    // // unlink("archivoCopia.txt"); //borra archivo
 
-    // // fwrite($ar, "Hola");;
-    // // fwrite($ar, "Hola" . PHP_EOL);
-    // // fwrite($ar, "Hola" . PHP_EOL);
-    // // fwrite($ar, "Hola" . PHP_EOL);
-
-    // // copy("archivo.txt", "archivoCopia.txt");
-
-    // // echo $datos;
-
-    // // unlink("archivoCopia.txt");
-
-    // // fclose($ar);
-
-    // $datos = fread($ar, filesize("archivo.txt"));
-
-    // echo $datos;
-
-
-    // fclose($ar);
 
 ?>
