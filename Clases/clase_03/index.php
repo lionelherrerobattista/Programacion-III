@@ -1,13 +1,33 @@
 <?php
-    require_once "funciones.php";
+    require_once "archivo.php";
 
+    $opcion = $_POST["opcion"];
 
-    if(isset($_POST["nombre"], $_POST["legajo"]))
+    switch($opcion)
     {
-        $objeto = array("nombre" => $_POST["nombre"], "legajo" => $_POST["legajo"]);
+        case "guardar"://Guardar en archivo
+        if(isset($_POST["nombre"], $_POST["legajo"]))
+        {
+            $objeto = array("nombre" => $_POST["nombre"], "legajo" => $_POST["legajo"]);
 
-        Guardar("objetos.json", $objeto);
+            Guardar("objetos.json", $objeto);
+        }
+        break;
+
+        case 2:
+        break;
+
+        case 3:
+        break;
+
+        case 4:
+        break;
+
     }
+
+
+
+    
 
 
     $datos = Leer("objetos.json");
