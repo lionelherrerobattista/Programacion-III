@@ -2,6 +2,7 @@
     require_once "archivo.php";
 
     $opcion = $_POST["opcion"];
+    $ruta = "objetos.json";
 
     switch($opcion)
     {
@@ -10,24 +11,45 @@
         {
             $objeto = array("nombre" => $_POST["nombre"], "legajo" => $_POST["legajo"]);
 
-            Guardar("objetos.json", $objeto);
+            Archivo::Guardar($ruta, $objeto);
+
+            Archivo::Mostrar($ruta);
         }
         break;
 
-        case 2:
+        case 2://borrar
+        if(isset($_POST["legajo"]))
+        {
+          $legajo = $_POST["legajo"];
+
+          Archivo::Borrar($ruta, $legajo);
+
+          Archivo::Mostrar($ruta);
+
+        }
         break;
 
-        case 3:
+        case 3://Modificar
+        if(isset($_POST["nombre"], $_POST["legajo"]))
+        {
+          $objetoModificado = array("nombre" => $_POST["nombre"], "legajo" => $_POST["legajo"]);
+
+          Archivo::Modificar($ruta, $objetoModificado);
+
+          Archivo::Mostrar($ruta);
+
+        }
         break;
 
-        case 4:
+        case 4://Mostrar
+        Archivo::Mostrar($ruta);
         break;
 
     }
 
 
 
-    
+
 
 
     $datos = Leer("objetos.json");

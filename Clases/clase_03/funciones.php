@@ -1,13 +1,13 @@
 <?php
- 
+
     function Borrar($ruta, $nroLegajo)
     {
         $datos = Leer($ruta);
-        
+
         for($i = 0; $i < count($datos); $i++)
         {
             $objeto = $datos[$i];
-            
+
             if($objeto->legajo == $nroLegajo)
             {
                 unset($datos[$i]);
@@ -68,8 +68,8 @@
 
         $ar = fopen($ruta, "r");
         $datos = array();//array donde voy a guardar los objetos
-    
-        
+
+
 
         while(!feof($ar))
         {
@@ -79,8 +79,8 @@
             {
                 array_push($datos, $objeto);
             }
-            
-       
+
+
         }
 
         fclose($ar);
@@ -88,11 +88,11 @@
         return $datos;
     }
 
-    function Mostrar($datos)
+    function Mostrar($ruta)
     {
         //mostrar
 
-        $datos = Leer("objetos.json");
+        $datos = Leer($ruta);
 
 
         for($i = 0; $i < count($datos); $i++)
@@ -103,13 +103,13 @@
 
             echo "Nombre: " . ucwords($objeto->nombre) . "<br>";
             echo "Legajo: "  . $objeto->legajo  . "<br><br>";
-            
+
             //También:
             // foreach($datos[$i] as $clave=>$valor)
             // {
             //      echo $clave . ": " . $valor . "<br>";
             // }
-        
+
         }
 
     }
