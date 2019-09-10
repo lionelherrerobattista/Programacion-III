@@ -1,23 +1,13 @@
 <?php
-    // var_dump($_FILES); //array de array, adentro está el archivo
-    // var_dump($_POST); //devuelve array vacío
-
-    $archivo = $_FILES["archivo"];//nombre del archivo
-    $origen = $archivo["tmp_name"];//ubicación temporal
-    $fecha = new DateTime();//timestamp para no repetir nombre
     
+    require_once "./clases/archivo.php";
+    
+    $archivo = $_FILES["archivo"]; //nombre del archivo
+
+    $destino = "C:\\xampp\\htdocs\\clase_4";
 
 
-    //otro metodo: $_FILES["archivo"]["tmp_name"];
+    Archivo::GuardarArchivoTemporal($archivo, $destino);
 
-    //busco la extensión del archivo:
-    $extension = pathinfo($_FILES["archivo"]["name"], PATHINFO_EXTENSION);
-
-    echo $extension;
-
-    $destino = "C:\\xampp\\htdocs\\clase_4\\archivo" . $fecha->getTimeStamp() . "." . $extension;
-
-    //lo saco de la carpeta temporal:
-    move_uploaded_file($origen, $destino);
 
 ?>
