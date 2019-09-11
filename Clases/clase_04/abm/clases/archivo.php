@@ -126,8 +126,9 @@
               $objeto = $datos[$i];
 
               echo "Nombre: " . ucwords($objeto->nombre) . "<br>";
+              echo "Apellido: " . ucwords($objeto->apellido) . "<br>";
               echo "Legajo: "  . $objeto->legajo  . "<br><br>";
-              echo "<img src='" . $objeto->rutaFoto . "'/>";
+              echo "<img src='" . $objeto->rutaFoto . "'/><br>";
 
               //También:
               // foreach($datos[$i] as $clave=>$valor)

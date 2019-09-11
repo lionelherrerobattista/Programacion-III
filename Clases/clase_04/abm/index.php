@@ -3,18 +3,18 @@
     require_once "./clases/alumno.php";
 
     $opcion = $_POST["opcion"];
-    $ruta = "objetos.json";
-    $destino = "./archivos/";
+    $ruta = "objetos.json";//donde guardo el json
+    $destino = "./archivos/";//de los archivos
     $archivo = $_FILES["archivo"];
 
     switch($opcion)
     {
         case "guardar"://Guardar en archivo
-        if(isset($_POST["nombre"], $_POST["legajo"], $_FILES["archivo"]))
+        if(isset($_POST["nombre"], $_POST["apellido"], $_POST["legajo"], $_FILES["archivo"]))
         {
             $rutaFoto = Archivo::GuardarArchivoTemporal($archivo, $destino);
 
-            $objeto = array("nombre" => $_POST["nombre"], "legajo" => $_POST["legajo"], "rutaFoto" => $rutaFoto);
+            $objeto = array("nombre" => $_POST["nombre"], "apellido" => $_POST["apellido"], "legajo" => $_POST["legajo"], "rutaFoto" => $rutaFoto);
 
             Archivo::Guardar($ruta, $objeto);
 
@@ -57,6 +57,8 @@
         // break;
 
     }
+
+    echo Archivo::Mostrar($ruta);
 
 
 
