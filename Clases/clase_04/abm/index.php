@@ -17,7 +17,7 @@
             $objeto = array("nombre" => $_POST["nombre"], "apellido" => $_POST["apellido"],
                  "legajo" => $_POST["legajo"], "rutaFoto" => $rutaFoto);
 
-            Archivo::Guardar($ruta, $objeto);
+            Archivo::GuardarPersona($ruta, $objeto);
 
         }
         break;
@@ -47,7 +47,7 @@
         break;
 
         case "mostrar"://Mostrar
-        Archivo::Mostrar($ruta);
+        Archivo::MostrarPersonas($ruta);
         break;
 
         // case "guardarDesdeArchivo":
