@@ -4,27 +4,20 @@
         public static function GuardarArchivoTemporal($archivo, $destino)
         {
             
-            $origen = $archivo["tmp_name"];//ubicación temporal
-            $fecha = new DateTime();//timestamp para no repetir nombre
-            
+            $origen = $archivo["tmp_name"];
+            $fecha = new DateTime();
 
-
-            //otro metodo: $_FILES["archivo"]["tmp_name"];
-
-            //busco la extensión del archivo:
             $extension = pathinfo($_FILES["archivo"]["name"], PATHINFO_EXTENSION);
 
             $destino = $destino . "archivo" . $fecha->getTimeStamp() . "." . $extension;
 
-            //lo saco de la carpeta temporal:
             move_uploaded_file($origen, $destino);
 
             return $destino;
         }
 
 
-
-        public static function Borrar($ruta, $nroLegajo)
+        public static function BorrarPersona($ruta, $nroLegajo)
         {
             $datos = Archivo::Leer($ruta);
             
@@ -50,7 +43,7 @@
 
                     unlink($ruta);//borro el archivo anterior
 
-                    Archivo::Guardar($ruta, $objeto);
+                    Archivo::GuardarPersona($ruta, $objeto);
                 }
 
             }
@@ -65,7 +58,7 @@
             
         }
 
-        public static function Modificar($ruta, $elementoModificado)
+        public static function ModificarPersona($ruta, $elementoModificado)
         {
             $datos = Archivo::Leer($ruta);
 
@@ -97,56 +90,57 @@
 
                 unlink("objetos.json");
 
-                Archivo::Guardar($ruta, $objeto);
+                Archivo::GuardarPersona($ruta, $objeto);
             }
         }
 
-        public static function Guardar($ruta, $dato)
+        public static function GuardarPersona($ruta, $dato)
         {
-            $ar = fopen($ruta, "a");
+            if(file_exists($ruta))
+            {
+                $ar = fopen($ruta, "a");
 
-            fwrite($ar, json_encode($dato) . PHP_EOL);
+                fwrite($ar, json_encode($dato) . PHP_EOL);
 
-            fclose($ar);
+                fclose($ar);
+            }
+            
 
         }
 
         public static function Leer($ruta)
         {
 
-            $ar = fopen($ruta, "r");
-
-
-            if($ar != false)
+            if(file_exists($ruta))
             {
-                
-                $datos = array();//array donde voy a guardar los objetos
-
-
-
-                while(!feof($ar))
+                if($archivo != false)
                 {
-                    $objeto = json_decode(fgets($ar));//Se guarda como un objeto
 
-                    if($objeto != null)
+                    $archivo = fopen($ruta, "r");
+                    
+                    $datos = array();
+
+                    while(!feof($archivo))
                     {
-                        array_push($datos, $objeto);
+                        $objeto = json_decode(fgets($archivo));
+
+                        if($objeto != null)
+                        {
+                            array_push($datos, $objeto);
+                        }
+
+
                     }
 
-
+                    fclose($archivo);
                 }
-
-                fclose($ar);
             }
-
-
 
             return $datos;
         }
 
-        public static function Mostrar($ruta)
+        public static function MostrarPersonas($ruta)
         {
-          //mostrar
 
           $datos = Archivo::Leer($ruta);
 
@@ -163,11 +157,6 @@
                 echo "Legajo: "  . $objeto->legajo  . "<br><br>";
                 echo "<img src='" . $objeto->rutaFoto . "'/><br>";
   
-                //También:
-                // foreach($datos[$i] as $clave=>$valor)
-                // {
-                //      echo $clave . ": " . $valor . "<br>";
-                // }
   
             }
           }

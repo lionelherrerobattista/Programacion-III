@@ -1,8 +1,9 @@
 <?php
-    class Alumno
+
+    require_once "./clases/persona.php";
+
+    class Alumno extends Persona
     {
-        private $nombre;
-        private $apellido;
         private $legajo;
         private $rutaFoto;
 

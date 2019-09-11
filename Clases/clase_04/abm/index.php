@@ -9,7 +9,7 @@
 
     switch($opcion)
     {
-        case "guardar"://Guardar en archivo
+        case "guardar"://Guardar archivo temporal
         if(isset($_POST["nombre"], $_POST["apellido"], $_POST["legajo"], $_FILES["archivo"]))
         {
             $rutaFoto = Archivo::GuardarArchivoTemporal($archivo, $destino);
@@ -19,7 +19,6 @@
 
             Archivo::Guardar($ruta, $objeto);
 
-            Archivo::Mostrar($ruta);
         }
         break;
 
@@ -28,9 +27,7 @@
         {
           $legajo = $_POST["legajo"];
 
-          Archivo::Borrar($ruta, $legajo);
-
-          Archivo::Mostrar($ruta);
+          Archivo::BorrarPersona($ruta, $legajo);
 
         }
         break;
@@ -44,9 +41,7 @@
             $objetoModificado = array("nombre" => $_POST["nombre"],"apellido" => $_POST["apellido"],
             "legajo" => $_POST["legajo"], "rutaFoto" => $rutaFoto);
 
-            Archivo::Modificar($ruta, $objetoModificado);
-
-            Archivo::Mostrar($ruta);
+            Archivo::ModificarPersona($ruta, $objetoModificado);
 
         }
         break;
@@ -63,22 +58,7 @@
 
     }
 
+    //Para ver en Chrome:
     echo Archivo::Mostrar($ruta);
-
-
-
-
-
-
-    // $datos = Leer("objetos.json");
-
-    // Mostrar($datos);
-
-    // // fwrite($ar, "Hola" . PHP_EOL); //constante PHP_EOL
-
-    // // copy("archivo.txt", "archivoCopia.txt"); //Copia archivo
-
-    // // unlink("archivoCopia.txt"); //borra archivo
-
 
 ?>
