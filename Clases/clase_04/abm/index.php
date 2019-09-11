@@ -2,63 +2,98 @@
     require_once "./clases/archivo.php";
     require_once "./clases/alumno.php";
 
-    $opcion = $_POST["opcion"];
+    
     $ruta = "objetos.json";//donde guardo el json
     $destino = "./archivos/";//de los archivos
-    $archivo = $_FILES["archivo"];
 
-    switch($opcion)
+    if(isset($_FILES["archivo"]))
     {
-        case "guardar"://Guardar archivo temporal
-        if(isset($_POST["nombre"], $_POST["apellido"], $_POST["legajo"], $_FILES["archivo"]))
+        $archivo = $_FILES["archivo"];    
+    }
+    
+
+    if(isset($_POST["opcion"]))
+    {
+        $opcion = $_POST["opcion"];
+
+        switch($opcion)
         {
-            $rutaFoto = Archivo::GuardarArchivoTemporal($archivo, $destino);
+            case "guardar"://Guardar alumno y archivo temporal foto
+            if(isset($_POST["nombre"], $_POST["apellido"], $_POST["legajo"], $_FILES["archivo"]))
+            {
+                $archivo = $_FILES["archivo"];    
 
-            $objeto = array("nombre" => $_POST["nombre"], "apellido" => $_POST["apellido"],
-                 "legajo" => $_POST["legajo"], "rutaFoto" => $rutaFoto);
+                $rutaFoto = Archivo::GuardarArchivoTemporal($archivo, $destino);
 
-            Archivo::GuardarPersona($ruta, $objeto);
+                $objeto = array("nombre" => $_POST["nombre"], "apellido" => $_POST["apellido"],
+                    "legajo" => $_POST["legajo"], "rutaFoto" => $rutaFoto);
 
-        }
-        break;
+                Archivo::GuardarPersona($ruta, $objeto);
 
-        case "borrar"://borrar
-        if(isset($_POST["legajo"]))
-        {
-          $legajo = $_POST["legajo"];
+            }
+            break;
 
-          Archivo::BorrarPersona($ruta, $legajo);
+            case "borrar"://borrar alumno
+            if(isset($_POST["legajo"]))
+            {
+                $legajo = $_POST["legajo"];
 
-        }
-        break;
+                Archivo::BorrarPersona($ruta, $legajo);
 
-        case "modificar"://Modificar
-        if(isset($_POST["nombre"], $_POST["legajo"]))
-        {
+            }
+            break;
 
-            $rutaFoto = Archivo::GuardarArchivoTemporal($archivo, $destino);
+            case "modificar"://Modificar alumno
+            if(isset($_POST["nombre"], $_POST["apellido"], $_POST["legajo"], $_FILES["archivo"]))
+            {
+                $archivo = $_FILES["archivo"];
+
+                $rutaFoto = Archivo::GuardarArchivoTemporal($archivo, $destino);
+                
+                $objetoModificado = array("nombre" => $_POST["nombre"],"apellido" => $_POST["apellido"],
+                "legajo" => $_POST["legajo"], "rutaFoto" => $rutaFoto);
+
+                Archivo::ModificarPersona($ruta, $objetoModificado);
+
+            }
+            break;
+
+            // case "guardarDesdeArchivo":
+            // $destino = Archivo::GuardarArchivoTemporal($archivo, $destino);
+
+            // Archivo::Mostrar($destino);
+            // break;
             
-            $objetoModificado = array("nombre" => $_POST["nombre"],"apellido" => $_POST["apellido"],
-            "legajo" => $_POST["legajo"], "rutaFoto" => $rutaFoto);
+            default:
+            echo "Opción no disponible";
+            break;
 
-            Archivo::ModificarPersona($ruta, $objetoModificado);
 
         }
-        break;
+    }
+    else if(isset($_GET["opcion"]))
+    {
+        $opcion = $_GET["opcion"];
 
-        case "mostrar"://Mostrar
-        Archivo::MostrarPersonas($ruta);
-        break;
+        switch($opcion)
+        {
+            case "mostrar"://Mostrar
+            Archivo::MostrarPersonas($ruta);
+            break;
+            
+            default:
+            echo "Opción no disponible";
+            break;
 
-        // case "guardarDesdeArchivo":
-        // $destino = Archivo::GuardarArchivoTemporal($archivo, $destino);
 
-        // Archivo::Mostrar($destino);
-        // break;
-
+        }
+    }
+    else
+    {
+        echo "Opción no disponible";
     }
 
     //Para ver en Chrome:
     echo Archivo::Mostrar($ruta);
-
+    
 ?>
