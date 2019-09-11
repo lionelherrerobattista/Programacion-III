@@ -23,19 +23,22 @@
             
             if(file_exists($ruta))
             {
-                $datos = Archivo::Leer($ruta);
+                $lista = Archivo::LeerArchivo($ruta);
 
-                if(count($datos) > 1)
+                if(count($lista) > 1)
                 {
-                    for($i = 0; $i < count($datos); $i++)
+                    for($i = 0; $i < count($lista); $i++)
                     {
-                        $objeto = $datos[$i];
+                        $objeto = $lista[$i];
 
                         if($objeto->legajo == $nroLegajo)
                         {
-                            unlink($datos[$i]->rutaFoto);
-                            unset($datos[$i]);
-                            array_values($datos); //indices correlativos
+                            unlink($lista[$i]->rutaFoto);
+
+                            unset($lista[$i]);//elimino elemento de la lista
+
+                            array_values($lista); //indices correlativos
+
                             break;
                         }
 
@@ -45,17 +48,17 @@
                     
                     unlink($ruta);//borro el archivo anterior
 
-                    foreach($datos as $objeto)
+                    foreach($lista as $objeto)
                     {
 
                         Archivo::GuardarPersona($ruta, $objeto);
                     }
 
                 }
-                else if($datos[0]->legajo == $nroLegajo)
+                else if($lista[0]->legajo == $nroLegajo)
                 {
-                    unlink($datos[$i]->rutaFoto);
-                    
+                    unlink($lista[$i]->rutaFoto);
+
                     unlink($ruta);
                     
                 }
@@ -72,15 +75,13 @@
         {
             if(file_exists($ruta))
             {
-                $datos = Archivo::Leer($ruta);
-
-                
+                $lista = Archivo::LeerArchivo($ruta);
 
                 $fecha = new DateTime();//timestamp para no repetir nombre
 
-                for($i = 0; $i < count($datos); $i++)
+                for($i = 0; $i < count($lista); $i++)
                 {
-                    $objeto = $datos[$i];
+                    $objeto = $lista[$i];
 
                     if($objeto->legajo == $elementoModificado["legajo"])
                     {
@@ -93,20 +94,20 @@
     
                         unlink($objeto->rutaFoto);
 
-                        $datos[$i] = $elementoModificado;
+                        $lista[$i] = $elementoModificado;
 
-                        var_dump($datos[$i]);
+                        
 
                         break;
                     }
                 }
 
-                unlink("objetos.json");
+                unlink($ruta);
 
                 //guardo los datos de nuevo en el archivo
-                for($i= 0 ; $i < count($datos); $i++)
+                for($i= 0 ; $i < count($lista); $i++)
                 {
-                    $objeto = $datos[$i];
+                    $objeto = $lista[$i];
 
                     Archivo::GuardarPersona($ruta, $objeto);
                 }
@@ -127,10 +128,10 @@
 
         }
 
-        public static function Leer($ruta)
+        public static function LeerArchivo($ruta)
         {
 
-            $datos = array();
+            $lista = array();
 
             if(file_exists($ruta))
             {
@@ -145,7 +146,7 @@
 
                     if($objeto != null)
                     {
-                        array_push($datos, $objeto);
+                        array_push($lista, $objeto);
                     }
 
 
@@ -155,30 +156,30 @@
             
             }
 
-            return $datos;
+            return $lista;
         }
 
         public static function MostrarPersonas($ruta)
         {
 
-          $datos = Archivo::Leer($ruta);
+            $datos = "";
+            $lista = Archivo::LeerArchivo($ruta);
 
-          if($datos != null)
-          {
-            for($i = 0; $i < count($datos); $i++)
+            if($lista != null)
             {
-                echo "Persona " . ($i+1) . "<br>";
-  
-                $objeto = $datos[$i];
-  
-                echo "Nombre: " . ucwords($objeto->nombre) . "<br>";
-                echo "Apellido: " . ucwords($objeto->apellido) . "<br>";
-                echo "Legajo: "  . $objeto->legajo  . "<br><br>";
-                echo "<img src='" . $objeto->rutaFoto . "'/><br>";
-  
-  
+                for($i = 0; $i < count($lista); $i++)
+                {
+                    $datos = $datos . "Persona " . ($i+1) . "<br>";
+
+                    $objeto = $lista[$i];
+
+                    $datos = $datos . Alumno::MostrarAlumno($objeto);
+
+
+                }
             }
-          }
+
+            return $datos;
          
 
         }

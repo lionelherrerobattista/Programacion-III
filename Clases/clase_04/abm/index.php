@@ -20,13 +20,11 @@
         {
             case "guardar"://Guardar alumno y archivo temporal foto
             if(isset($_POST["nombre"], $_POST["apellido"], $_POST["legajo"], $_FILES["archivo"]))
-            {
-                $archivo = $_FILES["archivo"];    
+            { 
 
                 $rutaFoto = Archivo::GuardarArchivoTemporal($archivo, $destino);
 
-                $objeto = array("nombre" => $_POST["nombre"], "apellido" => $_POST["apellido"],
-                    "legajo" => $_POST["legajo"], "rutaFoto" => $rutaFoto);
+                $objeto = new Alumno($_POST["nombre"],$_POST["apellido"], $_POST["legajo"], $rutaFoto);
 
                 Archivo::GuardarPersona($ruta, $objeto);
 
@@ -46,23 +44,15 @@
             case "modificar"://Modificar alumno
             if(isset($_POST["nombre"], $_POST["apellido"], $_POST["legajo"], $_FILES["archivo"]))
             {
-                $archivo = $_FILES["archivo"];
 
                 $rutaFoto = Archivo::GuardarArchivoTemporal($archivo, $destino);
                 
-                $objetoModificado = array("nombre" => $_POST["nombre"],"apellido" => $_POST["apellido"],
-                "legajo" => $_POST["legajo"], "rutaFoto" => $rutaFoto);
+                $objetoModificado = new Alumno($_POST["nombre"],$_POST["apellido"], $_POST["legajo"], $rutaFoto);
 
                 Archivo::ModificarPersona($ruta, $objetoModificado);
 
             }
             break;
-
-            // case "guardarDesdeArchivo":
-            // $destino = Archivo::GuardarArchivoTemporal($archivo, $destino);
-
-            // Archivo::Mostrar($destino);
-            // break;
             
             default:
             echo "Opción no disponible<br>";
@@ -78,13 +68,12 @@
         switch($opcion)
         {
             case "mostrar"://Mostrar
-            Archivo::MostrarPersonas($ruta);
+            echo Archivo::MostrarPersonas($ruta);
             break;
             
             default:
             echo "Opción no disponible<br>";
             break;
-
 
         }
     }
@@ -94,6 +83,6 @@
     }
 
     //Para ver en Chrome:
-    echo Archivo::MostrarPersonas($ruta);
+    // echo Archivo::MostrarPersonas($ruta);
     
 ?>
