@@ -14,12 +14,12 @@
             //busco la extensión del archivo:
             $extension = pathinfo($_FILES["archivo"]["name"], PATHINFO_EXTENSION);
 
-            echo $extension;
-
-            $destino = $destino . "\\archivo" . $fecha->getTimeStamp() . "." . $extension;
+            $destino = $destino . "archivo" . $fecha->getTimeStamp() . "." . $extension;
 
             //lo saco de la carpeta temporal:
             move_uploaded_file($origen, $destino);
+
+            return $destino;
         }
 
 
@@ -56,7 +56,7 @@
         {
             $datos = Archivo::Leer($ruta);
 
-            for($i = 0; $i < count(); $i++)
+            for($i = 0; $i < count($datos); $i++)
             {
                 $objeto = $datos[$i];
 
@@ -73,7 +73,7 @@
 
                 unlink("objetos.json");
 
-                Archivo::Guardar($objeto);
+                Archivo::Guardar($ruta, $objeto);
             }
         }
 
@@ -127,6 +127,7 @@
 
               echo "Nombre: " . ucwords($objeto->nombre) . "<br>";
               echo "Legajo: "  . $objeto->legajo  . "<br><br>";
+              echo "<img src='" . $objeto->rutaFoto . "'/>";
 
               //También:
               // foreach($datos[$i] as $clave=>$valor)
