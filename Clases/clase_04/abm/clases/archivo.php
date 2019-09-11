@@ -19,91 +19,110 @@
 
         public static function BorrarPersona($ruta, $nroLegajo)
         {
-            $datos = Archivo::Leer($ruta);
             
-            if(count($datos) > 1)
+            
+            if(file_exists($ruta))
             {
-                for($i = 0; $i < count($datos); $i++)
-                {
-                    $objeto = $datos[$i];
+                $datos = Archivo::Leer($ruta);
 
-                    if($objeto->legajo == $nroLegajo)
+                if(count($datos) > 1)
+                {
+                    for($i = 0; $i < count($datos); $i++)
                     {
-                        unset($datos[$i]);
-                        array_values($datos); //indices correlativos
-                        break;
+                        $objeto = $datos[$i];
+
+                        if($objeto->legajo == $nroLegajo)
+                        {
+                            unlink($datos[$i]->rutaFoto);
+                            unset($datos[$i]);
+                            array_values($datos); //indices correlativos
+                            break;
+                        }
+
+                    }
+
+                    //guardo los datos de nuevo en el archivo
+                    
+                    unlink($ruta);//borro el archivo anterior
+
+                    foreach($datos as $objeto)
+                    {
+
+                        Archivo::GuardarPersona($ruta, $objeto);
                     }
 
                 }
-
-                //guardo los datos de nuevo en el archivo
-                foreach($datos as $objeto)
+                else if($datos[0]->legajo == $nroLegajo)
                 {
-                    // $objeto = $datos[$i];
-
-                    unlink($ruta);//borro el archivo anterior
-
-                    Archivo::GuardarPersona($ruta, $objeto);
+                    unlink($datos[$i]->rutaFoto);
+                    
+                    unlink($ruta);
+                    
                 }
 
             }
             else
             {
-                unlink($ruta);
-                
-            }
-
-
-
+                echo "Archivo no encontrado <br>";
+            }          
             
         }
 
         public static function ModificarPersona($ruta, $elementoModificado)
         {
-            $datos = Archivo::Leer($ruta);
-
-            $fecha = new DateTime();//timestamp para no repetir nombre
-
-            for($i = 0; $i < count($datos); $i++)
+            if(file_exists($ruta))
             {
-                $objeto = $datos[$i];
+                $datos = Archivo::Leer($ruta);
 
-                $extension = pathinfo($objeto->rutaFoto, PATHINFO_EXTENSION);
+                
 
-                $nombreBackup = "./backupFotos/backup" . $fecha->getTimeStamp() . "." . $extension;
+                $fecha = new DateTime();//timestamp para no repetir nombre
 
-                //guardo la foto en la carpeta de backup:
-                copy($objeto->rutaFoto, $nombreBackup);
-
-                unlink($objeto->rutaFoto);
-
-                if($objeto->legajo == $elementoModificado["legajo"])
+                for($i = 0; $i < count($datos); $i++)
                 {
-                    $datos[$i] = $elementoModificado;
-                }
-            }
+                    $objeto = $datos[$i];
 
-            //guardo los datos de nuevo en el archivo
-            for($i= 0 ; $i < count($datos); $i++)
-            {
-                $objeto = $datos[$i];
+                    if($objeto->legajo == $elementoModificado["legajo"])
+                    {
+                        $extension = pathinfo($objeto->rutaFoto, PATHINFO_EXTENSION);
+
+                        $nombreBackup = "./backupFotos/backup" . $fecha->getTimeStamp() . "." . $extension;
+    
+                        //guardo la foto en la carpeta de backup:
+                        copy($objeto->rutaFoto, $nombreBackup);
+    
+                        unlink($objeto->rutaFoto);
+
+                        $datos[$i] = $elementoModificado;
+
+                        var_dump($datos[$i]);
+
+                        break;
+                    }
+                }
 
                 unlink("objetos.json");
 
-                Archivo::GuardarPersona($ruta, $objeto);
+                //guardo los datos de nuevo en el archivo
+                for($i= 0 ; $i < count($datos); $i++)
+                {
+                    $objeto = $datos[$i];
+
+                    Archivo::GuardarPersona($ruta, $objeto);
+                }
             }
+            
         }
 
         public static function GuardarPersona($ruta, $dato)
         {
-            if(file_exists($ruta))
-            {
-                $ar = fopen($ruta, "a");
+            
+            $archivo = fopen($ruta, "a");
 
-                fwrite($ar, json_encode($dato) . PHP_EOL);
+            fwrite($archivo, json_encode($dato) . PHP_EOL);
 
-                fclose($ar);
-            }
+            fclose($archivo);
+        
             
 
         }
@@ -111,29 +130,29 @@
         public static function Leer($ruta)
         {
 
+            $datos = array();
+
             if(file_exists($ruta))
             {
-                if($archivo != false)
+                
+                $archivo = fopen($ruta, "r");
+                
+                
+
+                while(!feof($archivo))
                 {
+                    $objeto = json_decode(fgets($archivo));
 
-                    $archivo = fopen($ruta, "r");
-                    
-                    $datos = array();
-
-                    while(!feof($archivo))
+                    if($objeto != null)
                     {
-                        $objeto = json_decode(fgets($archivo));
-
-                        if($objeto != null)
-                        {
-                            array_push($datos, $objeto);
-                        }
-
-
+                        array_push($datos, $objeto);
                     }
 
-                    fclose($archivo);
+
                 }
+
+                fclose($archivo);
+            
             }
 
             return $datos;

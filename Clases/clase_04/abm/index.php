@@ -65,7 +65,7 @@
             // break;
             
             default:
-            echo "Opción no disponible";
+            echo "Opción no disponible<br>";
             break;
 
 
@@ -82,7 +82,7 @@
             break;
             
             default:
-            echo "Opción no disponible";
+            echo "Opción no disponible<br>";
             break;
 
 
@@ -90,10 +90,10 @@
     }
     else
     {
-        echo "Opción no disponible";
+        echo "Opción no disponible<br>";
     }
 
     //Para ver en Chrome:
-    echo Archivo::Mostrar($ruta);
+    echo Archivo::MostrarPersonas($ruta);
     
 ?>
