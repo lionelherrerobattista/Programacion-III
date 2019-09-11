@@ -14,7 +14,8 @@
         {
             $rutaFoto = Archivo::GuardarArchivoTemporal($archivo, $destino);
 
-            $objeto = array("nombre" => $_POST["nombre"], "apellido" => $_POST["apellido"], "legajo" => $_POST["legajo"], "rutaFoto" => $rutaFoto);
+            $objeto = array("nombre" => $_POST["nombre"], "apellido" => $_POST["apellido"],
+                 "legajo" => $_POST["legajo"], "rutaFoto" => $rutaFoto);
 
             Archivo::Guardar($ruta, $objeto);
 
@@ -37,11 +38,15 @@
         case "modificar"://Modificar
         if(isset($_POST["nombre"], $_POST["legajo"]))
         {
-          $objetoModificado = array("nombre" => $_POST["nombre"], "legajo" => $_POST["legajo"]);
 
-          Archivo::Modificar($ruta, $objetoModificado);
+            $rutaFoto = Archivo::GuardarArchivoTemporal($archivo, $destino);
+            
+            $objetoModificado = array("nombre" => $_POST["nombre"],"apellido" => $_POST["apellido"],
+            "legajo" => $_POST["legajo"], "rutaFoto" => $rutaFoto);
 
-          Archivo::Mostrar($ruta);
+            Archivo::Modificar($ruta, $objetoModificado);
+
+            Archivo::Mostrar($ruta);
 
         }
         break;

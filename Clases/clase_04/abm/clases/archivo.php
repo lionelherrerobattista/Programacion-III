@@ -27,38 +27,62 @@
         public static function Borrar($ruta, $nroLegajo)
         {
             $datos = Archivo::Leer($ruta);
-
-            for($i = 0; $i < count($datos); $i++)
+            
+            if(count($datos) > 1)
             {
-                $objeto = $datos[$i];
-
-                if($objeto->legajo == $nroLegajo)
+                for($i = 0; $i < count($datos); $i++)
                 {
-                    unset($datos[$i]);
-                    array_values($datos); //indices correlativos
-                    break;
+                    $objeto = $datos[$i];
+
+                    if($objeto->legajo == $nroLegajo)
+                    {
+                        unset($datos[$i]);
+                        array_values($datos); //indices correlativos
+                        break;
+                    }
+
+                }
+
+                //guardo los datos de nuevo en el archivo
+                foreach($datos as $objeto)
+                {
+                    // $objeto = $datos[$i];
+
+                    unlink($ruta);//borro el archivo anterior
+
+                    Archivo::Guardar($ruta, $objeto);
                 }
 
             }
-
-            //guardo los datos de nuevo en el archivo
-            foreach($datos as $objeto)
+            else
             {
-                // $objeto = $datos[$i];
-
-                unlink("objetos.json");//borro el archivo anterior
-
-                Archivo::Guardar($ruta, $objeto);
+                unlink($ruta);
+                
             }
+
+
+
+            
         }
 
         public static function Modificar($ruta, $elementoModificado)
         {
             $datos = Archivo::Leer($ruta);
 
+            $fecha = new DateTime();//timestamp para no repetir nombre
+
             for($i = 0; $i < count($datos); $i++)
             {
                 $objeto = $datos[$i];
+
+                $extension = pathinfo($objeto->rutaFoto, PATHINFO_EXTENSION);
+
+                $nombreBackup = "./backupFotos/backup" . $fecha->getTimeStamp() . "." . $extension;
+
+                //guardo la foto en la carpeta de backup:
+                copy($objeto->rutaFoto, $nombreBackup);
+
+                unlink($objeto->rutaFoto);
 
                 if($objeto->legajo == $elementoModificado["legajo"])
                 {
@@ -91,23 +115,31 @@
         {
 
             $ar = fopen($ruta, "r");
-            $datos = array();//array donde voy a guardar los objetos
 
 
-
-            while(!feof($ar))
+            if($ar != false)
             {
-                $objeto = json_decode(fgets($ar));//Se guarda como un objeto
+                
+                $datos = array();//array donde voy a guardar los objetos
 
-                if($objeto != null)
+
+
+                while(!feof($ar))
                 {
-                    array_push($datos, $objeto);
+                    $objeto = json_decode(fgets($ar));//Se guarda como un objeto
+
+                    if($objeto != null)
+                    {
+                        array_push($datos, $objeto);
+                    }
+
+
                 }
 
-
+                fclose($ar);
             }
 
-            fclose($ar);
+
 
             return $datos;
         }
@@ -118,25 +150,28 @@
 
           $datos = Archivo::Leer($ruta);
 
-
-          for($i = 0; $i < count($datos); $i++)
+          if($datos != null)
           {
-              echo "Persona " . ($i+1) . "<br>";
-
-              $objeto = $datos[$i];
-
-              echo "Nombre: " . ucwords($objeto->nombre) . "<br>";
-              echo "Apellido: " . ucwords($objeto->apellido) . "<br>";
-              echo "Legajo: "  . $objeto->legajo  . "<br><br>";
-              echo "<img src='" . $objeto->rutaFoto . "'/><br>";
-
-              //También:
-              // foreach($datos[$i] as $clave=>$valor)
-              // {
-              //      echo $clave . ": " . $valor . "<br>";
-              // }
-
+            for($i = 0; $i < count($datos); $i++)
+            {
+                echo "Persona " . ($i+1) . "<br>";
+  
+                $objeto = $datos[$i];
+  
+                echo "Nombre: " . ucwords($objeto->nombre) . "<br>";
+                echo "Apellido: " . ucwords($objeto->apellido) . "<br>";
+                echo "Legajo: "  . $objeto->legajo  . "<br><br>";
+                echo "<img src='" . $objeto->rutaFoto . "'/><br>";
+  
+                //También:
+                // foreach($datos[$i] as $clave=>$valor)
+                // {
+                //      echo $clave . ": " . $valor . "<br>";
+                // }
+  
+            }
           }
+         
 
         }
 
