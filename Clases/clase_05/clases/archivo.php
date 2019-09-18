@@ -4,14 +4,14 @@
         public static function GuardarArchivoTemporal($archivo, $destino)
         {
             
-            $origen = $archivo["tmp_name"];
+            $origen = $archivo["archivo"]->getClientFileName();
             $fecha = new DateTime();
 
-            $extension = pathinfo($_FILES["archivo"]["name"], PATHINFO_EXTENSION);
+            $extension = pathinfo($archivo["archivo"]->getClientFileName(), PATHINFO_EXTENSION);
 
             $destino = $destino . "archivo" . $fecha->getTimeStamp() . "." . $extension;
 
-            move_uploaded_file($origen, $destino);
+            $archivo["archivo"]->moveTo($destino);
 
             return $destino;
         }
@@ -33,7 +33,7 @@
 
                         if($objeto->legajo == $nroLegajo)
                         {
-                            // unlink($lista[$i]->rutaFoto);
+                            unlink($lista[$i]->rutaFoto);
 
                             unset($lista[$i]);//elimino elemento de la lista
 
@@ -57,7 +57,7 @@
                 }
                 else if($lista[0]->legajo == $nroLegajo)
                 {
-                    // unlink($lista[$i]->rutaFoto);
+                    unlink($lista[$i]->rutaFoto);
 
                     unlink($ruta);
                     
@@ -77,7 +77,7 @@
             {
                 $lista = Archivo::LeerArchivo($ruta);
 
-                // $fecha = new DateTime();//timestamp para no repetir nombre
+                $fecha = new DateTime();//timestamp para no repetir nombre
 
                 for($i = 0; $i < count($lista); $i++)
                 {
@@ -85,14 +85,14 @@
 
                     if($objeto->legajo == $elementoModificado->legajo)
                     {
-                        // $extension = pathinfo($objeto->rutaFoto, PATHINFO_EXTENSION);
+                        $extension = pathinfo($objeto->rutaFoto, PATHINFO_EXTENSION);
 
-                        // $nombreBackup = "./backupFotos/backup" . $fecha->getTimeStamp() . "." . $extension;
+                        $nombreBackup = "./backupFotos/backup" . $fecha->getTimeStamp() . "." . $extension;
     
                         //guardo la foto en la carpeta de backup:
-                        // copy($objeto->rutaFoto, $nombreBackup);
+                        copy($objeto->rutaFoto, $nombreBackup);
     
-                        // unlink($objeto->rutaFoto);
+                        unlink($objeto->rutaFoto);
 
                         $lista[$i] = $elementoModificado;
 

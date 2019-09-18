@@ -1,5 +1,5 @@
 <?php
-    use Psr\Http\Message\RequestInterface as Request;
+    use Psr\Http\Message\ServerRequestInterface as Request;
     use Psr\Http\Message\ResponseInterface as Response;
 
     require 'vendor/autoload.php';
@@ -11,24 +11,44 @@
 
     $ruta = "./objetos.json";
 
-    $app = new \Slim\App();
+    $app = new \Slim\App(["settings" => $config]);
 
-    //Agregar alumno:
-    $app->post('/alumnos/{nombre}/{apellido}/{legajo}', function (Request $req,  Response $res, $args = []) {
+    //Agregar alumno o modificar (segun opcion):
+    $app->post('/alumnos/{nombre}/{apellido}/{legajo}/{opcion}', function (Request $req,  Response $res, $args = []) {
 
         $ruta = "./objetos.json";
+        $destino = "./imagenes/";
+        $mensaje = "Error";
 
-        $alumno = new Alumno($args["nombre"], $args["apellido"], $args["legajo"]);
+        //le paso el archivo
+        $archivo = $req->getUploadedFiles();
 
-        $datos = Alumno::MostrarAlumno($alumno);
+        $rutaFoto = Archivo::GuardarArchivoTemporal($archivo, $destino);
 
-        Archivo::GuardarPersona($ruta, $alumno);
+        $alumno = new Alumno($args["nombre"], $args["apellido"], $args["legajo"], $rutaFoto);
 
-        return $res->getBody()->write($datos);
+        switch($args["opcion"])
+        {
+            case "agregar":
+            Archivo::GuardarPersona($ruta, $alumno);
+            $mensaje = "Alumno guardado";
+            break;
+
+            case "modificar":
+            Archivo::ModificarAlumno($ruta, $alumno);
+            $mensaje = "Alumno modificado";
+            break;
+
+            default:
+            $mensaje = "Error";
+            break;
+        }
+
+        return $res->getBody()->write($mensaje);
     });
 
 
-    //Eliminar alumno:
+    //Mostrar alumno:
     $app->get('/alumnos', function (Request $req,  Response $res, $args = []) {
 
         $ruta = "./objetos.json";
@@ -39,18 +59,24 @@
 
     });
 
-    //Modificar alumno:
-    $app->put('/alumnos/{nombre}/{apellido}/{legajo}', function (Request $req,  Response $res, $args = []) {
+    //Modificar alumno sin foto:
+    // $app->put('/alumnos/{nombre}/{apellido}/{legajo}', function (Request $req,  Response $res, $args = []) {
 
-        $ruta = "./objetos.json";
+    //     $ruta = "./objetos.json";
+    //     $destino = "./imagenes/";
 
-        $alumnoModificado = new Alumno($args["nombre"], $args["apellido"], $args["legajo"]);
+    //     //le paso el archivo
+    //     $archivo = $req->getUploadedFiles();
 
-        Archivo::ModificarAlumno($ruta, $alumnoModificado);
+    //     $rutaFoto = Archivo::GuardarArchivoTemporal($archivo, $destino);
 
-        return $res->getBody()->write(Alumno::MostrarAlumno($alumnoModificado));
+    //     $alumnoModificado = new Alumno($args["nombre"], $args["apellido"], $args["legajo"], $rutaFoto);
 
-    });
+    //     Archivo::ModificarAlumno($ruta, $alumnoModificado);
+
+    //     return $res->getBody()->write('Alumno Modificado');
+
+    // });
 
     //Borrar alumno:
     $app->delete('/alumnos/{legajo}', function (Request $req,  Response $res, $args = []) {
