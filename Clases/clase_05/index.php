@@ -14,7 +14,7 @@
     $app = new \Slim\App();
 
     //Agregar alumno:
-    $app->post('/{nombre}/{apellido}/{legajo}', function (Request $req,  Response $res, $args = []) {
+    $app->post('/alumnos/{nombre}/{apellido}/{legajo}', function (Request $req,  Response $res, $args = []) {
 
         $ruta = "./objetos.json";
 
@@ -29,7 +29,7 @@
 
 
     //Eliminar alumno:
-    $app->get('/', function (Request $req,  Response $res, $args = []) {
+    $app->get('/alumnos', function (Request $req,  Response $res, $args = []) {
 
         $ruta = "./objetos.json";
         
@@ -40,7 +40,7 @@
     });
 
     //Modificar alumno:
-    $app->put('/{nombre}/{apellido}/{legajo}', function (Request $req,  Response $res, $args = []) {
+    $app->put('/alumnos/{nombre}/{apellido}/{legajo}', function (Request $req,  Response $res, $args = []) {
 
         $ruta = "./objetos.json";
 
@@ -49,6 +49,17 @@
         Archivo::ModificarAlumno($ruta, $alumnoModificado);
 
         return $res->getBody()->write(Alumno::MostrarAlumno($alumnoModificado));
+
+    });
+
+    //Borrar alumno:
+    $app->delete('/alumnos/{legajo}', function (Request $req,  Response $res, $args = []) {
+
+        $ruta = "./objetos.json";
+
+        Archivo::BorrarPersona($ruta, $args["legajo"]);
+
+        return $res->getBody()->write('Alumno Borrado');
 
     });
 

@@ -33,7 +33,7 @@
 
                         if($objeto->legajo == $nroLegajo)
                         {
-                            unlink($lista[$i]->rutaFoto);
+                            // unlink($lista[$i]->rutaFoto);
 
                             unset($lista[$i]);//elimino elemento de la lista
 
@@ -57,7 +57,7 @@
                 }
                 else if($lista[0]->legajo == $nroLegajo)
                 {
-                    unlink($lista[$i]->rutaFoto);
+                    // unlink($lista[$i]->rutaFoto);
 
                     unlink($ruta);
                     
