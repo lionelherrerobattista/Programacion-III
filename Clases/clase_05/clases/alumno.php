@@ -26,6 +26,21 @@
             return $datos;
         }
 
+        //Manejo la fuente de datos acá:
+        public static function TraerAlumnos()
+        {
+            $ruta = "./objetos.json";
+            
+            $datos = Archivo::MostrarPersonas($ruta);
+
+            if($datos == null)
+            {
+                $datos = "Error al traer los datos";
+            }
+
+            return $datos;
+        }
+
     }
 
 

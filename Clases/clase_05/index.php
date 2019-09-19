@@ -4,91 +4,33 @@
 
     require 'vendor/autoload.php';
     require_once "./clases/archivo.php";
-    require_once "./clases/alumno.php";
+    require_once "./clases/alumnoApi.php";
 
     $config['displayErrorDetails'] = true;
     $config['addContentLengthHeader'] = false;
 
-    $ruta = "./objetos.json";
-
     $app = new \Slim\App(["settings" => $config]);
 
-    //Agregar alumno o modificar (segun opcion):
-    $app->post('/alumnos/{nombre}/{apellido}/{legajo}/{opcion}', function (Request $req,  Response $res, $args = []) {
-
-        $ruta = "./objetos.json";
-        $destino = "./imagenes/";
-        $mensaje = "Error";
-
-        //le paso el archivo
-        $archivo = $req->getUploadedFiles();
-
-        $rutaFoto = Archivo::GuardarArchivoTemporal($archivo, $destino);
-
-        $alumno = new Alumno($args["nombre"], $args["apellido"], $args["legajo"], $rutaFoto);
-
-        switch($args["opcion"])
-        {
-            case "agregar":
-            Archivo::GuardarPersona($ruta, $alumno);
-            $mensaje = "Alumno guardado";
-            break;
-
-            case "modificar":
-            Archivo::ModificarAlumno($ruta, $alumno);
-            $mensaje = "Alumno modificado";
-            break;
-
-            default:
-            $mensaje = "Error";
-            break;
-        }
-
-        return $res->getBody()->write($mensaje);
-    });
+    //Agrupo las funciones comunes:
+    $app->group('/alumnos', function()
+    {
+        //Agregar alumno o modificar (segun opcion):
+        $this->post('/{nombre}/{apellido}/{legajo}/{opcion}', \AlumnoApi::class . ':GuardarUno');
 
 
-    //Mostrar alumno:
-    $app->get('/alumnos', function (Request $req,  Response $res, $args = []) {
+        //Mostrar alumno:
+        $this->get('/', \AlumnoApi::class . ':MostrarTodos');
 
-        $ruta = "./objetos.json";
         
-        $datos = Archivo::MostrarPersonas($ruta);
-        
-        return $res->getBody()->write($datos);
+        //Modificar alumno sin foto:        
+        $this->put('/alumnos/{nombre}/{apellido}/{legajo}', \AlumnoApi::class . ':ModificarUno');
+
+        //Borrar alumno:
+        $this->delete('/{legajo}', \AlumnoApi::class . ':BorrarUno');
 
     });
 
-    //Modificar alumno sin foto:
-    // $app->put('/alumnos/{nombre}/{apellido}/{legajo}', function (Request $req,  Response $res, $args = []) {
-
-    //     $ruta = "./objetos.json";
-    //     $destino = "./imagenes/";
-
-    //     //le paso el archivo
-    //     $archivo = $req->getUploadedFiles();
-
-    //     $rutaFoto = Archivo::GuardarArchivoTemporal($archivo, $destino);
-
-    //     $alumnoModificado = new Alumno($args["nombre"], $args["apellido"], $args["legajo"], $rutaFoto);
-
-    //     Archivo::ModificarAlumno($ruta, $alumnoModificado);
-
-    //     return $res->getBody()->write('Alumno Modificado');
-
-    // });
-
-    //Borrar alumno:
-    $app->delete('/alumnos/{legajo}', function (Request $req,  Response $res, $args = []) {
-
-        $ruta = "./objetos.json";
-
-        Archivo::BorrarPersona($ruta, $args["legajo"]);
-
-        return $res->getBody()->write('Alumno Borrado');
-
-    });
-
+    //siempre!!:
     $app->run();
 
 
