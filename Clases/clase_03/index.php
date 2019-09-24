@@ -17,7 +17,7 @@
         }
         break;
 
-        case 2://borrar
+        case "borrar"://borrar
         if(isset($_POST["legajo"]))
         {
           $legajo = $_POST["legajo"];
@@ -29,7 +29,7 @@
         }
         break;
 
-        case 3://Modificar
+        case "modificar"://Modificar
         if(isset($_POST["nombre"], $_POST["legajo"]))
         {
           $objetoModificado = array("nombre" => $_POST["nombre"], "legajo" => $_POST["legajo"]);
@@ -41,7 +41,7 @@
         }
         break;
 
-        case 4://Mostrar
+        case "mostrar"://Mostrar
         Archivo::Mostrar($ruta);
         break;
 
