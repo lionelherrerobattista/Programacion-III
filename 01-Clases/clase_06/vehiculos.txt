@@ -1,0 +1,2 @@
+{"marca":"ford","modelo":"fiesta","patente":"123abc","precio":"100000"}
+{"marca":"peugeot","modelo":"206","patente":"100cba","precio":"100000"}
