@@ -18,15 +18,19 @@
         $this->post('/vehiculo', \VehiculoApi::class . ':cargarVehiculo');
 
         //consultar vehiculo
-        $this->get('/{consulta}', \VehiculoApi::class . ':consultarVehiculo');
+        $this->get('/vehiculo/{consulta}', \VehiculoApi::class . ':consultarVehiculo');
 
+        //guardar servicio
         $this->post('/servicio', \VehiculoApi::class . ':cargarTipoServicio');
-        
-        // //Modificar alumno sin foto:        
-        // $this->put('/alumnos/{nombre}/{apellido}/{legajo}', \AlumnoApi::class . ':ModificarUno');
 
-        // //Borrar alumno:
-        // $this->delete('/{legajo}', \AlumnoApi::class . ':BorrarUno');
+        //sacar turno
+        $this->get('/turnos/{patente}/{fecha}', \VehiculoApi::class . ':sacarTurno');
+        
+        //Mostrar turnos
+        $this->get('/turnos', \VehiculoApi::class . ':mostrarTurnos');
+
+        //inscripciones
+        $this->get('/inscripciones/{filtro}', \VehiculoApi::class . ':inscripciones');
 
     });
 

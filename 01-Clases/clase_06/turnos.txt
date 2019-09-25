@@ -1,0 +1,2 @@
+{"fecha":"lunes","patente":"123abc","marca":"ford","modelo":"fiesta","precio":"2000","tipoServicio":"10000"}
+{"fecha":"martes","patente":"100cba","marca":"peugeot","modelo":"206","precio":"2000","tipoServicio":"10000"}

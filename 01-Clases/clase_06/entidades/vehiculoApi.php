@@ -3,6 +3,7 @@
     require_once "./entidades/vehiculo.php";
     require_once "./entidades/servicio.php";
     require_once "./entidades/IApiUsable.php";
+    require_once "./entidades/turno.php";
 
     class VehiculoApi
     {
@@ -15,7 +16,9 @@
         {
             $ruta = "./vehiculos.txt";
             $muestroVehiculo = false;
+            $encontro = false;
             $consulta = strtolower($args["consulta"]);
+
             $datos = array();
 
 
@@ -32,12 +35,19 @@
 
                 if($muestroVehiculo == true)
                 {
+                    $encontro = true;
                     array_push($datos, $auxVehiculo);
                 }
 
                 $muestroVehiculo = false;
 
             }
+
+            if($encontro == false)
+            {
+                $datos = "No encontró $consulta";
+            }
+
 
             $newResponse = $response->withJson($datos, 200); //codigo de respuesta
             
@@ -87,6 +97,7 @@
             
             $args = $request->getParsedBody();
 
+            //comprobar que el tipo sea el correcto
             $servicio = new Servicio(strtolower($args["id"]), strtolower($args["tipo"]), strtolower($args["precio"]), strtolower($args["demora"]));
                             
             Archivo::GuardarUno($ruta, $servicio);
@@ -102,65 +113,72 @@
 
         public static function sacarTurno($request, $response, $args)
         {
-            $ruta = "./vehiculos.txt";
+            $ruta = "./turnos.txt";
+            $rutaVehiculos =  "./vehiculos.txt";
+            $rutaServicios = "./tipoServicio.txt";
             $muestroVehiculo = false;
-            $consulta = strtolower($args["consulta"]);
+            $patente = strtolower($args["patente"]);
+            $fecha = strtolower($args["fecha"]);
             $datos = array();
+            $vehiculo = null;
 
 
-            $listavehiculos = Vehiculo::TraerVehiculos($ruta);
+            
+            $listaServicios = Servicio::TraerServicios($rutaServicios);
 
-                
-            foreach($listavehiculos as $auxVehiculo)
+           
+            if(file_exists($rutaVehiculos))
             {
-                if($auxVehiculo->marca == $consulta || $auxVehiculo->modelo == $consulta ||
-                    $auxVehiculo->patente == $consulta)
+                $listavehiculos = Vehiculo::TraerVehiculos($rutaVehiculos);
+
+                foreach($listavehiculos as $auxVehiculo)
                 {
-                    $muestroVehiculo = true;
+                    if($auxVehiculo->patente == $patente)
+                    {
+                        $vehiculo = $auxVehiculo;
+                        break;
+                    }
                 }
-
-                if($muestroVehiculo == true)
-                {
-                    array_push($datos, $auxVehiculo);
-                }
-
-                $muestroVehiculo = false;
-
             }
 
-            $newResponse = $response->withJson($datos, 200); //codigo de respuesta
+
+            $turno = new Turno($fecha, $patente, $vehiculo->marca, $vehiculo->modelo, $listaServicios[0]->precio, $listaServicios[0]->tipo);
+
+            Archivo::GuardarUno($ruta, $turno);
+
+            Turno::TraerTurnos($ruta);
+
             
-        
-            return $newResponse; //devolver siempre Json
         }
 
-        // public static function BorrarUno($request, $response, $args)
-        // {
-            
-        //     $ruta = "./objetos.json";
+        public static function mostrarTurnos($request, $response, $args)
+        {
+            $ruta = "./turnos.txt";
 
-        //     Archivo::BorrarPersona($ruta, $args["legajo"]);
+            $listaTurnos = Turno::TraerTurnos($ruta);
 
-        //     return $response->getBody()->write('Alumno Borrado');
+            $newResponse = $response->withJson($listaTurnos, 200);
 
-        // }
+            return $newResponse;
+        }
 
-        // public static function ModificarUno($request, $response, $args)
-        // {    
-        //     $ruta = "./objetos.json";
-        //     $destino = "./imagenes/";
+        public static function inscripciones($request, $response, $args)
+        {
+            $ruta = "./turnos.txt";
 
-        //     //le paso el archivo
-        //     $archivo = $request->getUploadedFiles();
+            $listaTurnos = Turno::TraerTurnos($ruta);
 
-        //     $rutaFoto = Archivo::GuardarArchivoTemporal($archivo, $destino);
+           
+            // usort(//array , //funcion que ordena);
+         
 
-        //     $alumnoModificado = new Alumno($args["nombre"], $args["apellido"], $args["legajo"], $rutaFoto);
+            $newResponse = $response->withJson($listaOrdenada, 200);
 
-        //     Archivo::ModificarAlumno($ruta, $alumnoModificado);
+            return $newResponse;
+        }
 
-        //     return $response->getBody()->write('Alumno Modificado');
-        // }
+
+        
 
     }
 

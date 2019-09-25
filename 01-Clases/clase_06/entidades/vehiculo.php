@@ -18,15 +18,6 @@
 
         }
 
-        // public static function MostrarAlumno($alumno)
-        // {
-        //     $datos = "Nombre: " . ucwords($alumno->nombre) . "<br>";
-        //     $datos = $datos . "Apellido: " . ucwords($alumno->apellido) . "<br>";
-        //     $datos = $datos . "Legajo: "  . $alumno->legajo  . "<br><br>";
-        //     $datos = $datos . "<img src='" . $alumno->rutaFoto . "'/><br>";
-
-        //     return $datos;
-        // }
 
         //Manejo la fuente de datos acá:
         public static function TraerVehiculos($ruta)
