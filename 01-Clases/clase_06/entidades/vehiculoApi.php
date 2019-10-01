@@ -154,48 +154,23 @@
 
         public static function ModificarVehiculo($request, $response, $args)
         {    
-            $ruta = "./vehiculos.txt";
-            $destino = "./imagenes/";
-            $encontroVehiculo = false;
-
-            $args = $request->getParsedBody();
-
+            $args = $request->getParsedBody();   
             
-   
-            if(file_exists($ruta))
-            {
-                $listavehiculos = Vehiculo::TraerVehiculos($ruta);
+            $archivoFoto = $request->getUploadedFiles();
 
-                foreach($listavehiculos as $auxVehiculo)
+            $listaVehiculos = Vehiculo::TraerVehiculos();
+
+            foreach($listaVehiculos as $auxVehiculo)
+            {
+                if(strcasecmp($auxVehiculo->patente, $args["patente"]) == 0)
                 {
-                    if($auxVehiculo->patente == strtolower($args["patente"]))
-                    {
-                        $encontroVehiculo = true;
-                        break;
-                    }
+                    $vehiculo = new Vehiculo($args["marca"], $args["modelo"], $args["patente"], $args["precio"], $archivoFoto);
+            
+                    Vehiculo::ModificarVehiculo($vehiculo);
                 }
             }
 
-            if($encontroVehiculo == true)
-            {
-                $archivo = $request->getUploadedFiles();
-
-                $rutaFoto = Archivo::GuardarArchivoTemporal($archivo, $destino, $args["patente"]);
-
-                $vehiculo = new Vehiculo(strtolower($args["marca"]), strtolower($args["modelo"]),
-                                             strtolower($args["patente"]), strtolower($args["precio"]), $rutaFoto);
-                
-                Archivo::ModificarUno($ruta, $vehiculo);
-
-                $mensaje = "Vehículo Guardado";
-            }
-            else
-            {
-                $mensaje = "No encontrado";
-            }
-
-
-            $listaVehiculos = Vehiculo::TraerVehiculos($ruta);
+            $listaVehiculos = Vehiculo::TraerVehiculos();
 
             $newResponse = $response->withJson($listaVehiculos, 200);
 

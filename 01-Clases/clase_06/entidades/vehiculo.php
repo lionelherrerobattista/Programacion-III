@@ -95,7 +95,32 @@
             
 
             return $guardo;
-        }  
+        } 
+
+        public static function ModificarVehiculo($elementoModificado)
+        {
+            $ruta = "./vehiculos.txt";
+
+            $listaVehiculos = Vehiculo::TraerVehiculos();
+
+            for($i= 0 ; $i < count($listaVehiculos); $i++)
+            {
+                $vehiculoAux = $listaVehiculos[$i];
+
+                //Modifico
+                if($vehiculoAux->patente == $elementoModificado->patente)
+                {
+                    Archivo::HacerBackup($ruta, $vehiculoAux);
+                    //reemplazo
+                    $listaVehiculos[$i] = $elementoModificado;
+
+                    Archivo::GuardarTodos($ruta, $listaVehiculos);
+                    break;
+                }
+            }
+
+        }
+
 
         public static function CrearTabla($listaVehiculos)
         {

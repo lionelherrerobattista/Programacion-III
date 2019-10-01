@@ -10,7 +10,7 @@
 
             $extension = pathinfo($archivo["archivo"]->getClientFileName(), PATHINFO_EXTENSION);
 
-            $destino = $destino . $patente . "-" . $fecha->format("d-m-Y") . "." . $extension;
+            $destino = $destino . $patente . "-" . $fecha->format("d-m-Y-Hi") . "." . $extension;
 
             $archivo["archivo"]->moveTo($destino);
 
@@ -72,48 +72,41 @@
             
         }
 
-        public static function ModificarUno($ruta, $elementoModificado)
+        public static function HacerBackup($ruta, $elementoAModificar)
         {
+      
+            $fecha = new DateTime();//timestamp para no repetir nombre
+    
+            $extension = pathinfo($elementoAModificar->rutaFoto, PATHINFO_EXTENSION);
+
+            $nombreBackup = "./backupFotos/backup" . $elementoAModificar->patente . "-" . $fecha->format("d-m-Y-Hi") . "." . $extension;
+
+            //guardo la foto en la carpeta de backup:
+            copy($elementoAModificar->rutaFoto, $nombreBackup);
+
+            unlink($elementoAModificar->rutaFoto);
+
+        }
+
+        public static function GuardarTodos($ruta, $lista)
+        {
+            $guardo = false;
+            
+            $archivo = fopen($ruta, "w");
+
+            foreach($lista as $objeto)
+            {
+                fwrite($archivo, json_encode($objeto) . PHP_EOL);
+            }
+
+            fclose($archivo);
+
             if(file_exists($ruta))
             {
-                $lista = Vehiculo::TraerVehiculos($ruta);
-
-                $fecha = new DateTime();//timestamp para no repetir nombre
-
-                for($i = 0; $i < count($lista); $i++)
-                {
-                    $objeto = $lista[$i];
-
-                    if($objeto->patente == $elementoModificado->patente)
-                    {
-                        $extension = pathinfo($objeto->rutaFoto, PATHINFO_EXTENSION);
-
-                        $nombreBackup = "./backupFotos/backup" . $objeto->patente . "-" . $fecha->format("d-m-Y") . "." . $extension;
-    
-                        //guardo la foto en la carpeta de backup:
-                        copy($objeto->rutaFoto, $nombreBackup);
-    
-                        unlink($objeto->rutaFoto);
-
-                        $lista[$i] = $elementoModificado;
-
-                        
-
-                        break;
-                    }
-                }
-
-                unlink($ruta);
-
-                //guardo los datos de nuevo en el archivo
-                for($i= 0 ; $i < count($lista); $i++)
-                {
-                    $objeto = $lista[$i];
-
-                    Archivo::GuardarUno($ruta, $objeto);
-                }
+                $guardo = true;
             }
-            
+
+            return $guardo;
         }
 
         public static function GuardarUno($ruta, $dato)
