@@ -121,6 +121,47 @@
 
         }
 
+        public static function BorrarVehiculo($patente)
+        {
+            $lista = Archivo::LeerArchivo($ruta);
+
+            if($lista != null)
+            {
+
+                if(count($lista) > 1)
+                {
+                    for($i = 0; $i < count($lista); $i++)
+                    {
+                        $objeto = $lista[$i];
+
+                        if($objeto->legajo == $nroLegajo)
+                        {
+                            unlink($lista[$i]->rutaFoto);
+
+                            unset($lista[$i]);//elimino elemento de la lista
+
+                            array_values($lista); //indices correlativos
+
+                            break;
+                        }
+
+                    }
+
+                    //guardo los datos de nuevo en el archivo                 
+                    Archivo::GuardarTodos($lista);
+
+                }
+                else if($lista[0]->legajo == $nroLegajo)
+                {
+                    unlink($lista[$i]->rutaFoto);
+
+                    unlink($ruta);
+                    
+                }
+            }
+
+        }
+
 
         public static function CrearTabla($listaVehiculos)
         {

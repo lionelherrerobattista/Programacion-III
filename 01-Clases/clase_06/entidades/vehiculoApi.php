@@ -31,6 +31,8 @@
             {
                 $newResponse = $response->withJson("Vehículo repetido", 404);
             }
+            
+            Archivo::CrearLog("POST", "1:1:1:1");
                       
             return $newResponse;
         }
