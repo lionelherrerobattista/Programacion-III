@@ -1,2 +1,4 @@
-{"fecha":"lunes","patente":"123abc","marca":"ford","modelo":"fiesta","precio":"2000","tipoServicio":"10000"}
-{"fecha":"martes","patente":"100cba","marca":"peugeot","modelo":"206","precio":"2000","tipoServicio":"30000"}
+{"fecha":"lunes","patente":"123abc","marca":"ford","modelo":"fiesta","precio":"2000","tipoServicio":"10.000km"}
+{"fecha":"martes","patente":"100cba","marca":"peugeot","modelo":"206","precio":"2000","tipoServicio":"10.000km"}
+{"fecha":"jueves","patente":"aaa111","marca":"toyota","modelo":"nohilux","precio":"2000","tipoServicio":"10.000km"}
+{"fecha":"jueves","patente":"aaa111","marca":"toyota","modelo":"nohilux","precio":"20","tipoServicio":"50.000km"}

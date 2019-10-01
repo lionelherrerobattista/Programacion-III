@@ -43,14 +43,25 @@
         {
             $ruta = "./vehiculos.txt";
             
-            $listaVehiculos = Archivo::LeerArchivo($ruta);
+            $listaVehiculos = Vehiculo::TraerVehiculos($ruta);
 
-            if($listaVehiculos == null)
+            $vehiculo = null;
+
+            if($listaVehiculos != null)
             {
-                $listaVehiculos = "Error al traer los datos";
+            
+                foreach($listaVehiculos as $auxVehiculo)
+                {
+                    if(strcasecmp($auxVehiculo->patente, $patente) == 0)
+                    {
+                        $vehiculo = $auxVehiculo;
+                        break;
+                    }
+                }
+            
             }
 
-            return $listaVehiculos;
+            return $vehiculo;
         }
 
         public static function GuardarVehiculo($vehiculo)
@@ -59,11 +70,12 @@
             $vehiculoRepetido = false;
             $guardo = false;
 
+            //Veo si está repetido
             if(file_exists($ruta))
             {
                 $listavehiculos = Vehiculo::TraerVehiculos();
 
-                //Veo si está repetido
+                
                 foreach($listavehiculos as $auxVehiculo)
                 {
                     if($auxVehiculo->patente == strtolower($vehiculo->patente))
@@ -74,6 +86,7 @@
                 }
             }
                 
+            //guardo
             if($vehiculoRepetido == false)
             {
                 Archivo::GuardarUno($ruta, $vehiculo);
@@ -84,7 +97,38 @@
             return $guardo;
         }  
 
+        public static function CrearTabla($listaVehiculos)
+        {
+            $tablaVehiculos = "<table>
+                                <thead>
+                                    <tr>
+                                        <th>Marca</th>
+                                        <th>Modelo</th>
+                                        <th>Patente</th>
+                                        <th>Precio</th>
+                                        <th>Foto</th>
+                                    </tr>     
+                                </thead>
+                                <tbody>";
+
+            foreach($listaVehiculos as $vehiculo)
+            {
+                $tablaVehiculos .= "<tr>
+                                        <td>" . $vehiculo->marca . "</td>
+                                        <td> " . $vehiculo->modelo . "</td>
+                                        <td>" . $vehiculo->patente . "</td>
+                                        <td>" . $vehiculo->precio . "</td>
+                                        <td>" . "<img src='$vehiculo->rutaFoto'/>" . "</td>
+                                    </tr>";
+            }                               
+    
+            $tablaVehiculos .=  "</tbody></table>";
+
+            return $tablaVehiculos;
+        }
+
     }
+    
 
 
 ?>

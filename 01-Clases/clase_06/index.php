@@ -30,7 +30,7 @@
         $this->get('/turnos', \VehiculoApi::class . ':mostrarTurnos');
 
         //inscripciones
-        $this->get('/inscripciones/{filtro}', \VehiculoApi::class . ':inscripciones');
+        $this->get('/inscripciones/{filtro}', \VehiculoApi::class . ':filtrarTurnos');
 
         //cargar vehiculo
         $this->post('/vehiculo/modificar', \VehiculoApi::class . ':modificarVehiculo');

@@ -118,12 +118,20 @@
 
         public static function GuardarUno($ruta, $dato)
         {
+            $guardo = false;
             
             $archivo = fopen($ruta, "a");
 
             fwrite($archivo, json_encode($dato) . PHP_EOL);
 
             fclose($archivo);
+
+            if(file_exists($ruta))
+            {
+                $guardo = true;
+            }
+
+            return $guardo;
         
         }
 

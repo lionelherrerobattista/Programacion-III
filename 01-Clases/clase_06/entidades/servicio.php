@@ -3,23 +3,32 @@
     class Servicio
     {
         public $id;
-        public $tipoServicio;
+        public $tipo;
         public $precio;
         public $demora;
 
         public function __construct($id, $tipo, $precio, $demora)
         {
 
-            $this->id = $id;
-            $this->tipoServicio = $tipo;
-            $this->precio = $precio;
-            $this->demora = $demora;
+            if(strcasecmp("10.000km", $tipo) == 0 ||
+                strcasecmp("20.000km", $tipo) == 0 ||
+                    strcasecmp("50.000km", $tipo) == 0)
+            {
+             
+                    
+                $this->id = $id;
+                $this->tipo = $tipo;
+                $this->precio = $precio;
+                $this->demora = $demora;   
+
+            }
             
 
         }
 
-        public static function TraerServicios($ruta)
+        public static function TraerServicios()
         {
+            $ruta = "./tipoServicio.txt";
             
             $listaServicios = Archivo::LeerArchivo($ruta);
 
@@ -30,5 +39,19 @@
 
             return $listaServicios;
         }
+
+        public static function GuardarServicio($vehiculo)
+        {
+            $ruta = "./tipoServicio.txt";
+            
+            $guardoServicio = false;
+
+            if(Archivo::GuardarUno($ruta, $vehiculo))
+            {
+                $guardoServicio = true;
+            }
+
+            return $guardoServicio;
+        }  
 
     }

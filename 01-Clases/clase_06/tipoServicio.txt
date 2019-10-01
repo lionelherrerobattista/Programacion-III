@@ -1,1 +1,3 @@
-{"id":"1","tipo":"10000","precio":"2000","demora":"5"}
+{"id":"1","tipo":"20.000km","precio":"2000","demora":"5"}
+{"id":"5","tipo":"50.000km","precio":"20","demora":"5"}
+{"id":"2","tipo":"10.000km","precio":"20","demora":"5"}
