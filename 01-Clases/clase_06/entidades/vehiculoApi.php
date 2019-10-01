@@ -58,42 +58,26 @@
         
         public static function cargarVehiculo($request, $response) //no paso args
         {
-            $ruta = "./vehiculos.txt";
-            $destino = "./imagenes/";
             $vehiculoRepetido = false;
-            $mensaje = "Error";
             $args = $request->getParsedBody();
-            $archivo = $request->getUploadedFiles();
+            $archivoFoto = $request->getUploadedFiles();        
 
-            $rutaFoto = Archivo::GuardarArchivoTemporal($archivo, $destino, $args["patente"]);
+            //Creo el objeto
+            $vehiculo = new Vehiculo($args["marca"], $args["modelo"], $args["patente"], $args["precio"], $archivoFoto);
 
-            $vehiculo = new Vehiculo(strtolower($args["marca"]), strtolower($args["modelo"]), strtolower($args["patente"]),
-                                         strtolower($args["precio"]), $rutaFoto);
-   
-            if(file_exists($ruta))
+            //Guardo
+            if(Vehiculo::GuardarVehiculo($vehiculo))
             {
-                $listavehiculos = Vehiculo::TraerVehiculos($ruta);
+                $listaVehiculos = Vehiculo::TraerVehiculos();
 
-                foreach($listavehiculos as $auxVehiculo)
-                {
-                    if($auxVehiculo->patente == strtolower($vehiculo->patente))
-                    {
-                        $vehiculoRepetido = true;
-                    }
-                }
-            }
-                
-            if($vehiculoRepetido == false)
-            {
-                Archivo::GuardarUno($ruta, $vehiculo);
-                $mensaje = "Vehículo Guardado";
+                $newResponse = $response->withJson($listaVehiculos, 200);
             }
             else
             {
-                $mensaje = "Vehiculo repetido";
+                $newResponse = $response->withJson("Vehículo repetido", 404);
             }
-
-            return $response->getBody()->write($mensaje);
+                      
+            return $newResponse;
         }
 
         public static function cargarTipoServicio($request, $response) //no paso args

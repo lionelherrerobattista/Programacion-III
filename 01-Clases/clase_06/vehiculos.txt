@@ -1,3 +1,4 @@
 {"marca":"ford","modelo":"fiesta","patente":"123abc","precio":"100000","rutaFoto":""}
 {"marca":"peugeot","modelo":"206","patente":"100cba","precio":"100000","rutaFoto":""}
 {"marca":"toyota","modelo":"nohilux","patente":"aaa111","precio":"10","rutaFoto":".\/imagenes\/aaa111-01-10-2019.jpg"}
+{"marca":"Ford","modelo":"Focus","patente":"asd123","precio":"20","rutaFoto":".\/imagenes\/asd123-01-10-2019.jpg"}
