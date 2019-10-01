@@ -32,6 +32,12 @@
         //inscripciones
         $this->get('/inscripciones/{filtro}', \VehiculoApi::class . ':inscripciones');
 
+        //cargar vehiculo
+        $this->post('/vehiculo/modificar', \VehiculoApi::class . ':modificarVehiculo');
+
+        //Mostrar turnos
+        $this->get('/vehiculos', \VehiculoApi::class . ':mostrarVehiculos');
+
     });
 
     //siempre!!:

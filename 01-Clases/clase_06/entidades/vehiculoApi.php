@@ -59,11 +59,16 @@
         public static function cargarVehiculo($request, $response) //no paso args
         {
             $ruta = "./vehiculos.txt";
+            $destino = "./imagenes/";
             $vehiculoRepetido = false;
             $mensaje = "Error";
             $args = $request->getParsedBody();
+            $archivo = $request->getUploadedFiles();
 
-            $vehiculo = new Vehiculo(strtolower($args["marca"]), strtolower($args["modelo"]), strtolower($args["patente"]), strtolower($args["precio"]));
+            $rutaFoto = Archivo::GuardarArchivoTemporal($archivo, $destino, $args["patente"]);
+
+            $vehiculo = new Vehiculo(strtolower($args["marca"]), strtolower($args["modelo"]), strtolower($args["patente"]),
+                                         strtolower($args["precio"]), $rutaFoto);
    
             if(file_exists($ruta))
             {
@@ -191,6 +196,44 @@
             return $response->getBody()->write($tablaTurnos);
         }
 
+
+        public static function mostrarVehiculos($request, $response, $args)
+        {
+            $ruta = "./vehiculos.txt";
+
+            $listaVehiculos = Vehiculo::TraerVehiculos($ruta);
+
+            $tablaVehiculos = "<table>
+                                <thead>
+                                    <tr>
+                                        <th>Marca</th>
+                                        <th>Modelo</th>
+                                        <th>Patente</th>
+                                        <th>Precio</th>
+                                        <th>Foto</th>
+                                    </tr>     
+                                </thead>
+                                <tbody>";
+
+            foreach($listaVehiculos as $vehiculo)
+            {
+                $tablaVehiculos .= "<tr>
+                                        <td>" . $vehiculo->marca . "</td>
+                                        <td> " . $vehiculo->modelo . "</td>
+                                        <td>" . $vehiculo->patente . "</td>
+                                        <td>" . $vehiculo->precio . "</td>
+                                        <td>" . "<img src='$vehiculo->rutaFoto'/>" . "</td>
+                                    </tr>";
+            }
+
+                                
+    
+            $tablaVehiculos .=  "</tbody></table>";
+
+
+            return $response->getBody()->write($tablaVehiculos);
+        }
+
         
 
 
@@ -220,6 +263,58 @@
 
             return $newResponse;
         }
+
+        public static function ModificarVehiculo($request, $response, $args)
+        {    
+            $ruta = "./vehiculos.txt";
+            $destino = "./imagenes/";
+            $encontroVehiculo = false;
+
+            $args = $request->getParsedBody();
+
+            
+   
+            if(file_exists($ruta))
+            {
+                $listavehiculos = Vehiculo::TraerVehiculos($ruta);
+
+                foreach($listavehiculos as $auxVehiculo)
+                {
+                    if($auxVehiculo->patente == strtolower($args["patente"]))
+                    {
+                        $encontroVehiculo = true;
+                        break;
+                    }
+                }
+            }
+
+            if($encontroVehiculo == true)
+            {
+                $archivo = $request->getUploadedFiles();
+
+                $rutaFoto = Archivo::GuardarArchivoTemporal($archivo, $destino, $args["patente"]);
+
+                $vehiculo = new Vehiculo(strtolower($args["marca"]), strtolower($args["modelo"]),
+                                             strtolower($args["patente"]), strtolower($args["precio"]), $rutaFoto);
+                
+                Archivo::ModificarUno($ruta, $vehiculo);
+
+                $mensaje = "Vehículo Guardado";
+            }
+            else
+            {
+                $mensaje = "No encontrado";
+            }
+
+
+            $listaVehiculos = Vehiculo::TraerVehiculos($ruta);
+
+            $newResponse = $response->withJson($listaVehiculos, 200);
+
+            return $newResponse;  
+
+        }
+
 
 
         //funiones que ordenan

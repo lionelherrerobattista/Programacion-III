@@ -1,15 +1,16 @@
 <?php
     class Archivo
     {
-        public static function GuardarArchivoTemporal($archivo, $destino)
+        public static function GuardarArchivoTemporal($archivo, $destino, $patente)
         {
             
             $origen = $archivo["archivo"]->getClientFileName();
+
             $fecha = new DateTime();
 
             $extension = pathinfo($archivo["archivo"]->getClientFileName(), PATHINFO_EXTENSION);
 
-            $destino = $destino . "archivo" . $fecha->getTimeStamp() . "." . $extension;
+            $destino = $destino . $patente . "-" . $fecha->format("d-m-Y") . "." . $extension;
 
             $archivo["archivo"]->moveTo($destino);
 
@@ -71,11 +72,11 @@
             
         }
 
-        public static function ModificarAlumno($ruta, $elementoModificado)
+        public static function ModificarUno($ruta, $elementoModificado)
         {
             if(file_exists($ruta))
             {
-                $lista = Archivo::LeerArchivo($ruta);
+                $lista = Vehiculo::TraerVehiculos($ruta);
 
                 $fecha = new DateTime();//timestamp para no repetir nombre
 
@@ -83,11 +84,11 @@
                 {
                     $objeto = $lista[$i];
 
-                    if($objeto->legajo == $elementoModificado->legajo)
+                    if($objeto->patente == $elementoModificado->patente)
                     {
                         $extension = pathinfo($objeto->rutaFoto, PATHINFO_EXTENSION);
 
-                        $nombreBackup = "./backupFotos/backup" . $fecha->getTimeStamp() . "." . $extension;
+                        $nombreBackup = "./backupFotos/backup" . $objeto->patente . "-" . $fecha->format("d-m-Y") . "." . $extension;
     
                         //guardo la foto en la carpeta de backup:
                         copy($objeto->rutaFoto, $nombreBackup);
@@ -109,7 +110,7 @@
                 {
                     $objeto = $lista[$i];
 
-                    Archivo::GuardarPersona($ruta, $objeto);
+                    Archivo::GuardarUno($ruta, $objeto);
                 }
             }
             

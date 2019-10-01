@@ -6,14 +6,16 @@
         public $modelo;
         public $patente;
         public $precio;
+        public $rutaFoto;
 
-        public function __construct($marca, $modelo, $patente, $precio)
+        public function __construct($marca, $modelo, $patente, $precio, $rutaFoto)
         {
 
             $this->marca = $marca;
             $this->modelo = $modelo;
             $this->patente = $patente;
             $this->precio = $precio;
+            $this->rutaFoto = $rutaFoto;
             
 
         }
