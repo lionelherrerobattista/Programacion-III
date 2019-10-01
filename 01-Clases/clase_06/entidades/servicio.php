@@ -3,7 +3,7 @@
     class Servicio
     {
         public $id;
-        public $tipo;
+        public $tipoServicio;
         public $precio;
         public $demora;
 
@@ -11,7 +11,7 @@
         {
 
             $this->id = $id;
-            $this->tipo = $tipo;
+            $this->tipoServicio = $tipo;
             $this->precio = $precio;
             $this->demora = $demora;
             

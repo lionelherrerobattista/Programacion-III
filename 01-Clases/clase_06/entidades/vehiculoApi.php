@@ -157,10 +157,43 @@
 
             $listaTurnos = Turno::TraerTurnos($ruta);
 
-            $newResponse = $response->withJson($listaTurnos, 200);
+            $tablaTurnos = "<table>
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Patente</th>
+                                        <th>Marca</th>
+                                        <th>Modelo</th>
+                                        <th>Precio</th>
+                                        <th>Servicio</th>
+                                    </tr>     
+                                </thead>
+                                <tbody>";
 
-            return $newResponse;
+            foreach($listaTurnos as $turno)
+            {
+                $tablaTurnos .=     "<tr>
+                                        <td>" . $turno->fecha . "</td>
+                                        <td> " . $turno->patente . "</td>
+                                        <td>" . $turno->marca . "</td>
+                                        <td>" . $turno->modelo . "</td>
+                                        <td>" . $turno->precio . "</td>
+                                        <td>" . $turno->tipoServicio . "</td>
+                                    
+                                    </tr>";
+            }
+
+                                
+    
+            $tablaTurnos .=  "</tbody></table>";
+
+
+            return $response->getBody()->write($tablaTurnos);
         }
+
+        
+
+
 
         public static function inscripciones($request, $response, $args)
         {
@@ -168,16 +201,52 @@
 
             $listaTurnos = Turno::TraerTurnos($ruta);
 
-           
-            // usort(//array , //funcion que ordena);
-         
+            if(isset($args["filtro"]))
+            {
+                switch($args["filtro"])
+                {
+                    case "fecha":
+                    usort($listaTurnos, array("vehiculoApi", "compararFecha"));
+                    break;
 
-            $newResponse = $response->withJson($listaOrdenada, 200);
+                    case "servicio":
+                    usort($listaTurnos, array("vehiculoApi", "compararServicio"));
+                    break;
+                }
+                
+            }
+
+            $newResponse = $response->withJson($listaTurnos, 200);
 
             return $newResponse;
         }
 
 
+        //funiones que ordenan
+        public static function compararFecha($elementoA, $elementoB)
+        {
+
+            return strcasecmp($elementoA->fecha, $elementoB->fecha);
+        }
+
+        public static function compararServicio($elementoA, $elementoB)
+        {
+            $retorno = 1;
+
+            if($elementoA->tipoServicio < $elementoB->tipoServicio)
+            {
+                $retorno = -1;
+            }
+            else if($elementoA->tipoServicio == $elementoB->tipoServicio)
+            {
+                $retorno = 0;
+            }
+
+            return $retorno;
+
+        }
+
+        
         
 
     }
