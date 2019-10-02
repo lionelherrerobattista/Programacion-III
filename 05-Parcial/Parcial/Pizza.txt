@@ -1,0 +1,1 @@
+{"idPizza":0,"precio":"300","tipo":"molde","cantidad":"15","sabor":"jamon","rutaImagenUno":".\/images\/pizzas\/molde-jamon1.jpg","rutaImagenDos":".\/images\/pizzas\/molde-jamon2.jpg"}
