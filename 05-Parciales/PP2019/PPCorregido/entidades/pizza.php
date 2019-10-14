@@ -149,6 +149,51 @@ class Pizza
         return $listaPizzas;
     }
 
+    public static function ValidarTipo($tipo)
+    {
+        $validado = false;
+
+        if(strcasecmp($tipo, "molde") == 0 || strcasecmp($tipo, "piedra") == 0)
+        {
+            $validado = true;
+        }
+
+        return $validado;
+    }
+
+    public static function ValidarSabor($sabor)
+    {
+        $datoValidado = false;
+
+        if(strcasecmp($sabor, "muzza") == 0
+            || strcasecmp($sabor, "jamon") == 0
+            || strcasecmp($sabor, "especial") == 0)
+        {
+            $datoValidado = true;
+        }
+
+        return $datoValidado;
+    }
+
+    public static function ValidarCombinacion($tipo, $sabor)
+    {
+        $pizzaRepetida = false;
+
+        $listaPizzas = Pizza::TraerPizzas();
+        
+        foreach($listaPizzas as $auxPizza)
+        {
+            //Combinación tipo-sabor única:
+            if(strcasecmp($auxPizza->tipo, $tipo) == 0 && strcasecmp($auxPizza->sabor, $sabor) == 0)
+            {
+                $pizzaRepetida = true;
+                break;
+            }
+        }
+
+        return $pizzaRepetida;
+    }
+
 }
 
 

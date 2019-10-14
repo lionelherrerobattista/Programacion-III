@@ -19,25 +19,13 @@ class PizzeriaAPI
         //Hago validaciones
 
         //Valido tipo y sabor
-        if((strcasecmp($args["tipo"], "molde") == 0 || strcasecmp($args["tipo"], "piedra") == 0) &&
-        (strcasecmp($args["sabor"], "muzza") == 0 || strcasecmp($args["sabor"], "jamon") == 0 || strcasecmp($args["sabor"], "especial") == 0))
+        if(Pizza::ValidarTipo($args["tipo"]) == true
+            && Pizza::ValidarSabor($args["sabor"]) == true)
         {
             $tipoSaborValido = true;
 
-            if(file_exists($ruta))
-            {
-                $listaPizzas = Pizza::TraerPizzas();
-                
-                foreach($listaPizzas as $auxPizza)
-                {
-                    //Combinación tipo-sabor única:
-                    if(strcasecmp($auxPizza->tipo, $args["tipo"]) == 0 && strcasecmp($auxPizza->sabor, $args["sabor"]) == 0)
-                    {
-                        $pizzaRepetida = true;
-                        break;
-                    }
-                }
-            }
+            $pizzaRepetida = Pizza::ValidarCombinacion($args["tipo"], $args["sabor"]);
+
         }
       
         //Guardo
@@ -97,7 +85,6 @@ class PizzeriaAPI
         $newResponse = $response->withJson($datos, 200);
 
         //Log
-
         PizzeriaAPI::HacerLog("GET", $request);
 
         return $newResponse;
@@ -172,14 +159,13 @@ class PizzeriaAPI
 
         $listaPizzas = Pizza::TraerPizzas();
 
-        if((strcasecmp($args["tipo"], "molde") == 0 || strcasecmp($args["tipo"], "piedra") == 0) &&
-        (strcasecmp($args["sabor"], "muzza") == 0 || strcasecmp($args["sabor"], "jamon") == 0 || strcasecmp($args["sabor"], "especial") == 0))
+        if(Pizza::ValidarTipo($args["tipo"]) == true && Pizza::ValidarSabor($args["sabor"]) == true)
         {
             $tipoSaborValido = true;
             
             foreach($listaPizzas as $auxPizza)
             {
-                //Combinación tipo-sabor única:
+                //Combinación tipo-sabor única + id:
                 if((strcasecmp($auxPizza->tipo, $args["tipo"]) == 0 && strcasecmp($auxPizza->sabor, $args["sabor"]) == 0)
                         && ($args["id"] != $auxPizza->id))
                 {
@@ -210,7 +196,7 @@ class PizzeriaAPI
 
         $newResponse = $response->withJson($listaPizzas, 200);
 
-        PizzeriaAPI::HacerLog("POST", $response);
+        PizzeriaAPI::HacerLog("POST", $request);
 
         return $newResponse;  
     }
@@ -264,8 +250,8 @@ class PizzeriaAPI
     public static function consultarLog($request, $response, $args)
     {
         $fecha = $request->getParam("fecha");
-        $fecha = new DateTime($fecha);
-        var_dump($fecha);
+        $fecha = new DateTime($fecha, new DateTimeZone('America/Argentina/Buenos_Aires'));
+        $fechaLog;
 
         $datos = array();
 
@@ -273,7 +259,9 @@ class PizzeriaAPI
 
         foreach($listaLogs as $log)
         {
-            if($log->hora < $fecha)
+            $fechaLog = new DateTime($log->hora, new DateTimeZone('America/Argentina/Buenos_Aires'));
+            
+            if($fechaLog < $fecha)
             {             
                 array_push($datos, $log);
             }
@@ -282,8 +270,7 @@ class PizzeriaAPI
         $newResponse = $response->withJson($datos, 200);
 
         return $newResponse;
-    }
-    
+    } 
 
     public static function HacerLog($caso, $request)
     {
