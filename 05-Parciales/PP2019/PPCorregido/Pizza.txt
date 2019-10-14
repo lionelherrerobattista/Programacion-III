@@ -1,0 +1,2 @@
+{"id":1,"precio":"500","tipo":"piedra","cantidad":"10","sabor":"muzza","imagenUno":".\/images\/pizzas\/foto1-piedra-muzza-14-10-2019-1656.jpg","imagenDos":".\/images\/pizzas\/foto2-piedra-muzza-14-10-2019-1656.jpg"}
+{"id":2,"precio":"300","tipo":"molde","cantidad":"10","sabor":"muzza","imagenUno":".\/images\/pizzas\/foto1molde_muzza-14-10-2019-1937.jpg","imagenDos":".\/images\/pizzas\/foto2molde_muzza-14-10-2019-1937.jpg"}

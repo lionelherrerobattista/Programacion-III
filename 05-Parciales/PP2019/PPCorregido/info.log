@@ -1,0 +1,6 @@
+{"caso":"GET","hora":"17:08:22","ruta":"http:\/\/localhost\/00-Parcial\/ventas?tipo=piedra"}
+{"caso":"GET","hora":"17:08:33","ruta":"http:\/\/localhost\/00-Parcial\/ventas?tipo=piedra&sabor=muzza"}
+{"caso":"GET","hora":"17:08:35","ruta":"http:\/\/localhost\/00-Parcial\/ventas?tipo=piedra&sabor=fdfdmuzza"}
+{"caso":"GET","hora":"17:08:41","ruta":"http:\/\/localhost\/00-Parcial\/ventas?tipo=pidfdfedra&sabor=fdfdmuzza"}
+{"caso":"GET","hora":"17:08:51","ruta":"http:\/\/localhost\/00-Parcial\/ventas?tipo=&sabor=muzza"}
+{"caso":"DELETE","hora":"17:48:58","ruta":"http:\/\/localhost\/00-Parcial\/pizzas?id=3"}
