@@ -1,0 +1,2 @@
+{"legajo":"101","email":"pppp@hotmail.com","nombre":"maria","clave":"abcd","fotoUno":".\/img\/fotos\/fotoUno-101-15-10-2019-152616.jpg","fotoDos":".\/img\/fotos\/fotoDos-101-15-10-2019-152616.jpg"}
+{"legajo":"100","email":"sdsdsd@gmail.com","nombre":"jose","clave":"1234","fotoUno":".\/img\/fotos\/fotoUno-100-15-10-2019-153404.jpg","fotoDos":".\/img\/fotos\/fotoDos-100-15-10-2019-153404.jpg"}
