@@ -1,0 +1,7 @@
+{"fecha":"15\/10\/2019","patente":"aaa111","marca":"ford","precio":"8000","tipoServicio":"50.000km"}
+{"fecha":"15\/10\/2019","patente":"aaa111","marca":"ford","precio":"8000","tipoServicio":"50.000km"}
+{"fecha":"15\/10\/2019","patente":"laq123","marca":"mercedes","precio":"8000","tipoServicio":"50.000km"}
+{"fecha":"15\/10\/2019","patente":"laq123","marca":"mercedes","precio":"5000","tipoServicio":"10.000km"}
+{"fecha":"15\/10\/2019","patente":"aaa111","marca":"ford","precio":"1000","tipoServicio":"20.000km"}
+{"fecha":"01\/10\/2019","patente":"aaa111","marca":"ford","precio":"1000","tipoServicio":"20.000km"}
+{"fecha":"01\/10\/2019","patente":"eee234","marca":"mercedes","precio":"1000","tipoServicio":"20.000km"}

@@ -1,0 +1,9 @@
+{"marca":"mercedes","patente":"bbb222","kms":"11.111","rutaFoto":".\/img\/archivo1571184889.jpg"}
+{"marca":"mercedes","patente":"bbb222","kms":"11.111","rutaFoto":".\/img\/archivo1571185025.jpg"}
+{"marca":"aaaaa","patente":"bbb222","kms":"2222","rutaFoto":".\/img\/archivo1571186023.jpg"}
+{"marca":"aaaaa","patente":"bbb222","kms":"2222","rutaFoto":".\/img\/archivo1571186065.jpg"}
+{"marca":"ford","patente":"abc444","kms":"50.000","rutaFoto":".\/img\/archivo1571184540.jpg"}
+{"marca":"ford","patente":"lll111","kms":"50.000","rutaFoto":".\/img\/archivo1571184540.jpg"}
+{"marca":"ford","patente":"bbb222","kms":"50.000","rutaFoto":".\/img\/archivo1571184876.jpg"}
+{"marca":"aaaaaa","patente":"ccc333","kms":"11111","rutaFoto":".\/img\/archivo1571185916.jpg"}
+{"marca":"aaaaaa","patente":"bbb222q","kms":"11111","rutaFoto":".\/img\/archivo1571186005.jpg"}
