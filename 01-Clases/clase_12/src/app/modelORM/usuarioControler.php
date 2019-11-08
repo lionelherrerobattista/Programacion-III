@@ -1,5 +1,6 @@
 <?php
 namespace App\Models\ORM;
+
 use Slim\App;
 use App\Models\ORM\usuario;
 use App\Models\IApiControler;
@@ -7,8 +8,12 @@ use App\Models\IApiControler;
 include_once __DIR__ . '/usuario.php';
 include_once __DIR__ . '../../modelAPI/IApiControler.php';
 
+
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use App\Models\AutentificadorJWT;
+
+
 
 
 class usuarioControler implements IApiControler 
@@ -58,11 +63,20 @@ class usuarioControler implements IApiControler
 
   public function loginUsuario($request, $response, $args)
   {
-    $email = $request->getParam("email");
+    $datos = $request->getParsedBody();
+
+    $token = $datos['token'];
+
+    //Verifico que el token sea confiable
+    AutentificadorJWT::VerificarToken($token);
+
+    //Obtengo los datos
+    $datos = AutentificadorJWT::ObtenerData($token);
+
+    $email = $datos->email;
 
     $newResponse = $response->withJson("Bienvenido $email", 200);
 
-    
     return $newResponse;
 
   }

@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 use Firebase\JWT\JWT;
+use \Exception;
 
 class AutentificadorJWT
 {
