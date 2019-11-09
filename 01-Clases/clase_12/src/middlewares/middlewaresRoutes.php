@@ -21,10 +21,11 @@ class Middleware
         if($usuario != null && hash_equals($usuario->clave, crypt($clave, "aaa")) == true) //generar salt 2do parametro igual al anterior
         {
 
-            //creo el token sin la clave
+            //creo el array sin la clave
             $datosUsuario = array(
 
-                'email' => $datos['email']
+                'email' => $usuario->email,
+                'perfil' => $usuario->perfil
     
             );
     
@@ -34,14 +35,14 @@ class Middleware
             //Reemplazo los datos del Body por el token, sin la clave
             $request = $request->withParsedBody(array('token' => $token));
 
-            $response = $next($request, $response); 
+            $newResponse = $next($request, $response); 
         }
         else
         {
-            $response->write("No existe $email", 200);
+            $newResponse = $response->withJson("No existe $email", 200);
         }
 
-        return $response;
+        return $newResponse;
     }
 }
     

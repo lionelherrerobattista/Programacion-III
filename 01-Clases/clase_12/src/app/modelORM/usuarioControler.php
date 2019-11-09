@@ -12,6 +12,7 @@ include_once __DIR__ . '../../modelAPI/IApiControler.php';
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use App\Models\AutentificadorJWT;
+use \Exception;
 
 
 
@@ -42,6 +43,7 @@ class usuarioControler implements IApiControler
     $usuario = new usuario;
     $usuario->clave = crypt($datos["clave"], "aaa");//generar salt para que coincidan
     $usuario->email = $datos["email"];
+    $usuario->perfil = $datos["perfil"];
     $usuario->save();
 
     $newResponse = $response->withJson("Usuario registrado", 200);  
@@ -63,19 +65,43 @@ class usuarioControler implements IApiControler
 
   public function loginUsuario($request, $response, $args)
   {
+    $esValido = false;
     $datos = $request->getParsedBody();
 
     $token = $datos['token'];
 
     //Verifico que el token sea confiable
-    AutentificadorJWT::VerificarToken($token);
+    try
+    {
+      AutentificadorJWT::VerificarToken($token);
+      $esValido = true;
+    }
+    catch(Exception $e)
+    {
+      $newResponse = $response->withJson($e->getMessage(), 200);
+    }
 
-    //Obtengo los datos
-    $datos = AutentificadorJWT::ObtenerData($token);
+    if($esValido)
+    {
+      //Obtengo los datos
+      $datos = AutentificadorJWT::ObtenerData($token);
 
-    $email = $datos->email;
+      $email = $datos->email;
+      $perfil = $datos->perfil;
 
-    $newResponse = $response->withJson("Bienvenido $email", 200);
+      if($perfil == 'admin')
+      {
+        $newResponse = $response->withJson("Bienvenido admin", 200);
+      }
+      else
+      {
+        $newResponse = $response->withJson("Bienvenido $email", 200);
+      }
+      
+    }
+    
+
+    
 
     return $newResponse;
 
