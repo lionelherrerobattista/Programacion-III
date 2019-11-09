@@ -17,7 +17,8 @@ class cdControler
     }
     
      public function TraerTodos($request, $response, $args) {
-        $todosLosCds=cd::TraerTodoLosCds();
+
+        $todosLosCds=cd::all();
         $newResponse = $response->withJson($todosLosCds, 200);  
         return $newResponse;
     }
