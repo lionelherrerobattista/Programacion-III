@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-11-2019 a las 01:06:54
--- Versión del servidor: 10.1.38-MariaDB
--- Versión de PHP: 7.3.2
+-- Tiempo de generación: 09-11-2019 a las 19:20:19
+-- Versión del servidor: 10.4.6-MariaDB
+-- Versión de PHP: 7.3.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -32,16 +32,18 @@ CREATE TABLE `usuarios` (
   `id` int(11) NOT NULL,
   `email` varchar(50) COLLATE utf8mb4_spanish2_ci NOT NULL,
   `clave` varchar(250) COLLATE utf8mb4_spanish2_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+  `perfil` varchar(60) COLLATE utf8mb4_spanish2_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`id`, `email`, `clave`, `created_at`, `updated_at`) VALUES
-(3, 'lala@gmail.com', 'aatxRPdZ/m52.', '2019-11-06 03:44:47', '2019-11-06 03:44:47');
+INSERT INTO `usuarios` (`id`, `email`, `clave`, `perfil`, `created_at`, `updated_at`) VALUES
+(3, 'lala@gmail.com', 'aatxRPdZ/m52.', 'admin', '2019-11-09 17:33:30', '2019-11-06 03:44:47'),
+(4, 'juanGomez@gmail.com', 'aaBsqqtToYBl.', 'usuario', '2019-11-09 21:58:48', '2019-11-09 21:58:48');
 
 --
 -- Índices para tablas volcadas
@@ -61,7 +63,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
