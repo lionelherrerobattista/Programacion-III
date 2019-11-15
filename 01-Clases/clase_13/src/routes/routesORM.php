@@ -23,13 +23,17 @@ return function (App $app) {
 
      $app->group('/usuariosORM', function () {   
          
-        $this->post('/usuarios', usuarioControler::class . ':CargarUno');
+        $this->post('/usuario', usuarioControler::class . ':CargarUno');
 
         $this->post('/login', usuarioControler::class . ':loginUsuario');
 
         $this->post('/materia', materiaControler::class . ':CargarUno')->add(Middleware::class . ':validarUsuarioAdmin');
 
-        $this->post('/usuario/', usuarioControler::class . ':ModificarUno')->add(Middleware::class . ':validarRuta');
+        //Si se lo pasa por url {}, no usar params
+        $this->post('/usuario/{legajo}', usuarioControler::class . ':ModificarUno')->add(Middleware::class . ':validarRuta');
+
+        //Si se lo paso por params
+        $this->post('/inscripcion/', usuarioControler::class . ':InscribirAlumno')->add(Middleware::class . ':validarRuta');
         
        
     });

@@ -71,10 +71,7 @@ class materiaControler implements IApiControler
        {
             $newResponse = $response->withJson("Faltan datos", 200);  
        }
-       
-            
-     
-             
+                  
         return $newResponse;
         
     }

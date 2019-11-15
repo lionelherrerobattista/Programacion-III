@@ -31,7 +31,7 @@ $app->group('/JWT', function () {
             }
             else
             {
-                 $token=" no psasste el token";
+                 $token=" no pasaste el token";
           
             }
           $response->getBody()->write("GET => JWT  ,Funciona el ejemplo , redirecciones a los ejemplos".$token);

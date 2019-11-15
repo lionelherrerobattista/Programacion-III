@@ -8,7 +8,7 @@ use App\Models\AutentificadorJWT;
 
 class Middleware
 {
-    public function validarUsuarioAdmin($request, $response, $next)
+    public static function validarUsuarioAdmin($request, $response, $next)
     {
 
         $token = $request->getHeader('token');
@@ -58,10 +58,11 @@ class Middleware
     }
 
 
-    public function validarRuta($request, $response, $next)
+    public static function validarRuta($request, $response, $next)
     {
 
-        $token = $request->getHeader('token');  
+        $token = $request->getHeader('token');
+        $esValido = false;  
 
         try
         {

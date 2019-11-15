@@ -3,10 +3,12 @@
 namespace App\Models\ORM;
 use App\Models\ORM\usuario;
 use App\Models\ORM\profesor_materia;
+use App\Models\ORM\alumno_materia;
 use App\Models\IApiControler;
 use App\Models\AutentificadorJWT;
 
 include_once __DIR__ . '/usuario.php';
+include_once __DIR__ . '/alumno_materia.php';
 include_once __DIR__ . '../../modelAPI/IApiControler.php';
 
 use Psr\Http\Message\ResponseInterface as Response;
@@ -48,20 +50,27 @@ class usuarioControler implements IApiControler
     public function CargarUno($request, $response, $args) {
          
         $datos = $request->getParsedBody();
+        $archivos = $request->getUploadedFiles();
 
-        if(isset($datos['email'], $datos['clave'], $datos['tipo'], $datos['foto']))
+        if(isset($datos['email'], $datos['clave'], $datos['tipo']))
         {
             $usuario = new usuario();
             $usuario->email = $datos['email'];
-            $usuario->clave = crypt($datos['clave'], self::$claveSecreta);
-            $usuario->foto = $datos['foto'];
-
+            $usuario->clave = crypt($datos['clave'], self::$claveSecreta); //llamo a la variable estática
+                
             if(strcasecmp($datos['tipo'],'alumno') == 0 ||
                 strcasecmp($datos['tipo'],'admin') == 0 ||
                 strcasecmp($datos['tipo'],'profesor') == 0)
             {   
                 $usuario->tipo = $datos['tipo'];
             }
+
+            if($archivos != null)
+            {
+                $usuario->foto = usuarioControler::GuardarArchivoTemporal($archivos['foto'], __DIR__ . "../../../../img/",
+                    $usuario->legajo.$usuario->tipo);    
+            }
+            
 
             $usuario->save();
             
@@ -96,57 +105,81 @@ class usuarioControler implements IApiControler
      
     public function ModificarUno($request, $response, $args) {
 
+        $usuarioAModificar = null;
+        $noEsAdmin = false;
+
+        $datosModificados = $request->getParsedBody();
+        $archivos = $request->getUploadedFiles();
+
+        // $legajo = $request->getParam('legajo'); //legajo que le paso por param
+        $legajo = $request->getAttribute('legajo');//si se lo paso por url
+
+        $token = $request->getHeader('token');
+        $datosToken = AutentificadorJWT::ObtenerData($token[0]);
+        $legajoRequest = $datosToken->legajo;//legajo del token
         
-        $datos = $request->getParsedBody();
-        // $legajo = $request->getParam('legajo');
+        //Compruebo el tipo de usuario
+        $usuario = usuario::where('legajo', $datosToken->legajo)->first();
 
-        // $usuario = usuario::where('legajo', $legajo);
+        //Para que un profesor o alumno no pueda modificar a otro
+        if((strcasecmp($usuario->tipo,'profesor') == 0 || strcasecmp($usuario->tipo,'alumno') == 0) && $usuario->legajo == $legajo)
+        {
+            $usuarioAModificar =  usuario::where('legajo', $legajo)->first();
+        }
+        else if($usuario->tipo == 'admin')//si es admin puede modificar
+        {
+            $usuarioAModificar =  usuario::where('legajo', $legajo)->first();
+        }
+        else
+        {
+            $noEsAdmin = true;
+        }
 
-        // if($usuario != null)
-        // {
-        //     switch($usuario->tipo)
-        //     {
-        //         case 'alumno':
-        //         $usuario->email = $datos['email'];
-        //         $usuario->foto = $datos['foto'];
-        //         break;
-
-        //         // case 'profesor':
-        //         // $usuario->email = $datos['email'];
-        //         // foreach($datos['materia'] as $idMateria)
-        //         // {
-        //         //     $profesorMateria = new profesor_materia();
-        //         //     $profesorMateria->id_profesor = $usuario->legajo;
-        //         //     $profesorMateria->id_materia = $datos['materia'];
-        //         //     $profesorMateria->save();
-        //         // }             
-        //         // break;
-
-        //         // case 'admin':
-        //         // $usuario->email = $datos['email'];
-        //         // $usuario->foto = $datos['foto'];
-        //         // foreach($datos['materia'] as $idMateria)
-        //         // {
-        //         //     $profesorMateria = new profesor_materia();
-        //         //     $profesorMateria->id_profesor = $usuario->legajo;
-        //         //     $profesorMateria->id_materia = $datos['materia'];
-        //         //     $profesorMateria->save();
-        //         // } 
-        //         // break;
-            
-
-        //     }
-
-        //     $newResponse = $response->withJson("Usuario modificado", 200);
+        if($usuarioAModificar != null)
+        {
 
             
-        // }
-        // else
-        // {
-        //     $newResponse = $response->withJson("No existe el usuario", 200);
-        // }
+            switch($usuarioAModificar->tipo)
+            {
+                case 'alumno':
+                $usuarioAModificar->email = $datosModificados['email'];
+                usuarioControler::HacerBackup(__DIR__ . "../../../../img/", $usuarioAModificar);
+                $usuarioAModificar->foto = usuarioControler::GuardarArchivoTemporal($archivos['foto'], __DIR__ . "../../../../img/",
+                    $usuarioAModificar->legajo.$usuarioAModificar->tipo);
+                    $usuarioAModificar->save();
+                break;
 
-        $newResponse = $response->withJson("No existe el usuario", 200);
+                case 'profesor':
+                $usuarioAModificar->email = $datosModificados['email'];
+                profesor_materia::where('id_profesor', $usuarioAModificar->legajo)->delete();//borro todas las materias del profesor
+
+                foreach($datosModificados['materiasDictadas'] as $idMateria)
+                {
+                    $profesorMateria = new profesor_materia();
+                    $profesorMateria->id_profesor = $usuarioAModificar->legajo;
+                    $profesorMateria->id_materia = $idMateria;
+                    $profesorMateria->save();
+                } 
+                
+                $usuarioAModificar->save();
+
+                break;
+
+            }
+
+            $newResponse = $response->withJson("Usuario modificado", 200);
+      
+        }
+        else
+        {
+            $newResponse = $response->withJson("No existe el usuario", 200);
+        }
+
+        if($noEsAdmin == true)
+        {
+            $newResponse = $response->withJson("No es admin", 200);
+        }
+        
 
 		return 	$newResponse;
     }
@@ -194,6 +227,81 @@ class usuarioControler implements IApiControler
         return $newResponse;
 
     }
+
+    public function InscribirAlumno($request, $response, $args)
+    {
+        $token = $request->getHeader('token');
+        $datosToken = AutentificadorJWT::ObtenerData($token[0]);
+        $alumno = usuario::where('legajo', $datosToken->legajo)->first();
+
+        if(strcasecmp($alumno->tipo, 'alumno') == 0)
+        {
+            $idMateria = $request->getParam('idMateria');
+
+            $materia = materia::where('id', $idMateria)->first();
+
+            if($materia->cupos > 0)
+            {
+                //Anoto al alumno
+                $alumnoMateria = new alumno_materia();
+                $alumnoMateria->id_alumno = $alumno->legajo;
+                $alumnoMateria->id_materia = $materia->id;
+                $alumnoMateria->save();
+
+                //Descuento los cupos
+                $materia->cupos--;
+                $materia->save();
+
+                $newResponse = $response->withJson("Inscripción exitosa", 200);
+            }
+            else
+            {
+                $newResponse = $response->withJson("No hay cupos", 200);
+            }
+
+            
+        }
+        else
+        {
+            $newResponse = $response->withJson("No es alumno", 200);
+        }
+
+        return $newResponse;
+    }
+
+    public static function GuardarArchivoTemporal($archivo, $destino, $nombre)
+    {
+        $origen = $archivo->getClientFileName();
+        
+        $fecha = new \DateTime();
+        $fecha = $fecha->setTimezone(new \DateTimeZone('America/Argentina/Buenos_Aires'));
+        $fecha = $fecha->format("d-m-Y-His");
+
+        $extension = pathinfo($archivo->getClientFileName(), PATHINFO_EXTENSION);
+
+        $destino = "$destino$nombre-$fecha.$extension";
+
+        $archivo->moveTo($destino);
+
+        return $destino;
+    }
+
+    public static function HacerBackup($ruta, $elementoAModificar)
+        {
+      
+            $fecha = new \DateTime();//timestamp para no repetir nombre
+            $fecha = $fecha->setTimezone(new \DateTimeZone('America/Argentina/Buenos_Aires'));
+            $fecha = $fecha->format("d-m-Y-His");
+            
+            $extension = pathinfo($elementoAModificar->foto, PATHINFO_EXTENSION);
+
+            //Donde guardo el backup:
+            $nombreBackup =  __DIR__ . "../../../../img/backup/backup$elementoAModificar->legajo-$fecha.$extension";
+
+            //Muevo el backup de la foto:
+            rename($elementoAModificar->foto, $nombreBackup);
+
+        }
     
 
 
