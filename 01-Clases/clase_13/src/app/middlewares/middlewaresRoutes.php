@@ -5,6 +5,8 @@ namespace App\Models\ORM;
 use App\Models\ORM\usuario;//ruta completa de la clase
 use App\Models\AutentificadorJWT;
 
+include_once __DIR__ . '../../modelAPI/AutentificadorJWT.php';
+
 
 class Middleware
 {
