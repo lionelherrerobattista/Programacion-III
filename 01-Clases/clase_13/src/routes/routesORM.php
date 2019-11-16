@@ -35,6 +35,9 @@ return function (App $app) {
         //Si se lo paso por params
         $this->post('/inscripcion/', usuarioControler::class . ':InscribirAlumno')->add(Middleware::class . ':validarRuta');
         
+        $this->get('/materias', usuarioControler::class . ':TraerTodos')->add(Middleware::class . ':validarRuta');
+
+        $this->get('/materias/', materiaControler::class . ':TraerUno')->add(Middleware::class . ':validarRuta');
        
     });
 

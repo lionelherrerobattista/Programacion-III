@@ -22,29 +22,12 @@ class usuarioControler implements IApiControler
  	  
      public function TraerTodos($request, $response, $args) {
        	
-        // $todosLosUsuarios = usuario::all();
-
-        // $newResponse = $response->withJson($todosLosUsuarios,200); 
-
-        // return $newResponse;
+      
     }
 
     public function TraerUno($request, $response, $args) {
         
-        // $id = $request->getParam('id');
-        
-        // $usuario = usuario::where('id', $id)->first();
-
-        // if($usuario != null)
-        // {
-        //     $newResponse = $response->withJson($usuario, 200);
-        // }
-        // else
-        // {
-        //     $newResponse = $response->withJson("No se encontró al usuario", 200);
-        // }
-           
-    	// return $newResponse;
+    
     }
    
     public function CargarUno($request, $response, $args) {
@@ -68,7 +51,7 @@ class usuarioControler implements IApiControler
             if($archivos != null)
             {
                 $usuario->foto = usuarioControler::GuardarArchivoTemporal($archivos['foto'], __DIR__ . "../../../../img/",
-                    $usuario->legajo.$usuario->tipo);    
+                    $usuario->legajo."_".$usuario->tipo);    
             }
             
 
@@ -86,21 +69,7 @@ class usuarioControler implements IApiControler
 
     public function BorrarUno($request, $response, $args) {
         
-        // $datos = $request->getParsedBody();
         
-        // $artista = artista::find($datos['id']);
-
-        // if($artista != null)
-        // {
-        //     artista::destroy($datos['id']);
-        //     $newResponse = $response->withJson("Artista borrado", 200);  
-        // }
-        // else
-        // {
-        //     $newResponse = $response->withJson("No se encontró al artista", 200);  
-        // }
-
-      	// return $newResponse;
     }
      
     public function ModificarUno($request, $response, $args) {
@@ -150,20 +119,27 @@ class usuarioControler implements IApiControler
                 break;
 
                 case 'profesor':
-                $usuarioAModificar->email = $datosModificados['email'];
-                profesor_materia::where('id_profesor', $usuarioAModificar->legajo)->delete();//borro todas las materias del profesor
+                    $usuarioAModificar->email = $datosModificados['email'];
+                    profesor_materia::where('id_profesor', $usuarioAModificar->legajo)->delete();//borro todas las materias del profesor
+                    if(is_array($datosModificados['materiasDictadas']))
+                    {
+                        $length = count($datosModificados['materiasDictadas'])-1;
+                    }
+                    else
+                    {
+                        $length = 1;
+                    }
 
-                foreach($datosModificados['materiasDictadas'] as $idMateria)
-                {
-                    $profesorMateria = new profesor_materia();
-                    $profesorMateria->id_profesor = $usuarioAModificar->legajo;
-                    $profesorMateria->id_materia = $idMateria;
-                    $profesorMateria->save();
-                } 
-                
-                $usuarioAModificar->save();
-
-                break;
+                    for($i=0; $i < $length; $i++)
+                    {
+                        $idMateria = $datosModificados['materiasDictadas'][$i];
+                        $profesorMateria = new profesor_materia();
+                        $profesorMateria->id_profesor = $usuarioAModificar->legajo;
+                        $profesorMateria->id_materia = $idMateria;
+                        $profesorMateria->save();
+                    }      
+                    $usuarioAModificar->save();
+                    break;
 
             }
 
@@ -302,7 +278,6 @@ class usuarioControler implements IApiControler
             rename($elementoAModificar->foto, $nombreBackup);
 
         }
-    
 
 
   

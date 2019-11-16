@@ -1,10 +1,13 @@
 <?php
 namespace App\Models\ORM;
-use App\Models\ORM\materia;
+use App\Models\ORM\usuario;
+use App\Models\ORM\profesor_materia;
+use App\Models\ORM\alumno_materia;
 use App\Models\IApiControler;
 use App\Models\AutentificadorJWT;
 
-include_once __DIR__ . '/materia.php';
+include_once __DIR__ . '/usuario.php';
+include_once __DIR__ . '/alumno_materia.php';
 include_once __DIR__ . '../../modelAPI/IApiControler.php';
 
 use Psr\Http\Message\ResponseInterface as Response;
@@ -15,39 +18,87 @@ class materiaControler implements IApiControler
 {
 
     
-     public function TraerTodos($request, $response, $args) {
-       	// //return cd::all()->toJson();
-        // $todosLosCds=cd::all();
+  public function TraerTodos($request, $response, $args) {
+     
+    $token = $request->getHeader('token');
+    $datosToken = AutentificadorJWT::ObtenerData($token[0]);
+    $usuario = usuario::where('legajo', $datosToken->legajo)->first();
 
-        // //reemplazo el id por el nombre del artista
-        // foreach($todosLosCds as $auxCd)
-        // {
-        //   $artista = artista::find($auxCd->interpret);
-
-        //   $auxCd->interpret = $artista->nombre;
-        // }
-
-        // $newResponse = $response->withJson($todosLosCds, 200);  
-
-        // return $newResponse;
+    switch($usuario->tipo)
+    {
+        case 'alumno':
+            $datos = alumno_materia::where('id_alumno', $usuario->legajo)
+                ->join('materias', 'alumno_materias.id_materia', '=', 'materias.id')
+                ->select('materias.nombre', 'materias.cuatrimestre')
+                ->get();
+            $newResponse = $response->withJson($datos, 200);
+            break;
+        case 'profesor':
+            $datos = profesor_materia::where('id_profesor', $usuario->legajo)
+                ->join('materias', 'profesor_materias.id_materia', '=', 'materias.id')
+                ->select('materias.nombre', 'materias.cuatrimestre')
+                ->get();
+            $newResponse = $response->withJson($datos, 200);
+            break;
+        case 'admin':
+            $datos = materia::all();
+            $newResponse = $response->withJson($datos, 200);
+        break;
     }
-    public function TraerUno($request, $response, $args) {
-     	  
-    //   $id = $request->getParam('id');
-        
-    //   $cd = cd::where('id', $id)->first();
 
-    //   if($cd != null)
-    //   {
-    //       $newResponse = $response->withJson($cd, 200);
-    //   }
-    //   else
-    //   {
-    //       $newResponse = $response->withJson("No se encontró al cd", 200);
-    //   }
-         
+    return $newResponse;
+  }
+
+    public function TraerUno($request, $response, $args) {
     
-    // 	return $newResponse;
+      $token = $request->getHeader('token');
+      $datosToken = AutentificadorJWT::ObtenerData($token[0]);
+      $usuario = usuario::where('legajo', $datosToken->legajo)->first();
+      $idMateria = $request->getParam('id');
+
+      switch($usuario->tipo)
+      {
+        case 'admin':
+          $datos = alumno_materia::where('id_materia', $idMateria)
+                ->join('usuarios', 'alumno_materias.id_alumno', '=', 'usuarios.legajo')
+                ->select('usuarios.legajo', 'usuarios.email', 'usuarios.foto')
+                ->get();
+          $newResponse = $response->withJson($datos, 200);
+          break;
+
+        case 'profesor':
+          $dictaLaMateria = false;
+          $materiasDictadas = profesor_materia::where('id_profesor', $usuario->legajo)->get();
+ 
+          foreach($materiasDictadas as $auxMateria)
+          {
+            if($auxMateria->id_materia == $idMateria)
+            {
+              $dictaLaMateria = true;
+            }
+          }
+
+          if($dictaLaMateria == true)
+          {
+            $datos = alumno_materia::where('id_materia', $idMateria)
+                ->join('usuarios', 'alumno_materias.id_alumno', '=', 'usuarios.legajo')
+                ->select('usuarios.legajo', 'usuarios.email', 'usuarios.foto')
+                ->get();
+            $newResponse = $response->withJson($datos, 200);
+          }
+          else
+          {
+            $newResponse = $response->withJson('No dicta la materia', 200);
+          }
+          break;
+
+          default:
+            $newResponse = $response->withJson('No tienen permisos suficientes', 200);
+            break;
+      }
+      
+      return $newResponse;
+    
     }
    
       public function CargarUno($request, $response, $args) {
@@ -76,58 +127,12 @@ class materiaControler implements IApiControler
         
     }
       public function BorrarUno($request, $response, $args) {
-       
-        $datos = $request->getParsedBody();
-        
-        $cd = cd::find($datos['id']);
-
-        if($cd != null)
-        {
-            cd::destroy($datos['id']);
-            $newResponse = $response->withJson("cd borrado", 200);  
-        }
-        else
-        {
-            $newResponse = $response->withJson("No se encontró al cd", 200);  
-        }
-
-      	return $newResponse;
-      
+   
     }
      
      public function ModificarUno($request, $response, $args) {
      	 
-      $datos = $request->getParsedBody();
-
-      if(isset($datos['id']))
-      {
-        $cd = cd::find($datos['id']);
-
-        if($cd != null && isset($datos['titel'], $datos['jahr'], $datos['interpret']))
-        {
-            $cd->titel = $datos['titel'];
-            $cd->jahr = $datos['jahr'];
-            $cd->interpret =  $datos['interpret'];
-            $cd->save();
-            
-            $newResponse = $response->withJson("cd modificado", 200);      
-        }
-        elseif(!(isset($datos['titel'], $datos['jahr'], $datos['interpret'])))
-        {
-            $newResponse = $response->withJson("Falta un dato a modificar", 200); 
-        }
-        else
-        {
-            $newResponse = $response->withJson("No se encontró al cd", 200); 
-        }
-      }
-      else
-      {
-        $newResponse = $response->withJson("Id no definido", 200);
-      }    
-       
-      return 	$newResponse;
-    }
+     }
 
 
   
