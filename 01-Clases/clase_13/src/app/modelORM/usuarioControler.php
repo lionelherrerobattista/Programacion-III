@@ -123,7 +123,7 @@ class usuarioControler implements IApiControler
                     profesor_materia::where('id_profesor', $usuarioAModificar->legajo)->delete();//borro todas las materias del profesor
                     if(is_array($datosModificados['materiasDictadas']))
                     {
-                        $length = count($datosModificados['materiasDictadas'])-1;
+                        $length = count($datosModificados['materiasDictadas']);
                     }
                     else
                     {
@@ -216,24 +216,38 @@ class usuarioControler implements IApiControler
 
             $materia = materia::where('id', $idMateria)->first();
 
-            if($materia->cupos > 0)
+            //Me fijo si no está repetido:
+            $alumnoRepetido = alumno_materia::where([
+                ['id_alumno', $alumno->legajo],
+                 ['id_materia', $materia->id]])->exists();
+
+            if($alumnoRepetido == false)
             {
-                //Anoto al alumno
-                $alumnoMateria = new alumno_materia();
-                $alumnoMateria->id_alumno = $alumno->legajo;
-                $alumnoMateria->id_materia = $materia->id;
-                $alumnoMateria->save();
+                if($materia->cupos > 0)
+                {
+                    //Anoto al alumno
+                    $alumnoMateria = new alumno_materia();
+                    $alumnoMateria->id_alumno = $alumno->legajo;
+                    $alumnoMateria->id_materia = $materia->id;
+                    $alumnoMateria->save();
 
-                //Descuento los cupos
-                $materia->cupos--;
-                $materia->save();
+                    //Descuento los cupos
+                    $materia->cupos--;
+                    $materia->save();
 
-                $newResponse = $response->withJson("Inscripción exitosa", 200);
+                    $newResponse = $response->withJson("Inscripción exitosa", 200);
+                }
+                else
+                {
+                    $newResponse = $response->withJson("No hay cupos", 200);
+                }    
+
             }
             else
             {
-                $newResponse = $response->withJson("No hay cupos", 200);
+                $newResponse = $response->withJson("Ya está anotado", 200);
             }
+            
 
             
         }
