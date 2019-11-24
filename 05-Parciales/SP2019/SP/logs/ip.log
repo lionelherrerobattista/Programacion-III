@@ -1060,3 +1060,15 @@
 [2019-11-20 01:03:30] UTN FRA LOGGER.INFO: ip = [] {"uid":"e8321d2"}
 [2019-11-20 01:14:30] UTN FRA LOGGER.INFO: Datos  =Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36 [] {"uid":"0f68848"}
 [2019-11-20 01:14:30] UTN FRA LOGGER.INFO: ip = [] {"uid":"0f68848"}
+[2019-11-24 20:58:42] UTN FRA LOGGER.INFO: Datos  =PostmanRuntime/7.19.0 [] {"uid":"f073398"}
+[2019-11-24 20:58:42] UTN FRA LOGGER.INFO: ip =::1 [] {"uid":"f073398"}
+[2019-11-24 21:03:22] UTN FRA LOGGER.INFO: Datos  =PostmanRuntime/7.19.0 [] {"uid":"aca3eba"}
+[2019-11-24 21:03:22] UTN FRA LOGGER.INFO: ip =::1 [] {"uid":"aca3eba"}
+[2019-11-24 21:05:42] UTN FRA LOGGER.INFO: Datos  =PostmanRuntime/7.19.0 [] {"uid":"b7cc0ee"}
+[2019-11-24 21:05:42] UTN FRA LOGGER.INFO: ip =::1 [] {"uid":"b7cc0ee"}
+[2019-11-24 21:07:43] UTN FRA LOGGER.INFO: Datos  =PostmanRuntime/7.19.0 [] {"uid":"10c8b1a"}
+[2019-11-24 21:07:43] UTN FRA LOGGER.INFO: ip =::1 [] {"uid":"10c8b1a"}
+[2019-11-24 21:13:01] UTN FRA LOGGER.INFO: Datos  =PostmanRuntime/7.19.0 [] {"uid":"6c9f1b5"}
+[2019-11-24 21:13:01] UTN FRA LOGGER.INFO: ip =::1 [] {"uid":"6c9f1b5"}
+[2019-11-24 21:13:16] UTN FRA LOGGER.INFO: Datos  =PostmanRuntime/7.19.0 [] {"uid":"5749402"}
+[2019-11-24 21:13:16] UTN FRA LOGGER.INFO: ip =::1 [] {"uid":"5749402"}

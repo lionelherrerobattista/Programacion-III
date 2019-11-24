@@ -49,6 +49,7 @@ class userControler implements IApiControler
   public function CargarUno($request, $response, $args) {
         
     $datos = $request->getParsedBody();
+    $archivos = $request->getUploadedFiles();
     
     //Agrego a la base de datos:
     $usuario = new user;
@@ -61,19 +62,19 @@ class userControler implements IApiControler
         $usuario->clave = crypt($datos["clave"], self::$claveSecreta);
         $usuario->legajo = $datos["legajo"];
 
-        $usuario->imagen_uno = userControler::GuardarArchivoTemporal($datos['fotoUno'], __DIR__ . "../../../../images/users",
+        $usuario->imagen_uno = userControler::GuardarArchivoTemporal($archivos['fotoUno'], __DIR__ . "../../../../images/users",
             $usuario->legajo."_"."fotoUno");    
 
-          $usuario->imagen_dos = userControler::GuardarArchivoTemporal($datos['fotoDos'], __DIR__ . "../../../../images/users",
+          $usuario->imagen_dos = userControler::GuardarArchivoTemporal($archivos['fotoDos'], __DIR__ . "../../../../images/users",
           $usuario->legajo."_"."fotoDos"); 
     
 
-          $log = new log();
-          $log->ip = "1.0.0.1";
-          $log->ruta = "/users";
-          $log->metodo = "POST";
-          $log->usuario = $usuario->legajo;
-          $log->save();
+          // $log = new log();
+          // $log->ip = "1.0.0.1";
+          // $log->ruta = "/users";
+          // $log->metodo = "POST";
+          // $log->usuario = $usuario->legajo;
+          // $log->save();
 
         $usuario->save();
 
@@ -85,11 +86,11 @@ class userControler implements IApiControler
       else
       {
 
-        $log = new log();
-        $log->ip = "1.0.0.1";
-        $log->ruta = "/users";
-        $log->metodo = "POST";
-        $log->save();
+        // $log = new log();
+        // $log->ip = "1.0.0.1";
+        // $log->ruta = "/users";
+        // $log->metodo = "POST";
+        // $log->save();
 
         $newResponse = $response->withJson("Legajo invalido", 200);  
       }
@@ -97,11 +98,11 @@ class userControler implements IApiControler
     }
     else
     {
-      $log = new log();
-      $log->ip = "1.0.0.1";
-      $log->ruta = "/users";
-      $log->metodo = "POST";
-      $log->save();
+      // $log = new log();
+      // $log->ip = "1.0.0.1";
+      // $log->ruta = "/users";
+      // $log->metodo = "POST";
+      // $log->save();
 
       $newResponse = $response->withJson("Faltan datos", 200);  
     }
@@ -332,31 +333,17 @@ class userControler implements IApiControler
 
   public static function GuardarArchivoTemporal($archivo, $destino, $nombre)
     {
-        $origen = $archivo;
+      $origen = $archivo->getClientFileName();
         
-        $fecha = new \DateTime();
-        $fecha = $fecha->setTimezone(new \DateTimeZone('America/Argentina/Buenos_Aires'));
-        $fecha = $fecha->format("d-m-Y-His");
-        // $extension = pathinfo($archivo->getClientFileName(), PATHINFO_EXTENSION);
-        $destino = "$destino$nombre-$fecha.jpg";
-       
-        return $destino;
+      $fecha = new \DateTime();
+      $fecha = $fecha->setTimezone(new \DateTimeZone('America/Argentina/Buenos_Aires'));
+      $fecha = $fecha->format("d-m-Y-His");
+      $extension = pathinfo($archivo->getClientFileName(), PATHINFO_EXTENSION);
+      $destino = "$destino$nombre-$fecha.$extension";
+      $archivo->moveTo($destino);
+      return $destino;
     }
 
-    public static function HacerBackup($ruta, $elementoAModificar)
-        {
-      
-            $fecha = new \DateTime();//timestamp para no repetir nombre
-            $fecha = $fecha->setTimezone(new \DateTimeZone('America/Argentina/Buenos_Aires'));
-            $fecha = $fecha->format("d-m-Y-His");
-            
-            $extension = pathinfo($elementoAModificar->foto, PATHINFO_EXTENSION);
-            //Donde guardo el backup:
-            $nombreBackup =  __DIR__ . "../../../../img/backup/backup$elementoAModificar->legajo-$fecha.$extension";
-            //Muevo el backup de la foto:
-            rename($elementoAModificar->foto, $nombreBackup);
-        }
-  
 
 
 
