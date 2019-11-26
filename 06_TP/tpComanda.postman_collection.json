@@ -1,0 +1,122 @@
+{
+	"info": {
+		"_postman_id": "6266af0a-f2a9-43d6-855d-c4337d78398f",
+		"name": "tpComanda",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CargarEmpleado",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost/SP/public/appORM/login",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"SP",
+						"public",
+						"appORM",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SuspenderEmpleado",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost/TP/public/comandaORM/empleados",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"TP",
+						"public",
+						"comandaORM",
+						"empleados"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BorrarEmpleado",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost/TP/public/comandaORM/empleado/101",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"TP",
+						"public",
+						"comandaORM",
+						"empleado",
+						"101"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "crearPedido",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "nombre[0]",
+							"value": "pizza",
+							"type": "text"
+						},
+						{
+							"key": "tipo[0]",
+							"value": "comida",
+							"type": "text"
+						},
+						{
+							"key": "nombre[1]",
+							"value": "coca-cola",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "tipo[1]",
+							"value": "bebida",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost/TP/public/comandaORM/pedidos",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"TP",
+						"public",
+						"comandaORM",
+						"pedidos"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
