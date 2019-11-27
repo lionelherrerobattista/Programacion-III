@@ -188,7 +188,7 @@ class empleadoControler
                                 ['estado', 'pendiente']])
                                 ->first();
 
-                    var_dump($pedido);
+                    $minutos = rand(1, $tiempoEstimado+5); //minutos que tarda en preparar
                     $pedido->estado = 'En preparación';
                     $pedido->tiempo_preparacion = $tiempoEstimado;
                     // sleep(500);//en segundos
@@ -202,6 +202,7 @@ class empleadoControler
                         ->first();
                     $pedido->estado = 'En preparación';
                     $pedido->tiempo_preparacion = $tiempoEstimado;
+                    $minutos = rand(2, $tiempoEstimado+5); //minutos que tarda en preparar
                     // sleep(500);//en segundos
                     $pedido->estado = 'listo para servir';
                     break;
@@ -213,18 +214,15 @@ class empleadoControler
                         ->first();
                     $pedido->estado = 'En preparación';
                     $pedido->tiempo_preparacion = $tiempoEstimado;//minutos
+                    $minutos = rand(5, $tiempoEstimado+5); //minutos que tarda en preparar
                     // sleep(500);//en segundos
                     $pedido->estado = 'listo para servir';
                     break;
                 }
 
-                $horaEntrega = \DateTime::createFromFormat('Y-m-d H:i:s', $pedido->hora_pedido);//timestamp creacion del pedido
-                // $horaEntrega = $horaEntrega->setTimezone(new \DateTimeZone('America/Argentina/Buenos_Aires'));
-                var_dump($pedido->hora_pedido);
-                $minutos = rand(1, $tiempoEstimado+5);
-     
-                $horaEntrega = $horaEntrega->add((new \DateInterval('PT' . $minutos . 'M')));
-
+                //hora en la que entrega el pedido
+                $horaEntrega = \DateTime::createFromFormat('Y-m-d H:i:s', $pedido->hora_pedido);//timestamp creacion del pedido  
+                $horaEntrega->modify("+$minutos minutes");//agrego los minutos
                 $pedido->hora_entrega = $horaEntrega;
                 $pedido->save();
 
