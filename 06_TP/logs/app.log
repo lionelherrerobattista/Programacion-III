@@ -19,3 +19,4 @@
 [2019-11-26 20:44:50] LA COMANDA LOGGER.INFO: metodo=POST, URI=http%3A%2F%2Flocalhost%2FTP%2Fpublic, RUTA=comandaORM%2Fpedidos, autoridad=localhost [] {"uid":"b1627ed"}
 [2019-11-26 20:45:16] LA COMANDA LOGGER.INFO: metodo=POST, URI=http%3A%2F%2Flocalhost%2FTP%2Fpublic, RUTA=comandaORM%2Fpedidos, autoridad=localhost [] {"uid":"5c0d64c"}
 [2019-11-26 20:45:25] LA COMANDA LOGGER.INFO: metodo=POST, URI=http%3A%2F%2Flocalhost%2FTP%2Fpublic, RUTA=comandaORM%2Fpedidos, autoridad=localhost [] {"uid":"e92d17e"}
+[2019-11-26 23:51:52] LA COMANDA LOGGER.INFO: metodo=POST, URI=http%3A%2F%2Flocalhost%2FTP%2Fpublic, RUTA=comandaORM%2Fpedidos, autoridad=localhost [] {"uid":"a3cc6bd"}

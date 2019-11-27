@@ -30,9 +30,9 @@ return [
         'db' => [
            'driver' => 'mysql',
             'host' => 'localhost',
-            'database' => 'la_comanda',
-            'username' => 'root',
-            'password' => '',
+            'database' => 'id11739346_la_comanda',
+            'username' => 'id11739346_lacomanda',
+            'password' => '12345',
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',

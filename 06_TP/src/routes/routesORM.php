@@ -24,11 +24,15 @@ return function (App $app) {
 
         $this->post('/empleados', empleadoControler::class . ':CargarEmpleado');
 
-        $this->post('/empleado/{id}', empleadoControler::class . ':SuspenderEmpleado');
+        $this->post('/empleado/suspender/{id}', empleadoControler::class . ':SuspenderEmpleado');
 
-        $this->delete('/empleado/{id}', empleadoControler::class . ':BorrarEmpleado');
+        $this->post('/empleado/eliminar/{id}', empleadoControler::class . ':BorrarEmpleado');
 
         $this->post('/pedidos', pedidoControler::class . ':CargarPedido');
+
+        $this->get('/pedidos/{id}', empleadoControler::class . ':VerPedidos');
+
+        $this->post('/pedido/preparacion/{id}', empleadoControler::class . ':PrepararPedido');
 
      
     });

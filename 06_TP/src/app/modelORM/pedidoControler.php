@@ -25,6 +25,10 @@ class pedidoControler
         {
             if(pedidoControler::ValidarTipo($datos['tipo']))
             {
+
+                $horaPedido = new \DateTime();//timestamp creacion del pedido
+                $horaPedido = $horaPedido->setTimezone(new \DateTimeZone('America/Argentina/Buenos_Aires'));
+                $horaPedido = $horaPedido->format("d-m-Y-His");
                 
                 if(isset($datos['idMesa']))//Si una mesa quiere pedir algo más
                 {
@@ -47,6 +51,7 @@ class pedidoControler
                         $pedido->id_mesa =  $idMesa; //asigno el id
                         $pedido->nombre = $datos['nombre'][$i];
                         $pedido->tipo = $datos['tipo'][$i];
+                        $pedido->hora_pedido = $horaPedido;
     
                         $pedido->save();
                     }
@@ -56,7 +61,9 @@ class pedidoControler
                     $pedido = new pedido();
                     $pedido->id_mesa =  $idMesa;
                     $pedido->nombre = $datos['nombre'];
+                    
                     $pedido->tipo = $datos['tipo'];
+                    $pedido->hora_pedido = $horaPedido;
                     $pedido->save();
                 }
 

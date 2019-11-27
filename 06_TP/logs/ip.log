@@ -40,3 +40,5 @@
 [2019-11-26 20:45:16] LA COMANDA LOGGER.INFO: ip =::1 [] {"uid":"9ac0a31"}
 [2019-11-26 20:45:25] LA COMANDA LOGGER.INFO: Datos  =PostmanRuntime/7.20.1 [] {"uid":"d1ef49b"}
 [2019-11-26 20:45:25] LA COMANDA LOGGER.INFO: ip =::1 [] {"uid":"d1ef49b"}
+[2019-11-26 23:51:52] LA COMANDA LOGGER.INFO: Datos  =Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36 [] {"uid":"214de78"}
+[2019-11-26 23:51:52] LA COMANDA LOGGER.INFO: ip =::1 [] {"uid":"214de78"}
