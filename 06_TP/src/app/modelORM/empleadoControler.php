@@ -4,12 +4,12 @@ namespace App\Models\ORM;
 use Slim\App;
 use App\Models\ORM\empleado;
 use App\Models\ORM\pedidos;
-use App\Models\ORM\registro_login;
+use App\Models\ORM\operaciones_registro;
 
 
 include_once __DIR__ . '/empleado.php';
 include_once __DIR__ . '/pedido.php';
-include_once __DIR__ . '/registro_login.php';
+include_once __DIR__ . '/operaciones_registro.php';
 
 
 use Psr\Http\Message\ResponseInterface as Response;
@@ -39,6 +39,7 @@ class empleadoControler
                 strcasecmp($datos['tipo'],'cervecero') == 0 ||
                 strcasecmp($datos['tipo'],'cocinero') == 0 ||
                 strcasecmp($datos['tipo'],'mozo') == 0 ||
+                strcasecmp($datos['tipo'],'admin') == 0 ||
                 strcasecmp($datos['tipo'],'socio') == 0)
             {   
                 $empleado->tipo = $datos['tipo'];
@@ -145,16 +146,8 @@ class empleadoControler
 
                     $token = AutentificadorJWT::CrearToken($datosToken);
 
-                    $registroLogin = new registro_login();
-
-                    //Guardo los datos del login
-                    $horaLogin = new \DateTime();
-                    $horaLogin = $horaLogin->setTimezone(new \DateTimeZone('America/Argentina/Buenos_Aires'));
-
-                    $registroLogin->hora_login = $horaLogin;
-                    $registroLogin->id_empleado = $empleado->id;
-                    
-                    $registroLogin->save();
+                    //Guardo la operacion
+                    empleadoControler::RegistrarOperacion($empleado, 'Login');
 
                     $newResponse = $response->withJson($token, 200);  
                 }
@@ -175,6 +168,20 @@ class empleadoControler
         }
         
         return $newResponse;
+    }
+
+    public static function RegistrarOperacion($empleado, $operacion)
+    {
+        $hora = new \DateTime();
+        $hora = $hora->setTimezone(new \DateTimeZone('America/Argentina/Buenos_Aires'));
+
+        $registroOperacion = new operaciones_registro();
+        $registroOperacion->hora = $hora;
+        $registroOperacion->id_empleado = $empleado->id;
+        $registroOperacion->operacion = $operacion;
+
+        
+        $registroOperacion->save();
     }
 
 

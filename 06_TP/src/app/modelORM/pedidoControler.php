@@ -20,86 +20,84 @@ class pedidoControler
     public function CargarPedido($request, $response, $args)
     {
         $datos = $request->getParsedBody();
+        $token = $request->getHeader('token');
         
-        if(isset($datos['nombre'], $datos['tipo'], $datos['idMesa']))
+        $token = $token[0];
+        $datosToken = AutentificadorJWT::ObtenerData($token);  
+        $idEmpleado = $datosToken->id;
+
+        $empleado = empleado::where('id', $idEmpleado)->first();
+        
+        if(isset($datos['nombre'], $datos['idComida'], $datos['idMesa']))
         {
             $mesa = mesa::where('id', $datos['idMesa']);
 
             if($idMesa != null)
             {
-                if(pedidoControler::ValidarTipo($datos['tipo']))
-                {
-
-                    $horaCreacion = new \DateTime();//timestamp creacion del pedido
-                    $horaCreacion = $horaCreacion->setTimezone(new \DateTimeZone('America/Argentina/Buenos_Aires'));
-                    
-                    if(isset($datos['idMesa']))//Si una mesa quiere pedir algo más
-                    {
-                        $codigoMesa = $datos['codigoMesa'];
-                    }
-                    else
-                    {
-                        //creo id random para la mesa:
-                        $codigoMesa = substr(md5(uniqid(rand(), true)), 0, 5);
-
-                        //guardo el código de la mesa:
-                        $mesa->codigo_unico = $codigoMesa;
-                        $mesa->estado = 'Con cliente esperando pedido';
-                        $mesa->save(); 
-                    }
-
-                    //codigo único del pedido:
-                    $codigoUnico = substr(md5(uniqid(rand(), true)), 0, 5);
-
                 
-                    if(is_array($datos['nombre']))//si pide más de 1 cosa
-                    {
-                        $length = count($datos['nombre']);
+                $horaCreacion = new \DateTime();//timestamp creacion del pedido
+                $horaCreacion = $horaCreacion->setTimezone(new \DateTimeZone('America/Argentina/Buenos_Aires'));
+                
+                if(isset($datos['idMesa']))//Si una mesa quiere pedir algo más
+                {
+                    $codigoMesa = $datos['codigoMesa'];
+                }
+                else
+                {
+                    //creo id random para la mesa:
+                    $codigoMesa = substr(md5(uniqid(rand(), true)), 0, 5);
 
-                        for($i = 0; $i < $length; $i++)
-                        {
-                            $pedido = new pedido();
-                            $pedido->codigo_mesa =  $codigoMesa; //asigno el id
-                            $pedido->codigo_unico = $codigoUnico;
-                            $pedido->nombre = $datos['nombre'][$i];
-                            $pedido->tipo = $datos['tipo'][$i];
-                            $pedido->hora_creacion = $horaCreacion;
-                        
-                            $pedido->save();
-                        }
-                    }
-                    else
+                    //guardo el código de la mesa:
+                    $mesa->codigo_unico = $codigoMesa;
+                    $mesa->estado = 'Con cliente esperando pedido';
+                    $mesa->save(); 
+                }
+
+                //codigo único del pedido:
+                $codigoUnico = substr(md5(uniqid(rand(), true)), 0, 5);
+
+            
+                if(is_array($datos['idComida']))//si pide más de 1 cosa
+                {
+                    $length = count($datos['idComida']);
+
+                    for($i = 0; $i < $length; $i++)
                     {
                         $pedido = new pedido();
                         $pedido->codigo_mesa =  $codigoMesa; //asigno el id
                         $pedido->codigo_unico = $codigoUnico;
-                        $pedido->nombre = $datos['nombre'];                 
-                        $pedido->tipo = $datos['tipo'];
+                        $pedido->id_comida = $datos['idComida'][$i];
+                        
                         $pedido->hora_creacion = $horaCreacion;
+                    
                         $pedido->save();
                     }
-
-                    $newResponse = $response->withJson("Pedido en preparacion. Id Mesa: $codigoMesa, Id Pedido: $codigoUnico", 200);//devuelvo el id de la mesa
                 }
                 else
                 {
-                    $newResponse = $response->withJson("No es un tipo válido", 200);  
+                    $pedido = new pedido();
+                    $pedido->codigo_mesa =  $codigoMesa; //asigno el id
+                    $pedido->codigo_unico = $codigoUnico;
+                    $pedido->id_comida = $datos['idComida'];                 
+                    
+                    $pedido->hora_creacion = $horaCreacion;
+                    $pedido->save();
                 }
+
+                empleadoControler::RegistrarOperacion($empleado, 'Cargar Pedido');
+
+                $newResponse = $response->withJson("Pedido en preparacion. Id Mesa: $codigoMesa, Id Pedido: $codigoUnico", 200);//devuelvo el id de la mesa
+        
             }
             else
             {
                 $newResponse = $response->withJson("No existe la mesa $idMesa", 200);  
             }
-
-                
-            
+      
         }
         else
-        {
-            
-        
-            $newResponse = $response->withJson("Falta dato", 200);  
-            
+        {      
+            $newResponse = $response->withJson("Falta dato", 200);            
         }
 
         return $newResponse;
@@ -109,11 +107,9 @@ class pedidoControler
     {
         $token = $request->getHeader('token');
         $token = $token[0];
-
-        $datosToken = AutentificadorJWT::ObtenerData($token);
+        $datosToken = AutentificadorJWT::ObtenerData($token); 
         
         $idEmpleado = $datosToken->id;
-
         $empleado = empleado::where('id', $idEmpleado)->first();
     
         switch($empleado->tipo)
@@ -147,14 +143,12 @@ class pedidoControler
                     'id_mesa', 'hora_creacion', 'tiempo_preparacion',
                     'hora_entrega');
             break;
-
-
-
         }
 
-        $newResponse = $response->withJson($pedidos, 200);
-        
+        empleadoControler::RegistrarOperacion($empleado, 'Ver Pedido');
 
+        $newResponse = $response->withJson($pedidos, 200);
+    
         return $newResponse;
     }
 
@@ -170,7 +164,6 @@ class pedidoControler
         $idEmpleado = $datosToken->id;
         $empleado = empleado::where('id', $idEmpleado)->first();
 
-   
         if($idPedido != null)
         {
             if(isset($datos['tiempoEstimado']))
@@ -185,25 +178,19 @@ class pedidoControler
                     $pedido->estado = 'En preparación';
                     $pedido->save();
         
-                    //hora en la que entrega el pedido
-                    // $horaEntrega = \DateTime::createFromFormat('Y-m-d H:i:s', $pedido->hora_pedido);//timestamp creacion del pedido  
-                    // $horaEntrega->modify("+$minutos minutes");//agrego los minutos
-                    // $pedido->hora_entrega = $horaEntrega;
-                    
+                    empleadoControler::RegistrarOperacion($empleado, 'Preparar pedido');
         
                     $newResponse = $response->withJson("Pedido $idPedido en preparación", 200);   
                 }
                 else
                 {
                     $newResponse = $response->withJson("No encontró el pedido $idPedido", 200);       
-                }
-                
+                }              
             }
             else
             {
                 $newResponse = $response->withJson("No se estableció el tiempo estimado", 200);   
             }
-
         }
         else
         {
@@ -231,6 +218,8 @@ class pedidoControler
             $pedido->estado = "Listo para servir";
 
             $pedido->save();
+
+            empleadoControler::RegistrarOperacion($empleado, 'Terminar Pedido');
             
             $newResponse = $response->withJson("Pedido $idPedido listo para servir", 200);
         }
@@ -270,6 +259,8 @@ class pedidoControler
             $mesa = mesa::where('codigo_unico', $codigoUnico)->first();
             $mesa->estado = 'Con clientes comiendo';
             $mesa->save();
+
+            empleadoControler::RegistrarOperacion($empleado, 'Servir Pedido');
             
             $newResponse = $response->withJson("Pedido $idPedido entregado", 200);
         }
@@ -281,60 +272,96 @@ class pedidoControler
         return $newResponse;
     }
 
+    public function MostrarTiempoRestante($request, $response, $args)
+    {
+        $codigoMesa = $request->getParam('codigoMesa');
+        $codigoPedido = $request->getParam('codigoPedido');
+
+        if(isset($codigoMesa, $codigoPedido))
+        {
+            
+            $pedido = pedido::where([['codigo_mesa', $codigoMesa], 
+                                     ['codigo_unico', $codigoPedido]])->first();
+
+            if($pedido != null)
+            {
+                $tiempoPreparacion = $pedido->tiempo_preparacion;
+
+                $horaEntrega = \DateTime::createFromFormat('Y-m-d H:i:s', $pedido->hora_pedido);//timestamp creacion del pedido  
+                $horaEntrega->modify("+$tiempoPreparacion minutes");//agrego los minutos
+                $horaEntrega;
+
+                $horaActual = new \DateTime();//timestamp creacion del pedido
+                $horaActual = $horaActual->setTimezone(new \DateTimeZone('America/Argentina/Buenos_Aires'));
+    
+                $tiempoRestante = $horaEntrega->diff($horaActual);
+                $tiempoRestante->format("%i minutos");
+
+                $newResponse = $response->withJson("Faltan $tiempoRestante para su pedido", 200);
+                    
+            }
+            else
+            {
+                $newResponse = $response->withJson("No se encontró el pedido", 200);
+            }
+
+        }
+        else
+        {
+            $newResponse = $response->withJson("Faltan datos", 200);
+        }
+
+        return $newResponse;
+        
+    }
+
     public function CobrarPedido($request, $response, $args)
     {
-        //Saco el total
-        
-        $codigoUnico = $pedido->codigo_mesa;
+        $token = $request->getHeader('token');
+        $codigoPedido = $request->getAttribute('codigoPedido');
 
+        $token = $token[0];
+        $datosToken = AutentificadorJWT::ObtenerData($token);     
+        $idEmpleado = $datosToken->id;
+
+        $empleado = empleado::where('id', $idEmpleado)->first();
+        
+        //Busco las comidas y el precio:
+        $pedido = $datos = alumno_materia::where('codigo_unico', $codigoPedido)
+                ->join('comidas', 'pedidos.id_comida', '=', 'comidas.id')
+                ->select('comidas.nombre', 'comidas.precio')
+                ->get();
+        //Saco el total:
+        $montoTotal = 0;
+
+        foreach($pedidos as $pedido)
+        {
+            $montoTotal += $pedido->monto;
+        }
+
+        //Modifico el estado de la mesa:        
+        $codigoUnico = $pedido->codigo_mesa;
         $mesa = mesa::where('codigo_unico', $codigoUnico)->first();
         $mesa->estado = 'Con clientes pagando';
         $mesa->save();
 
+        //facturación:
+        $factura = new factura();
+        $factura->id_mesa = $mesa->id;
+        $factura->codigo_pedido = $codigoPedido;
+        $factura->monto = $montoTotal;
+        $factura->save();
+
+        empleadoControler::RegistrarOperacion($empleado, 'Cobrar Pedido');
+
+        $newResponse = $response->withJson("Total a pagar: $montoTotal",200);
+
+        return $newResponse;
+
     }
 
-    //Valido el tipo de pedido
-    public static function ValidarTipo($tipo)
-    {
-        $esValido = true;
-
-        if(is_array($tipo))
-        {
-            $length = count($tipo);
-
-            for($i = 0; $i < $length; $i++)
-            {
-                if(strcasecmp($tipo[$i],'cerveza') == 0 ||
-                    strcasecmp($tipo[$i],'bebida') == 0 ||
-                    strcasecmp($tipo[$i],'comida') == 0 )
-                {
-                    continue;
-                }
-                else
-                {
-                    $esValido = false;
-                    break;
-                }
-            }
-        }
-        else
-        {
-            if(strcasecmp($tipo,'cerveza') == 0 ||
-                    strcasecmp($tipo,'bebida') == 0 ||
-                    strcasecmp($tipo,'comida') == 0 )
-                {
-                    $esValido = true;
-                }
-                else
-                {
-                    $esValido = false;
-                }
-        }
 
 
-
-        return $esValido;
-    }
-
+    
   
 }
