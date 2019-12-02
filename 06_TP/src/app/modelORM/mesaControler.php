@@ -17,6 +17,16 @@ use \Exception;
 class mesaControler
 {
 
+    public function CargarMesa($request, $response, $args)
+    {
+        $mesa = new mesa();
+
+        $mesa->estado = 'Cerrada';
+
+        $mesa->save();
+
+    }
+
 
   
 }

@@ -24,17 +24,46 @@ return function (App $app) {
 
         $this->post('/empleados', empleadoControler::class . ':CargarEmpleado');
 
-        $this->post('/empleado/suspender/{id}', empleadoControler::class . ':SuspenderEmpleado');
+        $this->post('/empleados/suspender/{id}', empleadoControler::class . ':SuspenderEmpleado');
 
-        $this->post('/empleado/eliminar/{id}', empleadoControler::class . ':BorrarEmpleado');
+        $this->post('/empleados/eliminar/{id}', empleadoControler::class . ':BorrarEmpleado');
 
-        $this->post('/pedidos', pedidoControler::class . ':CargarPedido');
+        $this->post('/empleados/login', empleadoControler::class . ':LoginEmpleado');
 
-        $this->get('/pedidos/{id}', empleadoControler::class . ':VerPedidos');
+        // $this->post('/pedidos', pedidoControler::class . ':CargarPedido');
 
-        $this->post('/pedido/preparacion/{id}', empleadoControler::class . ':PrepararPedido');
+        // $this->get('/pedidos/{id}', empleadoControler::class . ':VerPedidos');
+
+        // $this->post('/pedido/preparacion/{id}', empleadoControler::class . ':PrepararPedido');
 
      
     });
+
+
+    $app->group('/comandaORM/pedidos', function () {   
+
+
+        $this->post('', pedidoControler::class . ':CargarPedido');
+
+        $this->get('', pedidoControler::class . ':VerPedidos');
+
+        $this->post('/preparar/{idPedido}', pedidoControler::class . ':PrepararPedido');
+        
+        $this->post('/terminar/{idPedido}', pedidoControler::class . ':TerminarPedido');
+        
+        $this->post('/entregar/{idPedido}', pedidoControler::class . ':ServirPedido');
+ 
+    })->add(Middleware::class . ':ValidarRuta');
+
+
+    $app->group('/comandaORM/mesas', function () {   
+
+
+        $this->post('', pedidoControler::class . ':CargarMesa');
+
+ 
+    })->add(Middleware::class . ':ValidarRuta');
+
+
 
 };

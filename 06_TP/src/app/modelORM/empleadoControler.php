@@ -4,10 +4,12 @@ namespace App\Models\ORM;
 use Slim\App;
 use App\Models\ORM\empleado;
 use App\Models\ORM\pedidos;
+use App\Models\ORM\registro_login;
 
 
 include_once __DIR__ . '/empleado.php';
-include_once __DIR__ . '/pedidos.php';
+include_once __DIR__ . '/pedido.php';
+include_once __DIR__ . '/registro_login.php';
 
 
 use Psr\Http\Message\ResponseInterface as Response;
@@ -18,15 +20,19 @@ use \Exception;
 
 class empleadoControler
 {
+
+    private static $claveSecreta = 'claveSecreta1';
+
     public function CargarEmpleado($request, $response, $args) {
          
         $datos = $request->getParsedBody();
         
-        if(isset($datos['nombre'], $datos['tipo']))
+        if(isset($datos['nombre'], $datos['apellido'], $datos['tipo'],$datos['clave']))
         {
             $empleado = new empleado();
             $empleado->nombre = $datos['nombre'];            
             $empleado->apellido = $datos['apellido'];   
+            $empleado->clave = crypt($datos["clave"], self::$claveSecreta);
                 
             //tipos
             if(strcasecmp($datos['tipo'],'bartender') == 0 ||
@@ -113,135 +119,61 @@ class empleadoControler
         return $newResponse;
     }
 
-    public function VerPedidos($request, $response, $args)
-    {
-        $id = $request->getAttribute('id');
-
-        $empleado = empleado::where('id', $id)->first();
-        
-        if($empleado != null)
-        {
-            switch($empleado->tipo)
-            {
-                case 'bartender':
-                $pedidos = pedido::where([
-                            ['tipo', 'bebida'],
-                            ['estado', 'pendiente']])
-                            ->select('pedidos.nombre', 'pedidos.estado')
-                            ->get();
-                break;
-
-                case 'cervecero':
-                $pedidos = pedido::where([
-                    ['tipo', 'cerveza'],
-                    ['estado', 'pendiente']])
-                    ->select('pedidos.nombre', 'pedidos.estado')
-                    ->get();
-                break;
-
-                case 'cocinero':
-                $pedidos = pedido::where([
-                    ['tipo', 'comida'],
-                    ['estado', 'pendiente']])
-                    ->select('pedidos.nombre', 'pedidos.estado')
-                    ->get();
-                break;
-
-                case 'socio':
-                $pedidos = pedido::all();
-                break;
-
-
-
-            }
-
-            $newResponse = $response->withJson($pedidos, 200);
-        }
-        else
-        {
-            $newResponse = $response->withJson("No se encontro al empleado $id", 200); 
-        }
-
-        return $newResponse;
-    }
-
-    public function PrepararPedido($request, $response, $args)
+    
+    public function loginEmpleado($request, $response, $args)
     {
         $datos = $request->getParsedBody();
 
-        $id = $request->getAttribute('id');
-    
-        $empleado = empleado::where('id', $id)->first();
-        
-        if($empleado != null)
+        if(isset($datos['id'], $datos['clave']))
         {
-            if(isset($datos['tiempoEstimado']))
+            $id = $datos['id'];
+            $clave = $datos['clave'];
+            
+            $empleado = empleado::where('id', $id)->first();
+
+            if($empleado != null)
             {
-
-                $tiempoEstimado = $datos['tiempoEstimado'];
-
-                switch($empleado->tipo)
+                if(hash_equals($empleado->clave, crypt($clave, self::$claveSecreta)))
                 {
-                    case 'bartender':
-                    $pedido = pedido::where([
-                                ['tipo', 'bebida'],
-                                ['estado', 'pendiente']])
-                                ->first();
+                    $datosToken = array(
 
-                    $minutos = rand(1, $tiempoEstimado+5); //minutos que tarda en preparar
-                    $pedido->estado = 'En preparación';
-                    $pedido->tiempo_preparacion = $tiempoEstimado;
-                    // sleep(500);//en segundos
-                    $pedido->estado = 'listo para servir';
-                    break;
-        
-                    case 'cervecero':
-                    $pedido = pedido::where([
-                        ['tipo', 'cerveza'],
-                        ['estado', 'pendiente']])
-                        ->first();
-                    $pedido->estado = 'En preparación';
-                    $pedido->tiempo_preparacion = $tiempoEstimado;
-                    $minutos = rand(2, $tiempoEstimado+5); //minutos que tarda en preparar
-                    // sleep(500);//en segundos
-                    $pedido->estado = 'listo para servir';
-                    break;
-        
-                    case 'cocinero':
-                    $pedido = pedido::where([
-                        ['tipo', 'comida'],
-                        ['estado', 'pendiente']])
-                        ->first();
-                    $pedido->estado = 'En preparación';
-                    $pedido->tiempo_preparacion = $tiempoEstimado;//minutos
-                    $minutos = rand(5, $tiempoEstimado+5); //minutos que tarda en preparar
-                    // sleep(500);//en segundos
-                    $pedido->estado = 'listo para servir';
-                    break;
+                        'id' => $empleado->id,
+                        'nombre' => $empleado->nombre,
+                        'apellido' => $empleado->apellido,
+                        'tipo' => $empleado->tipo
+                    );
+
+                    $token = AutentificadorJWT::CrearToken($datosToken);
+
+                    $registroLogin = new registro_login();
+
+                    //Guardo los datos del login
+                    $horaLogin = new \DateTime();
+                    $horaLogin = $horaLogin->setTimezone(new \DateTimeZone('America/Argentina/Buenos_Aires'));
+
+                    $registroLogin->hora_login = $horaLogin;
+                    $registroLogin->id_empleado = $empleado->id;
+                    
+                    $registroLogin->save();
+
+                    $newResponse = $response->withJson($token, 200);  
                 }
-
-                //hora en la que entrega el pedido
-                $horaEntrega = \DateTime::createFromFormat('Y-m-d H:i:s', $pedido->hora_pedido);//timestamp creacion del pedido  
-                $horaEntrega->modify("+$minutos minutes");//agrego los minutos
-                $pedido->hora_entrega = $horaEntrega;
-                $pedido->save();
-
-                $newResponse = $response->withJson("Pedido Listo", 200);
+                else
+                {
+                    $newResponse = $response->withJson("Clave incorrecta", 200);  
+                }
+            
             }
             else
             {
-                $newResponse = $response->withJson("Faltan datos", 200); 
+                $newResponse = $response->withJson("No se encontró al empleado $id", 200);
             }
-            
-            
-            
-
         }
         else
         {
-            $newResponse = $response->withJson("No se encontro al empleado $id", 200); 
+            $newResponse = $response->withJson("Faltan datos", 200);
         }
-
+        
         return $newResponse;
     }
 
