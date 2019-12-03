@@ -286,6 +286,9 @@ class empleadoControler
                 {
                     $informacion = "Falta id empleado";            
                 }
+            break;
+            default:
+            $informacion = operaciones_registro::get();
                 
         }
 

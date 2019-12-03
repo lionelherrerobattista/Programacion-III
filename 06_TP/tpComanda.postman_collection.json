@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "415d1aa4-3e84-4ad8-89e9-57c1ea94fbd3",
+		"_postman_id": "6266af0a-f2a9-43d6-855d-c4337d78398f",
 		"name": "tpComanda",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -9,38 +9,31 @@
 			"name": "CargarEmpleado",
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "token",
-						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzMTQ2ODgsImF1ZCI6IjMwNDYxZDgxMGE2NTgwMmJlY2NmYTg5NDIyZmIxMDdjOGVmOGFkNjgiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9.wJDJmSs-oQM6Uc6b9xXK386w788Z1oMDxTOAy3IGHcI",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "nombre",
-							"value": "José",
-							"type": "text"
-						},
-						{
-							"key": "apellido",
-							"value": "García",
-							"type": "text"
-						},
-						{
-							"key": "tipo",
-							"value": "admin",
-							"type": "text"
-						},
-						{
-							"key": "clave",
-							"value": "1234",
-							"type": "text"
-						}
-					]
+					"formdata": []
 				},
+				"url": {
+					"raw": "localhost/SP/public/appORM/login",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"SP",
+						"public",
+						"appORM",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SuspenderEmpleado",
+			"request": {
+				"method": "POST",
+				"header": [],
 				"url": {
 					"raw": "localhost/TP/public/comandaORM/empleados",
 					"host": [
@@ -57,50 +50,12 @@
 			"response": []
 		},
 		{
-			"name": "SuspenderEmpleado",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "token",
-						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzMTQ2ODgsImF1ZCI6IjMwNDYxZDgxMGE2NTgwMmJlY2NmYTg5NDIyZmIxMDdjOGVmOGFkNjgiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9.wJDJmSs-oQM6Uc6b9xXK386w788Z1oMDxTOAy3IGHcI",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "formdata",
-					"formdata": []
-				},
-				"url": {
-					"raw": "localhost/TP/public/comandaORM/empleados/suspender/106",
-					"host": [
-						"localhost"
-					],
-					"path": [
-						"TP",
-						"public",
-						"comandaORM",
-						"empleados",
-						"suspender",
-						"106"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "BorrarEmpleado",
 			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "token",
-						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzMTQ2ODgsImF1ZCI6IjMwNDYxZDgxMGE2NTgwMmJlY2NmYTg5NDIyZmIxMDdjOGVmOGFkNjgiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9.wJDJmSs-oQM6Uc6b9xXK386w788Z1oMDxTOAy3IGHcI",
-						"type": "text"
-					}
-				],
+				"method": "DELETE",
+				"header": [],
 				"url": {
-					"raw": "localhost/TP/public/comandaORM/empleados/eliminar/106",
+					"raw": "localhost/TP/public/comandaORM/empleado/101",
 					"host": [
 						"localhost"
 					],
@@ -108,75 +63,15 @@
 						"TP",
 						"public",
 						"comandaORM",
-						"empleados",
-						"eliminar",
-						"106"
+						"empleado",
+						"101"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Modificar Empleado",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "token",
-						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzMTQ2ODgsImF1ZCI6IjMwNDYxZDgxMGE2NTgwMmJlY2NmYTg5NDIyZmIxMDdjOGVmOGFkNjgiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9.wJDJmSs-oQM6Uc6b9xXK386w788Z1oMDxTOAy3IGHcI",
-						"type": "text"
-					},
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"value": "application/x-www-form-urlencoded",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "nombre",
-							"value": "Pablo",
-							"type": "text"
-						},
-						{
-							"key": "apellido",
-							"value": "Suárez",
-							"type": "text"
-						},
-						{
-							"key": "clave",
-							"value": "cocinero",
-							"type": "text"
-						},
-						{
-							"key": "tipo",
-							"value": "cocinero",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "localhost/TP/public/comandaORM/empleados/modificar/103",
-					"host": [
-						"localhost"
-					],
-					"path": [
-						"TP",
-						"public",
-						"comandaORM",
-						"empleados",
-						"modificar",
-						"103"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "LoginEmpleado",
+			"name": "crearPedido",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -184,72 +79,26 @@
 					"mode": "formdata",
 					"formdata": [
 						{
-							"key": "id",
-							"value": "101",
+							"key": "nombre[0]",
+							"value": "pizza",
 							"type": "text"
 						},
 						{
-							"key": "clave",
-							"value": "1234",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "localhost/TP/public/comandaORM/empleados/login",
-					"host": [
-						"localhost"
-					],
-					"path": [
-						"TP",
-						"public",
-						"comandaORM",
-						"empleados",
-						"login"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "CrearPedido",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "token",
-						"type": "text",
-						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUyNDk4NzUsImF1ZCI6IjMwNDYxZDgxMGE2NTgwMmJlY2NmYTg5NDIyZmIxMDdjOGVmOGFkNjgiLCJkYXRhIjp7ImlkIjoxMDAsIm5vbWJyZSI6Ik1pZ3VlbCIsImFwZWxsaWRvIjoiTG9wZXoiLCJ0aXBvIjoibW96byJ9LCJhcHAiOiJBUEkgUkVTVCBDRCBVVE4gRlJBIn0.87RI-RPnibHFns-sATLHpswwTe0KrS8eurVGbLKy7zM"
-					}
-				],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "idMesa",
-							"value": "3",
+							"key": "tipo[0]",
+							"value": "comida",
 							"type": "text"
 						},
 						{
-							"key": "idComida[0]",
-							"value": "3",
-							"type": "text"
-						},
-						{
-							"key": "idComida[1]",
-							"value": "3",
+							"key": "nombre[1]",
+							"value": "coca-cola",
 							"type": "text",
 							"disabled": true
 						},
 						{
-							"key": "nombreCliente",
-							"value": "José",
-							"type": "text"
-						},
-						{
-							"key": "apellidoCliente",
-							"value": "García",
-							"type": "text"
+							"key": "tipo[1]",
+							"value": "bebida",
+							"type": "text",
+							"disabled": true
 						}
 					]
 				},
@@ -263,617 +112,6 @@
 						"public",
 						"comandaORM",
 						"pedidos"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "PrepararPedido",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "token",
-						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzMjc1MDQsImF1ZCI6IjMwNDYxZDgxMGE2NTgwMmJlY2NmYTg5NDIyZmIxMDdjOGVmOGFkNjgiLCJkYXRhIjp7ImlkIjoxMDMsIm5vbWJyZSI6IlBhYmxvIiwiYXBlbGxpZG8iOiJTdVx1MDBlMXJleiIsInRpcG8iOiJjb2NpbmVybyJ9LCJhcHAiOiJBUEkgUkVTVCBDRCBVVE4gRlJBIn0.wWO4WcXhNRo-PhZALr45gGlQSHDg0j51A5Ybj-XVP_k",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "tiempoEstimado",
-							"value": "20",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "localhost/TP/public/comandaORM/pedidos/preparar/13",
-					"host": [
-						"localhost"
-					],
-					"path": [
-						"TP",
-						"public",
-						"comandaORM",
-						"pedidos",
-						"preparar",
-						"13"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "VerPedidos",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "token",
-						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzMjc1MDQsImF1ZCI6IjMwNDYxZDgxMGE2NTgwMmJlY2NmYTg5NDIyZmIxMDdjOGVmOGFkNjgiLCJkYXRhIjp7ImlkIjoxMDMsIm5vbWJyZSI6IlBhYmxvIiwiYXBlbGxpZG8iOiJTdVx1MDBlMXJleiIsInRpcG8iOiJjb2NpbmVybyJ9LCJhcHAiOiJBUEkgUkVTVCBDRCBVVE4gRlJBIn0.wWO4WcXhNRo-PhZALr45gGlQSHDg0j51A5Ybj-XVP_k",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "localhost/TP/public/comandaORM/pedidos",
-					"host": [
-						"localhost"
-					],
-					"path": [
-						"TP",
-						"public",
-						"comandaORM",
-						"pedidos"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "TerminarPedido",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "token",
-						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzMjc1MDQsImF1ZCI6IjMwNDYxZDgxMGE2NTgwMmJlY2NmYTg5NDIyZmIxMDdjOGVmOGFkNjgiLCJkYXRhIjp7ImlkIjoxMDMsIm5vbWJyZSI6IlBhYmxvIiwiYXBlbGxpZG8iOiJTdVx1MDBlMXJleiIsInRpcG8iOiJjb2NpbmVybyJ9LCJhcHAiOiJBUEkgUkVTVCBDRCBVVE4gRlJBIn0.wWO4WcXhNRo-PhZALr45gGlQSHDg0j51A5Ybj-XVP_k",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "localhost/TP/public/comandaORM/pedidos/terminar/11",
-					"host": [
-						"localhost"
-					],
-					"path": [
-						"TP",
-						"public",
-						"comandaORM",
-						"pedidos",
-						"terminar",
-						"11"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "CancelarPedido",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "token",
-						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzMTQ2ODgsImF1ZCI6IjMwNDYxZDgxMGE2NTgwMmJlY2NmYTg5NDIyZmIxMDdjOGVmOGFkNjgiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9.wJDJmSs-oQM6Uc6b9xXK386w788Z1oMDxTOAy3IGHcI",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "localhost/TP/public/comandaORM/pedidos/cancelar/13",
-					"host": [
-						"localhost"
-					],
-					"path": [
-						"TP",
-						"public",
-						"comandaORM",
-						"pedidos",
-						"cancelar",
-						"13"
-					],
-					"query": [
-						{
-							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzMTQ2ODgsImF1ZCI6IjMwNDYxZDgxMGE2NTgwMmJlY2NmYTg5NDIyZmIxMDdjOGVmOGFkNjgiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9.wJDJmSs-oQM6Uc6b9xXK386w788Z1oMDxTOAy3IGHcI",
-							"disabled": true
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "ServirPedido",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "token",
-						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzMTQ2ODgsImF1ZCI6IjMwNDYxZDgxMGE2NTgwMmJlY2NmYTg5NDIyZmIxMDdjOGVmOGFkNjgiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9.wJDJmSs-oQM6Uc6b9xXK386w788Z1oMDxTOAy3IGHcI",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "localhost/TP/public/comandaORM/pedidos/servir/18",
-					"host": [
-						"localhost"
-					],
-					"path": [
-						"TP",
-						"public",
-						"comandaORM",
-						"pedidos",
-						"servir",
-						"18"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "CobrarPedido",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "token",
-						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzMTQ2ODgsImF1ZCI6IjMwNDYxZDgxMGE2NTgwMmJlY2NmYTg5NDIyZmIxMDdjOGVmOGFkNjgiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9.wJDJmSs-oQM6Uc6b9xXK386w788Z1oMDxTOAy3IGHcI",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "localhost/TP/public/comandaORM/pedidos/cobrar/a8040",
-					"host": [
-						"localhost"
-					],
-					"path": [
-						"TP",
-						"public",
-						"comandaORM",
-						"pedidos",
-						"cobrar",
-						"a8040"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "VerTiempoRestante",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": []
-				},
-				"url": {
-					"raw": "localhost/TP/public/comandaORM/pedido?codigoMesa=b1d8c&codigoPedido=c896c",
-					"host": [
-						"localhost"
-					],
-					"path": [
-						"TP",
-						"public",
-						"comandaORM",
-						"pedido"
-					],
-					"query": [
-						{
-							"key": "codigoMesa",
-							"value": "b1d8c"
-						},
-						{
-							"key": "codigoPedido",
-							"value": "c896c"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "CargarComida",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "token",
-						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzMTQ2ODgsImF1ZCI6IjMwNDYxZDgxMGE2NTgwMmJlY2NmYTg5NDIyZmIxMDdjOGVmOGFkNjgiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9.wJDJmSs-oQM6Uc6b9xXK386w788Z1oMDxTOAy3IGHcI",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "nombre",
-							"value": "IPA",
-							"type": "text"
-						},
-						{
-							"key": "tipo",
-							"value": "cerveza",
-							"type": "text"
-						},
-						{
-							"key": "precio",
-							"value": "90",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "localhost/TP/public/comandaORM/comidas",
-					"host": [
-						"localhost"
-					],
-					"path": [
-						"TP",
-						"public",
-						"comandaORM",
-						"comidas"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "BorrarComida",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "token",
-						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzMTQ2ODgsImF1ZCI6IjMwNDYxZDgxMGE2NTgwMmJlY2NmYTg5NDIyZmIxMDdjOGVmOGFkNjgiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9.wJDJmSs-oQM6Uc6b9xXK386w788Z1oMDxTOAy3IGHcI",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "localhost/TP/public/comandaORM/comidas/eliminar/8",
-					"host": [
-						"localhost"
-					],
-					"path": [
-						"TP",
-						"public",
-						"comandaORM",
-						"comidas",
-						"eliminar",
-						"8"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "ModificarComida",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "token",
-						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzMTQ2ODgsImF1ZCI6IjMwNDYxZDgxMGE2NTgwMmJlY2NmYTg5NDIyZmIxMDdjOGVmOGFkNjgiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9.wJDJmSs-oQM6Uc6b9xXK386w788Z1oMDxTOAy3IGHcI",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "nombre",
-							"value": "ipa",
-							"type": "text"
-						},
-						{
-							"key": "tipo",
-							"value": "cerveza",
-							"type": "text"
-						},
-						{
-							"key": "precio",
-							"value": "100",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "localhost/TP/public/comandaORM/comidas/modificar/7",
-					"host": [
-						"localhost"
-					],
-					"path": [
-						"TP",
-						"public",
-						"comandaORM",
-						"comidas",
-						"modificar",
-						"7"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "CargarMesa",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "token",
-						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzMTQ2ODgsImF1ZCI6IjMwNDYxZDgxMGE2NTgwMmJlY2NmYTg5NDIyZmIxMDdjOGVmOGFkNjgiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9.wJDJmSs-oQM6Uc6b9xXK386w788Z1oMDxTOAy3IGHcI",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "localhost/TP/public/comandaORM/mesas",
-					"host": [
-						"localhost"
-					],
-					"path": [
-						"TP",
-						"public",
-						"comandaORM",
-						"mesas"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "ModificarMesa",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "token",
-						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzMTQ2ODgsImF1ZCI6IjMwNDYxZDgxMGE2NTgwMmJlY2NmYTg5NDIyZmIxMDdjOGVmOGFkNjgiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9.wJDJmSs-oQM6Uc6b9xXK386w788Z1oMDxTOAy3IGHcI",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "estado",
-							"value": "Cerrada",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "localhost/TP/public/comandaORM/mesas/modificar/2",
-					"host": [
-						"localhost"
-					],
-					"path": [
-						"TP",
-						"public",
-						"comandaORM",
-						"mesas",
-						"modificar",
-						"2"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "EliminarMesa",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "token",
-						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzMTQ2ODgsImF1ZCI6IjMwNDYxZDgxMGE2NTgwMmJlY2NmYTg5NDIyZmIxMDdjOGVmOGFkNjgiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9.wJDJmSs-oQM6Uc6b9xXK386w788Z1oMDxTOAy3IGHcI",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "localhost/TP/public/comandaORM/mesas/eliminar/5",
-					"host": [
-						"localhost"
-					],
-					"path": [
-						"TP",
-						"public",
-						"comandaORM",
-						"mesas",
-						"eliminar",
-						"5"
-					],
-					"query": [
-						{
-							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzMTQ2ODgsImF1ZCI6IjMwNDYxZDgxMGE2NTgwMmJlY2NmYTg5NDIyZmIxMDdjOGVmOGFkNjgiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9.wJDJmSs-oQM6Uc6b9xXK386w788Z1oMDxTOAy3IGHcI",
-							"disabled": true
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "CerrarMesa",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "token",
-						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzMzYxNzAsImF1ZCI6IjMwNDYxZDgxMGE2NTgwMmJlY2NmYTg5NDIyZmIxMDdjOGVmOGFkNjgiLCJkYXRhIjp7ImlkIjoxMDEsIm5vbWJyZSI6Ikp1YW4iLCJhcGVsbGlkbyI6IlBcdTAwZTlyZXoiLCJ0aXBvIjoic29jaW8ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9.eZZiKeo3ahOx1xj62zca98O0XUjdkFLqWxqLDwBP2HA",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "localhost/TP/public/comandaORM/mesas/cerrar/3",
-					"host": [
-						"localhost"
-					],
-					"path": [
-						"TP",
-						"public",
-						"comandaORM",
-						"mesas",
-						"cerrar",
-						"3"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "CompletarEncuesta",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "codigoMesa",
-							"value": "b20af",
-							"type": "text"
-						},
-						{
-							"key": "puntajeMesa",
-							"value": "10",
-							"type": "text"
-						},
-						{
-							"key": "puntajeRestaurante",
-							"value": "10",
-							"type": "text"
-						},
-						{
-							"key": "puntajeMozo",
-							"value": "10",
-							"type": "text"
-						},
-						{
-							"key": "puntajeCocinero",
-							"value": "10",
-							"type": "text"
-						},
-						{
-							"key": "textoExperiencia",
-							"value": "Muy buena experiencia",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "localhost/TP/public/comandaORM/clientes/encuesta",
-					"host": [
-						"localhost"
-					],
-					"path": [
-						"TP",
-						"public",
-						"comandaORM",
-						"clientes",
-						"encuesta"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "consultasOperacionesEmpleados",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "localhost/TP/public/comandaORM/admin/operaciones?listado=operaciones del empleado",
-					"host": [
-						"localhost"
-					],
-					"path": [
-						"TP",
-						"public",
-						"comandaORM",
-						"admin",
-						"operaciones"
-					],
-					"query": [
-						{
-							"key": "listado",
-							"value": "operaciones del empleado"
-						},
-						{
-							"key": "idEmpleado",
-							"value": "105",
-							"disabled": true
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "consultasPedidos",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "localhost/TP/public/comandaORM/admin/pedidos?listado=entregados tarde",
-					"host": [
-						"localhost"
-					],
-					"path": [
-						"TP",
-						"public",
-						"comandaORM",
-						"admin",
-						"pedidos"
-					],
-					"query": [
-						{
-							"key": "listado",
-							"value": "entregados tarde"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "consulasMesas",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "localhost/TP/public/comandaORM/admin/mesas?listado=menos facturo",
-					"host": [
-						"localhost"
-					],
-					"path": [
-						"TP",
-						"public",
-						"comandaORM",
-						"admin",
-						"mesas"
-					],
-					"query": [
-						{
-							"key": "listado",
-							"value": "menos facturo"
-						}
 					]
 				}
 			},

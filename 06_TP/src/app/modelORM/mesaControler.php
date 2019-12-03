@@ -14,6 +14,7 @@ use App\Models\AutentificadorJWT;
 use \Exception;
 
 
+
 class mesaControler
 {
 
@@ -158,6 +159,9 @@ class mesaControler
     public function ConsultarMesas($request, $response, $args)
     {
         $listado = $request->getParam('listado');
+        $idMesa = $request->getParam('idMesa');
+        $fechaInicio = $request->getParam('fechaInicio');
+        $fechaFin = $request->getParam('fechaFin');
         $informacion = null;
         
         switch($listado)
@@ -166,6 +170,7 @@ class mesaControler
                 $informacion = factura::select('id_mesa')
                 ->groupBy('id_mesa')
                 ->orderByRaw('COUNT(*) DESC')
+                ->selectRaw("COUNT(*) as veces_usada")
                 ->limit(1)
                 ->get();
             break;
@@ -173,6 +178,23 @@ class mesaControler
                 $informacion = factura::select('id_mesa')
                 ->groupBy('id_mesa')
                 ->orderByRaw('COUNT(*) ASC')
+                ->selectRaw("COUNT(*) as veces_usada")
+                ->limit(1)
+                ->get();
+            break;
+            case "mas_facturo":
+                $informacion = factura::select('id_mesa')
+                ->groupBy('id_mesa')
+                ->orderByRaw('SUM(monto) desc')
+                ->selectRaw("SUM(monto) as monto_total")
+                ->limit(1)
+                ->get();
+            break;
+            case "menos_facturo":
+                $informacion = factura::select('id_mesa')
+                ->groupBy('id_mesa')
+                ->orderByRaw('SUM(monto) asc')
+                ->selectRaw("SUM(monto) as monto_total")
                 ->limit(1)
                 ->get();
             break;
@@ -185,7 +207,30 @@ class mesaControler
                 $informacion = factura::orderBy('monto', 'asc')
                 ->select('id_mesa', 'monto')
                 ->first();
+            break; 
+            case "entre_dos_fechas":
+                if($idMesa != null)
+                {
+                    $informacion = factura::where('id_mesa', $idMesa)
+                    ->where('hora', '>=', $fechaInicio)
+                    ->where('hora', '<=', $fechaFin)
+                    ->get();
+                }
             break;               
+            case "mejores_comentarios":
+                $informacion = encuesta::select('id_cliente', 'texto_experiencia')
+                ->selectRaw("(puntaje_mesa + puntaje_restaurante + puntaje_mozo + puntaje_cocinero) as puntaje_total")
+                ->orderByRaw('(puntaje_mesa + puntaje_restaurante + puntaje_mozo + puntaje_cocinero) desc')
+                ->limit(3)
+                ->get();
+            break; 
+            case "peores_comentarios":
+                $informacion = encuesta::select('id_cliente', 'texto_experiencia')
+                ->selectRaw("(puntaje_mesa + puntaje_restaurante + puntaje_mozo + puntaje_cocinero) as puntaje_total")
+                ->orderByRaw('(puntaje_mesa + puntaje_restaurante + puntaje_mozo + puntaje_cocinero) asc')
+                ->limit(3)
+                ->get();
+            break; 
         }
 
         if($informacion == null)

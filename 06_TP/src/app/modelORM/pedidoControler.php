@@ -6,12 +6,14 @@ use App\Models\ORM\pedido;
 use App\Models\ORM\mesa;
 use App\Models\ORM\factura;
 use App\Models\ORM\cliente;
+use App\Models\ORM\comida;
 
 
 include_once __DIR__ . '/pedido.php';
 include_once __DIR__ . '/mesa.php';
 include_once __DIR__ . '/factura.php';
 include_once __DIR__ . '/cliente.php';
+include_once __DIR__ . '/comida.php';
 
 
 use Psr\Http\Message\ResponseInterface as Response;
@@ -34,7 +36,7 @@ class pedidoControler
 
         $empleado = empleado::where('id', $idEmpleado)->first();
         
-        if(isset($datos['idComida'], $datos['idMesa'], $datos['nombreCliente'], $datos['apellidoCliente']))
+        if(isset($datos['nombreComida'], $datos['idMesa'], $datos['nombreCliente'], $datos['apellidoCliente']))
         {
             $mesa = mesa::where('id', $datos['idMesa'])->first();
 
@@ -64,16 +66,21 @@ class pedidoControler
                 $codigoUnico = substr(md5(uniqid(rand(), true)), 0, 5);
 
             
-                if(is_array($datos['idComida']))//si pide más de 1 cosa
+                if(is_array($datos['nombreComida']))//si pide más de 1 cosa
                 {
-                    $length = count($datos['idComida']);
+                    $length = count($datos['nombreComida']);
 
                     for($i = 0; $i < $length; $i++)
                     {
                         $pedido = new pedido();
                         $pedido->codigo_mesa =  $codigoMesa; //asigno el id
                         $pedido->codigo_unico = $codigoUnico;
-                        $pedido->id_comida = $datos['idComida'][$i];
+
+                        $idComida = comida::where('nombre', $datos['nombreComida'][$i])
+                                    ->select('id')
+                                    ->first();
+
+                        $pedido->id_comida = $idComida->id;
                         
                         $pedido->hora_creacion = $horaCreacion;
                     
@@ -85,7 +92,11 @@ class pedidoControler
                     $pedido = new pedido();
                     $pedido->codigo_mesa =  $codigoMesa; //asigno el id
                     $pedido->codigo_unico = $codigoUnico;
-                    $pedido->id_comida = $datos['idComida'];                 
+                    $idComida = comida::where('nombre', $datos['nombreComida'])
+                                    ->select('id')
+                                    ->first();
+
+                    $pedido->id_comida = $idComida->id;                
                     
                     $pedido->hora_creacion = $horaCreacion;
                     $pedido->save();
@@ -185,7 +196,7 @@ class pedidoControler
                 $tiempoEstimado = $datos['tiempoEstimado'];
 
                 $pedido = pedido::where('id', $idPedido)->first();
-                if($pedido != null)
+                if($pedido != null && strcasecmp($pedido->estado, 'pendiente') == 0)
                 {
                     $pedido->tiempo_preparacion = $tiempoEstimado;
                     $pedido->estado = 'En preparación';
@@ -485,9 +496,11 @@ class pedidoControler
                 
             break;
             case "cancelados":
-                $informacion = pedido::where('estado', 'Cancelado')
-                ->get(['id', 'id_comida', 'estado']);
+                $informacion = pedido::get(['id', 'id_comida', 'estado']);
             break;
+
+            default:
+            $informacion = pedido::get(['id', 'id_comida', 'estado']);
                 
         }
 
