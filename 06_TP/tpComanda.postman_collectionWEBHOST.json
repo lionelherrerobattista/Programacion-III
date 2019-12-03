@@ -260,6 +260,12 @@
 							"key": "apellidoCliente",
 							"value": "López",
 							"type": "text"
+						},
+						{
+							"key": "fotoMesa",
+							"type": "file",
+							"src": "/C:/Users/lion_/Pictures/perro.jpg",
+							"disabled": true
 						}
 					]
 				},
