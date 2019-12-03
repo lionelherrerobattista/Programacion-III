@@ -1,0 +1,972 @@
+{
+	"info": {
+		"_postman_id": "415d1aa4-3e84-4ad8-89e9-57c1ea94fbd3",
+		"name": "tpComanda",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CargarEmpleado",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzOTkxMTQsImF1ZCI6IjhjYWE5M2Y5M2QxMzU1NzBhNzY3OTU4NTk1N2E4Yjc0NGM2ZWVlNWUiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9._v5SZQJVmP1Eod5NwccQde25kqfqc13nAbYP-DMvtLs",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "nombre",
+							"value": "Juan",
+							"type": "text"
+						},
+						{
+							"key": "apellido",
+							"value": "Pérez",
+							"type": "text"
+						},
+						{
+							"key": "tipo",
+							"value": "cocinero",
+							"type": "text"
+						},
+						{
+							"key": "clave",
+							"value": "1234",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://tpcomanda1.000webhostapp.com/public/comandaORM/empleados",
+					"protocol": "https",
+					"host": [
+						"tpcomanda1",
+						"000webhostapp",
+						"com"
+					],
+					"path": [
+						"public",
+						"comandaORM",
+						"empleados"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SuspenderEmpleado",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzU0MDE4MTAsImF1ZCI6IjhjYWE5M2Y5M2QxMzU1NzBhNzY3OTU4NTk1N2E4Yjc0NGM2ZWVlNWUiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9.Jny93_OXrWly7gzDMaFNr0r0JEwVu0HThAMMtOQIUnU",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "https://tpcomanda1.000webhostapp.com/public/comandaORM/empleados/suspender/106",
+					"protocol": "https",
+					"host": [
+						"tpcomanda1",
+						"000webhostapp",
+						"com"
+					],
+					"path": [
+						"public",
+						"comandaORM",
+						"empleados",
+						"suspender",
+						"106"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BorrarEmpleado",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzU0MDE4MTAsImF1ZCI6IjhjYWE5M2Y5M2QxMzU1NzBhNzY3OTU4NTk1N2E4Yjc0NGM2ZWVlNWUiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9.Jny93_OXrWly7gzDMaFNr0r0JEwVu0HThAMMtOQIUnU",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://tpcomanda1.000webhostapp.com/public/comandaORM/empleados/eliminar/106",
+					"protocol": "https",
+					"host": [
+						"tpcomanda1",
+						"000webhostapp",
+						"com"
+					],
+					"path": [
+						"public",
+						"comandaORM",
+						"empleados",
+						"eliminar",
+						"106"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Modificar Empleado",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzU0MDE4MTAsImF1ZCI6IjhjYWE5M2Y5M2QxMzU1NzBhNzY3OTU4NTk1N2E4Yjc0NGM2ZWVlNWUiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9.Jny93_OXrWly7gzDMaFNr0r0JEwVu0HThAMMtOQIUnU",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "nombre",
+							"value": "Pablo",
+							"type": "text"
+						},
+						{
+							"key": "apellido",
+							"value": "Suárez",
+							"type": "text"
+						},
+						{
+							"key": "clave",
+							"value": "cocinero",
+							"type": "text"
+						},
+						{
+							"key": "tipo",
+							"value": "cocinero",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://tpcomanda1.000webhostapp.com/public/comandaORM/empleados/modificar/103",
+					"protocol": "https",
+					"host": [
+						"tpcomanda1",
+						"000webhostapp",
+						"com"
+					],
+					"path": [
+						"public",
+						"comandaORM",
+						"empleados",
+						"modificar",
+						"103"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LoginEmpleado",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id",
+							"value": "105",
+							"type": "text"
+						},
+						{
+							"key": "clave",
+							"value": "1234",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://tpcomanda1.000webhostapp.com/public/comandaORM/empleados/login",
+					"protocol": "https",
+					"host": [
+						"tpcomanda1",
+						"000webhostapp",
+						"com"
+					],
+					"path": [
+						"public",
+						"comandaORM",
+						"empleados",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CrearPedido",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"type": "text",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzOTk3NzQsImF1ZCI6IjhjYWE5M2Y5M2QxMzU1NzBhNzY3OTU4NTk1N2E4Yjc0NGM2ZWVlNWUiLCJkYXRhIjp7ImlkIjoxMDAsIm5vbWJyZSI6Ik1pZ3VlbCIsImFwZWxsaWRvIjoiTG9wZXoiLCJ0aXBvIjoibW96byJ9LCJhcHAiOiJBUEkgUkVTVCBDRCBVVE4gRlJBIn0.1TUcoPTTDHHeRG8eFzQski4f1k-q2AKRq8f1UL7Ada4"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "idMesa",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "nombreComida",
+							"value": "bife",
+							"type": "text"
+						},
+						{
+							"key": "idComida[1]",
+							"value": "3",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "nombreCliente",
+							"value": "Pedro",
+							"type": "text"
+						},
+						{
+							"key": "apellidoCliente",
+							"value": "López",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://tpcomanda1.000webhostapp.com/public/comandaORM/pedidos",
+					"protocol": "https",
+					"host": [
+						"tpcomanda1",
+						"000webhostapp",
+						"com"
+					],
+					"path": [
+						"public",
+						"comandaORM",
+						"pedidos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "VerPedidos",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzU0MDA2MjcsImF1ZCI6IjhjYWE5M2Y5M2QxMzU1NzBhNzY3OTU4NTk1N2E4Yjc0NGM2ZWVlNWUiLCJkYXRhIjp7ImlkIjoxMDMsIm5vbWJyZSI6IlBhYmxvIiwiYXBlbGxpZG8iOiJTdVx1MDBlMXJleiIsInRpcG8iOiJjb2NpbmVybyJ9LCJhcHAiOiJBUEkgUkVTVCBDRCBVVE4gRlJBIn0.-cOuswdF3gsASSQj9qUI_NgKavnvRTVkh8bX2EzE4Fo",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://tpcomanda1.000webhostapp.com/public/comandaORM/pedidos",
+					"protocol": "https",
+					"host": [
+						"tpcomanda1",
+						"000webhostapp",
+						"com"
+					],
+					"path": [
+						"public",
+						"comandaORM",
+						"pedidos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PrepararPedido",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzU0MDA3NzYsImF1ZCI6IjhjYWE5M2Y5M2QxMzU1NzBhNzY3OTU4NTk1N2E4Yjc0NGM2ZWVlNWUiLCJkYXRhIjp7ImlkIjoxMDMsIm5vbWJyZSI6IlBhYmxvIiwiYXBlbGxpZG8iOiJTdVx1MDBlMXJleiIsInRpcG8iOiJjb2NpbmVybyJ9LCJhcHAiOiJBUEkgUkVTVCBDRCBVVE4gRlJBIn0.IXYD8_dLvBMOZtjvk2u1GLSBQ1IeWixPH15nbzhqSTM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "tiempoEstimado",
+							"value": "20",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://tpcomanda1.000webhostapp.com/public/comandaORM/pedidos/preparar/51",
+					"protocol": "https",
+					"host": [
+						"tpcomanda1",
+						"000webhostapp",
+						"com"
+					],
+					"path": [
+						"public",
+						"comandaORM",
+						"pedidos",
+						"preparar",
+						"51"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "VerTiempoRestante",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "https://tpcomanda1.000webhostapp.com/public/comandaORM/clientes/pedido?codigoMesa=b1d8c&codigoPedido=c896c",
+					"protocol": "https",
+					"host": [
+						"tpcomanda1",
+						"000webhostapp",
+						"com"
+					],
+					"path": [
+						"public",
+						"comandaORM",
+						"clientes",
+						"pedido"
+					],
+					"query": [
+						{
+							"key": "codigoMesa",
+							"value": "b1d8c"
+						},
+						{
+							"key": "codigoPedido",
+							"value": "c896c"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TerminarPedido",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzU0MDA3NzYsImF1ZCI6IjhjYWE5M2Y5M2QxMzU1NzBhNzY3OTU4NTk1N2E4Yjc0NGM2ZWVlNWUiLCJkYXRhIjp7ImlkIjoxMDMsIm5vbWJyZSI6IlBhYmxvIiwiYXBlbGxpZG8iOiJTdVx1MDBlMXJleiIsInRpcG8iOiJjb2NpbmVybyJ9LCJhcHAiOiJBUEkgUkVTVCBDRCBVVE4gRlJBIn0.IXYD8_dLvBMOZtjvk2u1GLSBQ1IeWixPH15nbzhqSTM",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://tpcomanda1.000webhostapp.com/public/comandaORM/pedidos/terminar/51",
+					"protocol": "https",
+					"host": [
+						"tpcomanda1",
+						"000webhostapp",
+						"com"
+					],
+					"path": [
+						"public",
+						"comandaORM",
+						"pedidos",
+						"terminar",
+						"51"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CancelarPedido",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzMTQ2ODgsImF1ZCI6IjMwNDYxZDgxMGE2NTgwMmJlY2NmYTg5NDIyZmIxMDdjOGVmOGFkNjgiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9.wJDJmSs-oQM6Uc6b9xXK386w788Z1oMDxTOAy3IGHcI",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost/TP/public/comandaORM/pedidos/cancelar/13",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"TP",
+						"public",
+						"comandaORM",
+						"pedidos",
+						"cancelar",
+						"13"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzMTQ2ODgsImF1ZCI6IjMwNDYxZDgxMGE2NTgwMmJlY2NmYTg5NDIyZmIxMDdjOGVmOGFkNjgiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9.wJDJmSs-oQM6Uc6b9xXK386w788Z1oMDxTOAy3IGHcI",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ServirPedido",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzU0MDA5NDUsImF1ZCI6IjhjYWE5M2Y5M2QxMzU1NzBhNzY3OTU4NTk1N2E4Yjc0NGM2ZWVlNWUiLCJkYXRhIjp7ImlkIjoxMDgsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoibW96byJ9LCJhcHAiOiJBUEkgUkVTVCBDRCBVVE4gRlJBIn0.dwIK3Vi1tIgTqlRG-Kx5S7lU8Q-sBWopq2K_3TChhiU",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://tpcomanda1.000webhostapp.com/public/comandaORM/pedidos/servir/51",
+					"protocol": "https",
+					"host": [
+						"tpcomanda1",
+						"000webhostapp",
+						"com"
+					],
+					"path": [
+						"public",
+						"comandaORM",
+						"pedidos",
+						"servir",
+						"51"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CobrarPedido",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzU0MDA5NDUsImF1ZCI6IjhjYWE5M2Y5M2QxMzU1NzBhNzY3OTU4NTk1N2E4Yjc0NGM2ZWVlNWUiLCJkYXRhIjp7ImlkIjoxMDgsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoibW96byJ9LCJhcHAiOiJBUEkgUkVTVCBDRCBVVE4gRlJBIn0.dwIK3Vi1tIgTqlRG-Kx5S7lU8Q-sBWopq2K_3TChhiU",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://tpcomanda1.000webhostapp.com/public/comandaORM/pedidos/cobrar/3ccf4",
+					"protocol": "https",
+					"host": [
+						"tpcomanda1",
+						"000webhostapp",
+						"com"
+					],
+					"path": [
+						"public",
+						"comandaORM",
+						"pedidos",
+						"cobrar",
+						"3ccf4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CerrarMesa",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzU0MDExODksImF1ZCI6IjhjYWE5M2Y5M2QxMzU1NzBhNzY3OTU4NTk1N2E4Yjc0NGM2ZWVlNWUiLCJkYXRhIjp7ImlkIjoxMDEsIm5vbWJyZSI6Ikp1YW4iLCJhcGVsbGlkbyI6IlBcdTAwZTlyZXoiLCJ0aXBvIjoic29jaW8ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9.BSzcJtLpgkDr3Kg_HvhKzwyqnlP9bqJHhowb6msZJwo",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://tpcomanda1.000webhostapp.com/public/comandaORM/mesas/cerrar/3",
+					"protocol": "https",
+					"host": [
+						"tpcomanda1",
+						"000webhostapp",
+						"com"
+					],
+					"path": [
+						"public",
+						"comandaORM",
+						"mesas",
+						"cerrar",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CargarComida",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzOTkxMTQsImF1ZCI6IjhjYWE5M2Y5M2QxMzU1NzBhNzY3OTU4NTk1N2E4Yjc0NGM2ZWVlNWUiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9._v5SZQJVmP1Eod5NwccQde25kqfqc13nAbYP-DMvtLs",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "nombre",
+							"value": "IPA",
+							"type": "text"
+						},
+						{
+							"key": "tipo",
+							"value": "cerveza",
+							"type": "text"
+						},
+						{
+							"key": "precio",
+							"value": "90",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://tpcomanda1.000webhostapp.com/public/comandaORM/comidas",
+					"protocol": "https",
+					"host": [
+						"tpcomanda1",
+						"000webhostapp",
+						"com"
+					],
+					"path": [
+						"public",
+						"comandaORM",
+						"comidas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BorrarComida",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzOTkxMTQsImF1ZCI6IjhjYWE5M2Y5M2QxMzU1NzBhNzY3OTU4NTk1N2E4Yjc0NGM2ZWVlNWUiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9._v5SZQJVmP1Eod5NwccQde25kqfqc13nAbYP-DMvtLs",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://tpcomanda1.000webhostapp.com/public/comandaORM/comidas/eliminar/8",
+					"protocol": "https",
+					"host": [
+						"tpcomanda1",
+						"000webhostapp",
+						"com"
+					],
+					"path": [
+						"public",
+						"comandaORM",
+						"comidas",
+						"eliminar",
+						"8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ModificarComida",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzOTkxMTQsImF1ZCI6IjhjYWE5M2Y5M2QxMzU1NzBhNzY3OTU4NTk1N2E4Yjc0NGM2ZWVlNWUiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9._v5SZQJVmP1Eod5NwccQde25kqfqc13nAbYP-DMvtLs",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "nombre",
+							"value": "ipa",
+							"type": "text"
+						},
+						{
+							"key": "tipo",
+							"value": "cerveza",
+							"type": "text"
+						},
+						{
+							"key": "precio",
+							"value": "100",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://tpcomanda1.000webhostapp.com/public/comandaORM/comidas/modificar/7",
+					"protocol": "https",
+					"host": [
+						"tpcomanda1",
+						"000webhostapp",
+						"com"
+					],
+					"path": [
+						"public",
+						"comandaORM",
+						"comidas",
+						"modificar",
+						"7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CargarMesa",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzOTkxMTQsImF1ZCI6IjhjYWE5M2Y5M2QxMzU1NzBhNzY3OTU4NTk1N2E4Yjc0NGM2ZWVlNWUiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9._v5SZQJVmP1Eod5NwccQde25kqfqc13nAbYP-DMvtLs",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://tpcomanda1.000webhostapp.com/public/comandaORM/mesas",
+					"protocol": "https",
+					"host": [
+						"tpcomanda1",
+						"000webhostapp",
+						"com"
+					],
+					"path": [
+						"public",
+						"comandaORM",
+						"mesas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ModificarMesa",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzOTkxMTQsImF1ZCI6IjhjYWE5M2Y5M2QxMzU1NzBhNzY3OTU4NTk1N2E4Yjc0NGM2ZWVlNWUiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9._v5SZQJVmP1Eod5NwccQde25kqfqc13nAbYP-DMvtLs",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "estado",
+							"value": "Cerrada",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://tpcomanda1.000webhostapp.com/public/comandaORM/mesas/modificar/2",
+					"protocol": "https",
+					"host": [
+						"tpcomanda1",
+						"000webhostapp",
+						"com"
+					],
+					"path": [
+						"public",
+						"comandaORM",
+						"mesas",
+						"modificar",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "EliminarMesa",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzMTQ2ODgsImF1ZCI6IjMwNDYxZDgxMGE2NTgwMmJlY2NmYTg5NDIyZmIxMDdjOGVmOGFkNjgiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9.wJDJmSs-oQM6Uc6b9xXK386w788Z1oMDxTOAy3IGHcI",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://tpcomanda1.000webhostapp.com/public/comandaORM/mesas/eliminar/5",
+					"protocol": "https",
+					"host": [
+						"tpcomanda1",
+						"000webhostapp",
+						"com"
+					],
+					"path": [
+						"public",
+						"comandaORM",
+						"mesas",
+						"eliminar",
+						"5"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzUzOTkxMTQsImF1ZCI6IjhjYWE5M2Y5M2QxMzU1NzBhNzY3OTU4NTk1N2E4Yjc0NGM2ZWVlNWUiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9._v5SZQJVmP1Eod5NwccQde25kqfqc13nAbYP-DMvtLs",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CompletarEncuesta",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "codigoMesa",
+							"value": "80485",
+							"type": "text"
+						},
+						{
+							"key": "puntajeMesa",
+							"value": "10",
+							"type": "text"
+						},
+						{
+							"key": "puntajeRestaurante",
+							"value": "9",
+							"type": "text"
+						},
+						{
+							"key": "puntajeMozo",
+							"value": "9",
+							"type": "text"
+						},
+						{
+							"key": "puntajeCocinero",
+							"value": "10",
+							"type": "text"
+						},
+						{
+							"key": "textoExperiencia",
+							"value": "Muy buena experiencia",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://tpcomanda1.000webhostapp.com/public/comandaORM/clientes/encuesta",
+					"protocol": "https",
+					"host": [
+						"tpcomanda1",
+						"000webhostapp",
+						"com"
+					],
+					"path": [
+						"public",
+						"comandaORM",
+						"clientes",
+						"encuesta"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "consultasOperacionesEmpleados",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzU0MDE1NTQsImF1ZCI6IjhjYWE5M2Y5M2QxMzU1NzBhNzY3OTU4NTk1N2E4Yjc0NGM2ZWVlNWUiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9.wvmZRAKgzKw5BJqdk9zBxCmMqUgcs98WvAbnxODDm-U",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://tpcomanda1.000webhostapp.com/public/comandaORM/admin/operaciones?listado=operaciones del empleado",
+					"protocol": "https",
+					"host": [
+						"tpcomanda1",
+						"000webhostapp",
+						"com"
+					],
+					"path": [
+						"public",
+						"comandaORM",
+						"admin",
+						"operaciones"
+					],
+					"query": [
+						{
+							"key": "listado",
+							"value": "operaciones del empleado"
+						},
+						{
+							"key": "idEmpleado",
+							"value": "105",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "consultasPedidos",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzU0MDE1NTQsImF1ZCI6IjhjYWE5M2Y5M2QxMzU1NzBhNzY3OTU4NTk1N2E4Yjc0NGM2ZWVlNWUiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9.wvmZRAKgzKw5BJqdk9zBxCmMqUgcs98WvAbnxODDm-U",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://tpcomanda1.000webhostapp.com/public/comandaORM/admin/pedidos?",
+					"protocol": "https",
+					"host": [
+						"tpcomanda1",
+						"000webhostapp",
+						"com"
+					],
+					"path": [
+						"public",
+						"comandaORM",
+						"admin",
+						"pedidos"
+					],
+					"query": [
+						{
+							"key": "listado",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "consulasMesas",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzU0MDE1NTQsImF1ZCI6IjhjYWE5M2Y5M2QxMzU1NzBhNzY3OTU4NTk1N2E4Yjc0NGM2ZWVlNWUiLCJkYXRhIjp7ImlkIjoxMDUsIm5vbWJyZSI6Ikpvc1x1MDBlOSIsImFwZWxsaWRvIjoiR2FyY1x1MDBlZGEiLCJ0aXBvIjoiYWRtaW4ifSwiYXBwIjoiQVBJIFJFU1QgQ0QgVVROIEZSQSJ9.wvmZRAKgzKw5BJqdk9zBxCmMqUgcs98WvAbnxODDm-U",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "https://tpcomanda1.000webhostapp.com/public/comandaORM/admin/mesas?listado=peores_comentarios",
+					"protocol": "https",
+					"host": [
+						"tpcomanda1",
+						"000webhostapp",
+						"com"
+					],
+					"path": [
+						"public",
+						"comandaORM",
+						"admin",
+						"mesas"
+					],
+					"query": [
+						{
+							"key": "listado",
+							"value": "peores_comentarios"
+						},
+						{
+							"key": "fechaInicio",
+							"value": "2019-12-01",
+							"disabled": true
+						},
+						{
+							"key": "fechaFin",
+							"value": "2019-12-03",
+							"disabled": true
+						},
+						{
+							"key": "idMesa",
+							"value": "2",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
