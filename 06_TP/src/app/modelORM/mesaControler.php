@@ -101,7 +101,7 @@ class mesaControler
 
             if(isset($datos["codigoUnico"]))
             {    
-                $mesa->codig_unico = $datos["codigoUnico"];           
+                $mesa->codigo_unico = $datos["codigoUnico"];           
             }
           
             $mesa->save();
@@ -132,21 +132,23 @@ class mesaControler
 
         $empleado = empleado::where('id', $idEmpleado)->first();
         
-        $id = $request->getAttribute('id');
+        $idMesa = $request->getAttribute('idMesa');
 
-        $mesa = mesa::where('id', $id)->first();
+        $mesa = mesa::where('id', $idMesa)->first();
 
         if($mesa != null)
         {
             $mesa->estado = 'Cerrada';
+            $mesa->codigo_unico = null;
+            $mesa->save();
 
             empleadoControler::RegistrarOperacion($empleado, 'Cerrar Mesa');
 
-            $newResponse = $response->withJson("Mesa $id cerrada", 200); 
+            $newResponse = $response->withJson("Mesa $idMesa cerrada", 200); 
         }
         else
         {
-            $newResponse = $response->withJson("No se encontro al mesa $id", 200); 
+            $newResponse = $response->withJson("No se encontro la mesa $idMesa", 200); 
         }
 
 

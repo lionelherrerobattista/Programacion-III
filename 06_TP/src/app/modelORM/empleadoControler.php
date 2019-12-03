@@ -24,30 +24,38 @@ class empleadoControler
     private static $claveSecreta = 'claveSecreta1';
 
     public function CargarEmpleado($request, $response, $args) {
+
+        $token = $request->getHeader('token');
+        $token = $token[0];
+        $datosToken = AutentificadorJWT::ObtenerData($token);     
+        $idEmpleadoToken = $datosToken->id;
+        $empleadoToken = empleado::where('id', $idEmpleadoToken)->first();
          
         $datos = $request->getParsedBody();
         
         if(isset($datos['nombre'], $datos['apellido'], $datos['tipo'],$datos['clave']))
         {
-            $empleado = new empleado();
-            $empleado->nombre = $datos['nombre'];            
-            $empleado->apellido = $datos['apellido'];   
-            $empleado->clave = crypt($datos["clave"], self::$claveSecreta);
-                
+                    
             //tipos
-            if(strcasecmp($datos['tipo'],'bartender') == 0 ||
-                strcasecmp($datos['tipo'],'cervecero') == 0 ||
-                strcasecmp($datos['tipo'],'cocinero') == 0 ||
-                strcasecmp($datos['tipo'],'mozo') == 0 ||
-                strcasecmp($datos['tipo'],'admin') == 0 ||
-                strcasecmp($datos['tipo'],'socio') == 0)
-            {   
+            if(empleadoControler::ValidarTipo($datos['tipo']))
+            {   $empleado = new empleado();
+                $empleado->nombre = $datos['nombre'];            
+                $empleado->apellido = $datos['apellido'];   
+                $empleado->clave = crypt($datos["clave"], self::$claveSecreta);
                 $empleado->tipo = $datos['tipo'];
+
+                
+                $empleado->save();
+
+                empleadoControler::RegistrarOperacion($empleadoToken, 'Cargar Empleado');
+                
+                $newResponse = $response->withJson("Empleado cargado", 200);  
+            }
+            else
+            {
+                $newResponse = $response->withJson("Tipo inválido", 200);  
             }
            
-            $empleado->save();
-            
-            $newResponse = $response->withJson("Empleado cargado", 200);  
         }
         else
         {
@@ -59,9 +67,16 @@ class empleadoControler
 
     public function SuspenderEmpleado($request, $response, $args)
     {
-        $id = $request->getAttribute('id');
 
-        $empleado = empleado::where('id', $id)->first();
+        $token = $request->getHeader('token');
+        $token = $token[0];
+        $datosToken = AutentificadorJWT::ObtenerData($token);     
+        $idEmpleadoToken = $datosToken->id;
+        $empleadoToken = empleado::where('id', $idEmpleadoToken)->first();
+
+        $idEmpleado = $request->getAttribute('idEmpleado');
+
+        $empleado = empleado::where('id', $idEmpleado)->first();
 
         if($empleado != null)
         {
@@ -72,6 +87,8 @@ class empleadoControler
                 $empleado->save();
 
                 $estado = $empleado->estado;
+
+                empleadoControler::RegistrarOperacion($empleadoToken, 'Suspender Empleado');
 
                 $newResponse = $response->withJson("Se cambió el estado a $estado", 200); 
             }
@@ -90,7 +107,7 @@ class empleadoControler
         }
         else
         {
-            $newResponse = $response->withJson("No se encontro al empleado $id", 200); 
+            $newResponse = $response->withJson("No se encontro al empleado $idEmpleado", 200); 
         }
 
 
@@ -100,22 +117,84 @@ class empleadoControler
 
     public function BorrarEmpleado($request, $response, $args)
     {
-        
-        $id = $request->getAttribute('id');
 
-        $empleado = empleado::where('id', $id)->first();
+        $token = $request->getHeader('token');
+        $token = $token[0];
+        $datosToken = AutentificadorJWT::ObtenerData($token);     
+        $idEmpleadoToken = $datosToken->id;
+        $empleadoToken = empleado::where('id', $idEmpleadoToken)->first();
+        
+        $idEmpleado = $request->getAttribute('idEmpleado');
+
+        $empleado = empleado::where('id', $idEmpleado)->first();
 
         if($empleado != null)
         {
             $empleado->delete();
 
-            $newResponse = $response->withJson("Empleado $id eliminado", 200); 
+            empleadoControler::RegistrarOperacion($empleadoToken, 'Borrar Empleado');
+
+            $newResponse = $response->withJson("Empleado $idEmpleado eliminado", 200); 
         }
         else
         {
-            $newResponse = $response->withJson("No se encontro al empleado $id", 200); 
+            $newResponse = $response->withJson("No se encontro al empleado $idEmpleado", 200); 
         }
 
+
+        return $newResponse;
+    }
+
+    public function ModificarEmpleado($request, $response, $args)
+    {
+        
+        $token = $request->getHeader('token');
+        $idEmpleado = $request->getAttribute('idEmpleado');
+    
+        $token = $token[0];
+        $datosToken = AutentificadorJWT::ObtenerData($token);     
+        $idEmpleadoToken = $datosToken->id;
+
+        $empleado = empleado::where('id', $idEmpleadoToken)->first();
+
+        $datos = $request->getParsedBody();
+
+        //busco el empleado a modificar:
+        $auxEmpleado = empleado::where('id', $idEmpleado)->first();
+
+        if($auxEmpleado != null)
+        {
+            if(isset($datos["nombre"]))
+            {
+                $auxEmpleado->nombre = $datos["nombre"];    
+            }
+
+            if(isset($datos["apellido"]))
+            {    
+                $auxEmpleado->apellido = $datos["apellido"];           
+            }
+
+            if(isset($datos["clave"]))
+            {    
+                $auxEmpleado->clave = crypt($datos["clave"], self::$claveSecreta);         
+            }
+
+            if(isset($datos["tipo"]))
+            {    
+                $auxEmpleado->tipo = $datos["tipo"];           
+            }
+          
+            $auxEmpleado->save();
+
+            empleadoControler::RegistrarOperacion($empleado, 'Modificar Empleado');
+
+
+            $newResponse = $response->withJson("Empleado modificado", 200);
+        }
+        else
+        {
+            $newResponse = $response->withJson("No se encontró al empleado $idEmpleado", 200);
+        }         
 
         return $newResponse;
     }
@@ -182,6 +261,24 @@ class empleadoControler
 
         
         $registroOperacion->save();
+    }
+
+    public static function ValidarTipo($tipo)
+    {
+        $esValido = false;
+
+        if(strcasecmp($tipo,'bartender') == 0 ||
+                strcasecmp($tipo,'cervecero') == 0 ||
+                strcasecmp($tipo,'cocinero') == 0 ||
+                strcasecmp($tipo,'mozo') == 0 ||
+                strcasecmp($tipo,'admin') == 0 ||
+                strcasecmp($tipo,'socio') == 0)
+        {   
+            $esValido = true;
+        }
+
+
+        return $esValido;
     }
 
 

@@ -3,9 +3,13 @@ namespace App\Models\ORM;
 
 use Slim\App;
 use App\Models\ORM\pedido;
+use App\Models\ORM\mesa;
+use App\Models\ORM\factura;
 
 
 include_once __DIR__ . '/pedido.php';
+include_once __DIR__ . '/mesa.php';
+include_once __DIR__ . '/factura.php';
 
 
 use Psr\Http\Message\ResponseInterface as Response;
@@ -28,17 +32,18 @@ class pedidoControler
 
         $empleado = empleado::where('id', $idEmpleado)->first();
         
-        if(isset($datos['nombre'], $datos['idComida'], $datos['idMesa']))
+        if(isset($datos['idComida'], $datos['idMesa']))
         {
-            $mesa = mesa::where('id', $datos['idMesa']);
+            $mesa = mesa::where('id', $datos['idMesa'])->first();
 
-            if($idMesa != null)
+
+            if($mesa != null)
             {
                 
                 $horaCreacion = new \DateTime();//timestamp creacion del pedido
                 $horaCreacion = $horaCreacion->setTimezone(new \DateTimeZone('America/Argentina/Buenos_Aires'));
                 
-                if(isset($datos['idMesa']))//Si una mesa quiere pedir algo más
+                if(isset($datos['codigoMesa']))//Si una mesa quiere pedir algo más
                 {
                     $codigoMesa = $datos['codigoMesa'];
                 }
@@ -91,7 +96,7 @@ class pedidoControler
             }
             else
             {
-                $newResponse = $response->withJson("No existe la mesa $idMesa", 200);  
+                $newResponse = $response->withJson("No existe la mesa", 200);  
             }
       
         }
@@ -115,10 +120,9 @@ class pedidoControler
         switch($empleado->tipo)
         {
             case 'bartender':
-            $pedidos = pedido::where([
-                        ['tipo', 'bebida'],
-                        ['estado', 'pendiente']])
-                        ->select('nombre', 'estado')
+            $pedidos = comida::where([['tipo', 'bebida'],['estado', 'pendiente']])
+                        ->join('pedidos', 'pedidos.id_comida', '=', 'comidas.id')
+                        ->select('pedidos.id', 'comidas.nombre', 'pedidos.estado')
                         ->get();
             break;
 
@@ -131,11 +135,10 @@ class pedidoControler
             break;
 
             case 'cocinero':
-            $pedidos = pedido::where([
-                ['tipo', 'comida'],
-                ['estado', 'pendiente']])
-                ->select('nombre', 'estado')
-                ->get();
+            $pedidos = comida::where([['tipo', 'comida'],['estado', 'pendiente']])
+                        ->join('pedidos', 'pedidos.id_comida', '=', 'comidas.id')
+                        ->select('pedidos.id', 'comidas.nombre', 'pedidos.estado')
+                        ->get();
             break;
 
             case 'socio':
@@ -279,40 +282,95 @@ class pedidoControler
 
         if(isset($codigoMesa, $codigoPedido))
         {
-            
-            $pedido = pedido::where([['codigo_mesa', $codigoMesa], 
-                                     ['codigo_unico', $codigoPedido]])->first();
+
+            //Busco los pedidos que coincidan            
+            $pedidos = pedido::where([['codigo_mesa', $codigoMesa], 
+                                     ['codigo_unico', $codigoPedido],
+                                     ['estado', '!=', 'Cancelado']])->get();
+
+            //Busco el que más tarde:
+            $tiempoEstimado = 0;
+            $pedido = null;
+
+            foreach($pedidos as $auxPedido)
+            {
+                if($tiempoEstimado < $auxPedido->tiempo_preparacion)
+                {
+                    $pedido = $auxPedido;
+                    $tiempoEstimado = $auxPedido->tiempo_preparacion;
+                }
+            }
 
             if($pedido != null)
             {
                 $tiempoPreparacion = $pedido->tiempo_preparacion;
 
-                $horaEntrega = \DateTime::createFromFormat('Y-m-d H:i:s', $pedido->hora_pedido);//timestamp creacion del pedido  
+                $horaEntrega = new \DateTime($pedido->hora_creacion, new \DateTimeZone('America/Argentina/Buenos_Aires'));//timestamp creacion del pedido 
                 $horaEntrega->modify("+$tiempoPreparacion minutes");//agrego los minutos
-                $horaEntrega;
-
-                $horaActual = new \DateTime();//timestamp creacion del pedido
+                
+                $horaActual = new \DateTime();
                 $horaActual = $horaActual->setTimezone(new \DateTimeZone('America/Argentina/Buenos_Aires'));
     
-                $tiempoRestante = $horaEntrega->diff($horaActual);
-                $tiempoRestante->format("%i minutos");
+                
+                if($horaEntrega > $horaActual)
+                {
+                    //Saco la diferencia
+                    $tiempoRestante = $horaEntrega->diff($horaActual);
 
-                $newResponse = $response->withJson("Faltan $tiempoRestante para su pedido", 200);
-                    
+                    //Formateo para mostrar como string:
+                    $tiempoRestante = $tiempoRestante->format('%i minuto(s)');
+                    $horaEntrega = $horaEntrega->format("H:i:s");
+
+                    $newResponse = $response->withJson("Falta(n) $tiempoRestante para su pedido. Hora de entrega: $horaEntrega", 200);
+                }
+                else//si está atrasado
+                {
+                    $newResponse = $response->withJson("Pedido atrasado. En breve le entregaremos el pedido", 200);
+                }         
             }
             else
             {
                 $newResponse = $response->withJson("No se encontró el pedido", 200);
             }
-
         }
         else
         {
             $newResponse = $response->withJson("Faltan datos", 200);
         }
 
+        return $newResponse; 
+    }
+
+    public function CancelarPedido($request, $response, $args)
+    {
+        $token = $request->getHeader('token');
+        $token = $token[0];
+        $datosToken = AutentificadorJWT::ObtenerData($token);     
+        $idEmpleadoToken = $datosToken->id;
+        $empleadoToken = empleado::where('id', $idEmpleadoToken)->first();
+
+        $idPedido = $request->getAttribute('idPedido');
+
+        $pedido = pedido::where('id', $idPedido)->first();
+
+        if($pedido != null)
+        {        
+            $pedido->estado = 'Cancelado';
+
+            $pedido->save();
+
+            $estado = $pedido->estado;
+
+            empleadoControler::RegistrarOperacion($empleadoToken, 'Cancelar Pedido');
+
+            $newResponse = $response->withJson("Se cambió el estado a $estado", 200);       
+        }
+        else
+        {
+            $newResponse = $response->withJson("No se encontro al pedido $idPedido", 200); 
+        }
+
         return $newResponse;
-        
     }
 
     public function CobrarPedido($request, $response, $args)
@@ -325,24 +383,30 @@ class pedidoControler
         $idEmpleado = $datosToken->id;
 
         $empleado = empleado::where('id', $idEmpleado)->first();
-        
-        //Busco las comidas y el precio:
-        $pedido = $datos = alumno_materia::where('codigo_unico', $codigoPedido)
-                ->join('comidas', 'pedidos.id_comida', '=', 'comidas.id')
-                ->select('comidas.nombre', 'comidas.precio')
-                ->get();
-        //Saco el total:
-        $montoTotal = 0;
 
+        $pedidos = pedido::where('codigo_unico', $codigoPedido)->get();
+
+        //Busco las comidas y el precio:
+        $pedidos = pedido::where('codigo_unico', $codigoPedido)
+                ->join('comidas', 'pedidos.id_comida', '=', 'comidas.id')
+                ->get(['comidas.nombre', 'comidas.precio'])
+                ->toArray();
+
+        //Calculo el total:
+        $montoTotal = 0;
+        $cuenta = "Pedido:";
         foreach($pedidos as $pedido)
         {
-            $montoTotal += $pedido->monto;
+            $montoTotal += $pedido["precio"];
+
+            $cuenta = $cuenta . "<br>" . $pedido["nombre"] . "....." . $pedido["precio"];
         }
 
-        //Modifico el estado de la mesa:        
+        //Modifico el estado de la mesa:
+        $pedido = pedido::where('codigo_unico', $codigoPedido)->first();
         $codigoUnico = $pedido->codigo_mesa;
         $mesa = mesa::where('codigo_unico', $codigoUnico)->first();
-        $mesa->estado = 'Con clientes pagando';
+        $mesa->estado = 'Con cliente pagando';
         $mesa->save();
 
         //facturación:
@@ -352,9 +416,17 @@ class pedidoControler
         $factura->monto = $montoTotal;
         $factura->save();
 
+        //Cambio el estado del pedido
+        $pedidos = pedido::where('codigo_unico', $codigoPedido)->get();
+        foreach($pedidos as $pedido)
+        {
+            $pedido->estado = "Cobrado";
+            $pedido->save();
+        }
+
         empleadoControler::RegistrarOperacion($empleado, 'Cobrar Pedido');
 
-        $newResponse = $response->withJson("Total a pagar: $montoTotal",200);
+        $newResponse = $response->withJson($cuenta . "<br>Total a pagar: $montoTotal",200);
 
         return $newResponse;
 

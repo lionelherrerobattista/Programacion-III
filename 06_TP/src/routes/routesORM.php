@@ -33,18 +33,21 @@ return function (App $app) {
 
         $this->post('', empleadoControler::class . ':CargarEmpleado');//admin
 
-        $this->post('/suspender/{id}', empleadoControler::class . ':SuspenderEmpleado');//socio?
+        $this->post('/suspender/{idEmpleado}', empleadoControler::class . ':SuspenderEmpleado');//socio?
 
-        $this->post('/eliminar/{id}', empleadoControler::class . ':BorrarEmpleado');//admin
+        $this->post('/eliminar/{idEmpleado}', empleadoControler::class . ':BorrarEmpleado');//admin
 
-        $this->post('/login', empleadoControler::class . ':LoginEmpleado');
+        $this->post('/modificar/{idEmpleado}', empleadoControler::class . ':ModificarEmpleado');//admin
 
-    });
+        
 
+    })->add(Middleware::class . ':ValidarRuta');
+
+    $app->post('/comandaORM/empleados/login', empleadoControler::class . ':LoginEmpleado');
 
     //pedidos
     $app->group('/comandaORM/pedidos', function () {   
-        
+
         $this->post('', pedidoControler::class . ':CargarPedido');//mozo
 
         $this->post('/eliminar/{idPedido}', pedidoControler::class . ':BorrarPedido');//mozo
@@ -54,10 +57,12 @@ return function (App $app) {
         $this->post('/preparar/{idPedido}', pedidoControler::class . ':PrepararPedido');
         
         $this->post('/terminar/{idPedido}', pedidoControler::class . ':TerminarPedido');
+
+        $this->post('/cancelar/{idPedido}', pedidoControler::class . ':CancelarPedido');
         
         $this->post('/entregar/{idPedido}', pedidoControler::class . ':ServirPedido');//mozo
         
-        $this->post('/cobrar/{idPedido}', pedidoControler::class . ':CobrarPedido');//mozo
+        $this->post('/cobrar/{codigoPedido}', pedidoControler::class . ':CobrarPedido');//mozo
         
     })->add(Middleware::class . ':ValidarRuta');
 
