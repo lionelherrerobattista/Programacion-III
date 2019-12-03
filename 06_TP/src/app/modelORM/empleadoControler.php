@@ -249,7 +249,7 @@ class empleadoControler
         return $newResponse;
     }
 
-    public function verOperaciones($request, $response, $args)
+    public function ConsultarOperaciones($request, $response, $args)
     {
         $listado = $request->getParam('listado');
         $idEmpleado = $request->getParam('idEmpleado');

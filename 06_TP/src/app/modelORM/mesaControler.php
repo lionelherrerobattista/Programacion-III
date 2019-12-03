@@ -151,7 +151,6 @@ class mesaControler
             $newResponse = $response->withJson("No se encontro la mesa $idMesa", 200); 
         }
 
-
         return $newResponse;
     }
 

@@ -108,14 +108,14 @@ return function (App $app) {
     //admin
     $app->group('/comandaORM/admin', function () { 
 
-        $this->get('/operaciones', empleadoControler::class . ':VerOperaciones');
+        $this->get('/operaciones', empleadoControler::class . ':ConsultarOperaciones');
 
         $this->get('/pedidos', pedidoControler::class . ':ConsultarPedidos');
 
         $this->get('/mesas', mesaControler::class . ':ConsultarMesas');
         
 
-    });
+    })->add(Middleware::class . ':ValidarAdmin')->add(Middleware::class . ':ValidarRuta');
     
 
 
