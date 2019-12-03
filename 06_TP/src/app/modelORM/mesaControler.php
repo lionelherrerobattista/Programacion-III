@@ -156,5 +156,49 @@ class mesaControler
     }
 
 
+    public function ConsultarMesas($request, $response, $args)
+    {
+        $listado = $request->getParam('listado');
+        $informacion = null;
+        
+        switch($listado)
+        {
+            case "mas_usada":
+                $informacion = factura::select('id_mesa')
+                ->groupBy('id_mesa')
+                ->orderByRaw('COUNT(*) DESC')
+                ->limit(1)
+                ->get();
+            break;
+            case "menos_usada":
+                $informacion = factura::select('id_mesa')
+                ->groupBy('id_mesa')
+                ->orderByRaw('COUNT(*) ASC')
+                ->limit(1)
+                ->get();
+            break;
+            case "mayor_importe":
+                $informacion = factura::orderBy('monto', 'desc')
+                ->select('id_mesa', 'monto')
+                ->first();
+            break;
+            case "menor_importe":
+                $informacion = factura::orderBy('monto', 'asc')
+                ->select('id_mesa', 'monto')
+                ->first();
+            break;               
+        }
+
+        if($informacion == null)
+        {
+            $informacion = 'No hay pedidos';
+        }
+
+        $newResponse = $response->withJson($informacion, 200);
+
+        return $newResponse;
+    }
+
+
   
 }

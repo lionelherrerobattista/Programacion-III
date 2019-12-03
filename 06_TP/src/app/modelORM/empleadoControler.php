@@ -249,6 +249,51 @@ class empleadoControler
         return $newResponse;
     }
 
+    public function verOperaciones($request, $response, $args)
+    {
+        $listado = $request->getParam('listado');
+        $idEmpleado = $request->getParam('idEmpleado');
+
+        
+
+        switch($listado)
+        {
+            case "logins":
+                $informacion = operaciones_registro::where('operacion', 'Login')
+                    ->get(['id', 'operacion', 'id_empleado', 'hora']);
+            break;
+            case "operaciones_por_sector":
+                $informacion = operaciones_registro::join('empleados', 'operaciones_registros.id_empleado', '=', 'empleados.id')
+                    ->orderBy('empleados.tipo', 'asc')
+                    ->get(['operaciones_registros.id', 'operacion', 'id_empleado', 'empleados.tipo', 'hora']);
+            break;
+            case "operaciones_por_sector_por_empleado":
+                $informacion = operaciones_registro::join('empleados', 'operaciones_registros.id_empleado', '=', 'empleados.id')
+                    ->orderBy('empleados.tipo', 'asc')
+                    ->orderBy('empleados.id', 'asc')
+                    ->get(['operaciones_registros.id', 'operacion', 'id_empleado', 'empleados.tipo', 'hora']);
+            break;
+            case "operaciones_del_empleado":
+                if($idEmpleado != null)
+                {
+                    $informacion = operaciones_registro::where('id_empleado', $idEmpleado)
+                    ->join('empleados', 'operaciones_registros.id_empleado', '=', 'empleados.id')
+                    ->orderBy('empleados.tipo', 'asc')
+                    ->orderBy('empleados.id', 'asc')
+                    ->get(['operaciones_registros.id', 'operacion', 'id_empleado', 'empleados.tipo', 'hora']);
+                }
+                else
+                {
+                    $informacion = "Falta id empleado";            
+                }
+                
+        }
+
+        $newResponse = $response->withJson($informacion, 200);
+
+        return $newResponse;
+    }
+
     public static function RegistrarOperacion($empleado, $operacion)
     {
         $hora = new \DateTime();

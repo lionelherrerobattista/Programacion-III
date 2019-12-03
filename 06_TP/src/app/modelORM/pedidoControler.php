@@ -5,11 +5,13 @@ use Slim\App;
 use App\Models\ORM\pedido;
 use App\Models\ORM\mesa;
 use App\Models\ORM\factura;
+use App\Models\ORM\cliente;
 
 
 include_once __DIR__ . '/pedido.php';
 include_once __DIR__ . '/mesa.php';
 include_once __DIR__ . '/factura.php';
+include_once __DIR__ . '/cliente.php';
 
 
 use Psr\Http\Message\ResponseInterface as Response;
@@ -32,7 +34,7 @@ class pedidoControler
 
         $empleado = empleado::where('id', $idEmpleado)->first();
         
-        if(isset($datos['idComida'], $datos['idMesa']))
+        if(isset($datos['idComida'], $datos['idMesa'], $datos['nombreCliente'], $datos['apellidoCliente']))
         {
             $mesa = mesa::where('id', $datos['idMesa'])->first();
 
@@ -88,6 +90,14 @@ class pedidoControler
                     $pedido->hora_creacion = $horaCreacion;
                     $pedido->save();
                 }
+
+                //cargo los datos del cliente
+                $cliente = new cliente();
+                $cliente->nombre = $datos["nombreCliente"];
+                $cliente->apellido = $datos["apellidoCliente"];
+                $cliente->codigo_mesa = $codigoMesa;
+                $cliente->codigo_pedido = $codigoUnico;
+                $cliente->save();
 
                 empleadoControler::RegistrarOperacion($empleado, 'Cargar Pedido');
 
@@ -432,6 +442,64 @@ class pedidoControler
 
     }
 
+    public function ConsultarPedidos($request, $response, $args)
+    {
+        $listado = $request->getParam('listado');
+        $informacion = null;
+        
+
+        switch($listado)
+        {
+            case "mas_vendido":
+                $informacion = pedido::where('estado', '!=', 'Cancelado')
+                ->select('id_comida')
+                ->groupBy('id_comida')
+                ->orderByRaw('COUNT(*) DESC')
+                ->limit(1)
+                ->get();
+            break;
+            case "menos_vendido":
+                $informacion = pedido::where('estado', '!=', 'Cancelado')
+                ->select('id_comida')
+                ->groupBy('id_comida')
+                ->orderByRaw('COUNT(*) ASC')
+                ->limit(1)
+                ->get();
+            break;
+            case "entragados_tarde":
+                $pedidos = pedido::where('estado', '!=', 'Cancelado')
+                ->selecet('id', 'id_comida', 'hora_creacion', 'tiempo_preparacion', 'hora_entrega');
+                foreach($pedidos as $pedido)
+                {
+                    $tiempoPreparacion = $pedido->tiempo_preparacion;
+
+                    $horaEstimada = new \DateTime($pedido->hora_creacion, new \DateTimeZone('America/Argentina/Buenos_Aires'));//timestamp creacion del pedido 
+                    $horaEstimada->modify("+$tiempoPreparacion minutes");//agrego los minutos
+
+                    if($pedido->hora_entrega > $horaEstimada)
+                    {
+                        
+                        array_push($informacion, $pedido);
+                    }
+                }
+                
+            break;
+            case "cancelados":
+                $informacion = pedido::where('estado', 'Cancelado')
+                ->get(['id', 'id_comida', 'estado']);
+            break;
+                
+        }
+
+        if($informacion == null)
+        {
+            $informacion = 'No hay pedidos';
+        }
+
+        $newResponse = $response->withJson($informacion, 200);
+
+        return $newResponse;
+    }
 
 
     
